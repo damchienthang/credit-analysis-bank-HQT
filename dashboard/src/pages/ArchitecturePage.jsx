@@ -152,7 +152,7 @@ export default function ArchitecturePage() {
             const style = stageStyle(i, stages.length);
             return (
               <div key={s.no} className="flex items-center">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest ${style.hdr}`}>
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[12px] font-black uppercase tracking-widest ${style.hdr}`}>
                   <span>{s.no}</span>
                   <span className="hidden xl:inline">{s.title}</span>
                 </div>
@@ -210,14 +210,14 @@ export default function ArchitecturePage() {
                         exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                         <ul className="space-y-2 mb-4">
                           {s.details.map((d, j) => (
-                            <li key={j} className="flex gap-2 text-xs text-gray-600 font-medium">
+                            <li key={j} className="flex gap-2 text-[13px] text-gray-600 font-medium">
                               <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${style.dot}`} />
                               {d}
                             </li>
                           ))}
                         </ul>
                         <div className="p-3 bg-navy/5 rounded-xl border border-navy/10">
-                          <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Output</p>
+                          <p className="text-[12px] font-black text-gray-400 uppercase tracking-widest mb-1">Output</p>
                           <p className="text-xs font-bold text-navy">{s.output}</p>
                         </div>
                       </motion.div>
@@ -225,7 +225,7 @@ export default function ArchitecturePage() {
                   </AnimatePresence>
 
                   {!isOpen && (
-                    <p className="text-xs text-gray-400 italic leading-relaxed">{s.details[0]}</p>
+                    <p className="text-[16px] text-gray-400 italic leading-relaxed">{s.details[0]}</p>
                   )}
                 </div>
               </motion.div>
@@ -270,7 +270,7 @@ export default function ArchitecturePage() {
                 <p className="text-blue-200 text-xs mb-4">2,260,701 bản ghi · 19 thuộc tính</p>
                 <div className="space-y-1">
                   {factCols.map(col => (
-                    <div key={col} className="text-[11px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0 flex items-center gap-2">
+                    <div key={col} className="text-[13px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0 flex items-center gap-2">
                       {col.includes('PK') && <span className="text-banking-gold font-black text-[9px] w-4">PK</span>}
                       {col.includes('FK') && <span className="text-accent-blue font-black text-[9px] w-4">FK</span>}
                       {!col.includes('PK') && !col.includes('FK') && <span className="w-4" />}
@@ -290,11 +290,11 @@ export default function ArchitecturePage() {
                   className="rounded-2xl border-2 border-accent-blue/20 bg-accent-blue/5 p-5 enterprise-shadow">
                   <div className="flex items-center gap-2 mb-3 pb-2 border-b border-accent-blue/15">
                     <Layers className="h-4 w-4 text-accent-blue" />
-                    <h4 className="font-black text-navy text-sm">{dim.name}</h4>
+                    <h4 className="font-black text-navy text-[16px]">{dim.name}</h4>
                   </div>
                   <div className="space-y-1">
                     {dim.cols.map(col => (
-                      <div key={col} className="text-[10px] font-mono text-gray-600 flex items-center gap-1.5">
+                      <div key={col} className="text-[13px] font-mono text-gray-600 flex items-center gap-1.5">
                         {col.includes('PK')
                           ? <span className="text-banking-gold font-black text-[9px] w-4">PK</span>
                           : <span className="w-4" />
@@ -362,10 +362,6 @@ export default function ArchitecturePage() {
             <Link to="/dashboard"
               className="px-10 py-5 bg-navy text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:bg-accent-blue transition-all flex items-center gap-3 shadow-xl">
               Vào Dashboard <ArrowRight className="h-5 w-5" />
-            </Link>
-            <Link to="/platform"
-              className="px-10 py-5 bg-white text-navy rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform shadow-xl">
-              Lý thuyết BI
             </Link>
           </div>
         </div>

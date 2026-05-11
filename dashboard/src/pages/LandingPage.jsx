@@ -100,12 +100,12 @@ const LandingPage = () => {
                 </div>
                 <div className="mt-8 grid grid-cols-2 gap-4">
                   <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <p className="text-xl text-gray-400 mb-1">NPL Ratio</p>
-                    <p className="text-xl font-bold text-status-risk leading-none">14.2%</p>
+                    <p className="text-[14px] text-gray-400 mb-1">NPL Ratio</p>
+                    <p className="text-[16px] font-bold text-status-risk leading-none">14.2%</p>
                   </div>
                   <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <p className="text-xl text-gray-400 mb-1">Recovery Rate</p>
-                    <p className="text-xl font-bold text-status-good leading-none">58.3%</p>
+                    <p className="text-[14px] text-gray-400 mb-1">Recovery Rate</p>
+                    <p className="text-[16px] font-bold text-status-good leading-none">58.3%</p>
                   </div>
                 </div>
               </div>
@@ -179,6 +179,9 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* ===== ABOUT DATASET SECTION ===== */}
+      <AboutDataset />
+
       {/* ===== DATASET ATTRIBUTES TABLE SECTION ===== */}
       <DatasetSection />
 
@@ -188,6 +191,102 @@ const LandingPage = () => {
     </div>
   );
 };
+
+/* ---------- About Dataset ---------- */
+function AboutDataset() {
+  return (
+    <section className="py-16 bg-gray-50 border-y border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="bg-white rounded-3xl border border-gray-100 enterprise-shadow overflow-hidden"
+        >
+          {/* Header bar */}
+          <div className="bg-navy px-8 py-5 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-banking-gold/20 border-2 border-banking-gold flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-banking-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-banking-gold text-[10px] font-black uppercase tracking-[0.25em]">About Dataset</p>
+              <h2 className="text-white font-black text-xl leading-tight">LendingClub Loan Data (2007–2018)</h2>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Description */}
+            <div className="lg:col-span-2 space-y-4">
+              <p className="text-gray-600 leading-relaxed text-xl">
+                Bộ dữ liệu được cung cấp bởi <strong className="text-navy">LendingClub</strong> — nền tảng cho vay ngang hàng (P2P Lending) lớn nhất Hoa Kỳ. Dữ liệu ghi lại toàn bộ lịch sử khoản vay từ <strong className="text-navy">2007 đến 2018</strong>, bao gồm thông tin về người vay, điều kiện khoản vay, lịch sử tín dụng và kết quả thanh toán.
+              </p>
+              <p className="text-gray-600 leading-relaxed text-xm">
+                Sau quá trình <strong className="text-navy">ETL và làm sạch dữ liệu</strong>, bộ dữ liệu được thu gọn từ 151 cột nguyên bản xuống còn <strong className="text-navy">33 thuộc tính chất lượng cao</strong> với hơn <strong className="text-navy">2.26 triệu bản ghi</strong>, phục vụ phân tích rủi ro tín dụng và xây dựng hệ thống BI.
+              </p>
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 pt-2">
+                {['P2P Lending', 'Credit Risk', 'Financial Analytics', 'Big Data', 'ETL Pipeline', 'Star Schema'].map(tag => (
+                  <span key={tag} className="text-[12px] font-black px-3 py-1.5 rounded-full bg-navy/5 text-navy border border-navy/10 uppercase tracking-widest">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Stats + Link */}
+            <div className="space-y-4">
+              {/* Dataset stats */}
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { val: '2.26M+', label: 'Bản ghi' },
+                  { val: '151', label: 'Thuộc tính' },
+                  { val: '2007–2018', label: 'Thời gian' },
+                  { val: '50+', label: 'Bang (Mỹ)' },
+                ].map((s, i) => (
+                  <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 text-center">
+                    <p className="text-xl font-black text-accent-blue">{s.val}</p>
+                    <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Kaggle link */}
+              <a
+                href="https://www.kaggle.com/datasets/wordsforthewise/lending-club"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-4 bg-navy rounded-2xl hover:bg-accent-blue transition-colors group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-banking-gold flex items-center justify-center flex-shrink-0">
+                  <svg className="h-5 w-5 text-navy" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.236 0-.354-.117-.354-.352V.353c0-.233.118-.353.354-.353h2.431c.234 0 .351.12.351.353v14.343l6.203-6.272c.165-.165.33-.246.495-.246h3.239c.144 0 .236.06.285.18.046.149.034.255-.036.315l-6.555 6.344 6.836 8.507c.095.104.117.208.07.336z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-[16px] font-black leading-tight">Xem trên Kaggle</p>
+                  <p className="text-blue-300 text-[13px] truncate">wordsforthewise/lending-club</p>
+                </div>
+                <svg className="h-4 w-4 text-white/50 group-hover:text-banking-gold transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+
+              {/* Source note */}
+              <p className="text-[10px] text-gray-400 font-medium text-center">
+                Nguồn: Kaggle · LendingClub Statistics · Cập nhật 2018
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
 /* ---------- Dataset 33 Attributes ---------- */
 const attributes = [
@@ -262,7 +361,7 @@ function DatasetSection() {
             <span className="text-xs font-bold uppercase tracking-widest">Data Dictionary</span>
           </div>
           <h2 className="text-3xl md:text-5xl font-black text-navy mb-4 uppercase tracking-tighter">
-            33 Thuộc tính sau ETL
+            Các thuộc tính được lựa chọn
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
             Từ <strong>151 cột gốc</strong>, quy trình ETL đã loại bỏ 118 cột nhiễu, chuẩn hóa kiểu dữ liệu và tạo thêm 3 thuộc tính thời gian — còn lại <strong>33 thuộc tính chất lượng cao</strong>.

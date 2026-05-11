@@ -66,13 +66,13 @@ const TrendsPage = () => {
         <div className="bg-navy px-6 py-3 flex items-center gap-6 overflow-x-auto scrollbar-none">
           <div className="flex items-center gap-2 flex-shrink-0">
             <TrendingUp className="h-4 w-4 text-banking-gold" />
-            <span className="text-xs font-black uppercase tracking-widest text-white whitespace-nowrap">Xu hướng Ngân hàng 2025</span>
+            <span className="text-xl font-black uppercase tracking-widest text-white whitespace-nowrap">Xu hướng Ngân hàng 2025</span>
           </div>
           <div className="w-px h-5 bg-white/20 flex-shrink-0" />
           {trends.map((t, i) => (
             <div key={t.title} className="flex items-center gap-2 flex-shrink-0">
               <t.icon className="h-4 w-4 text-banking-gold" />
-              <span className="text-xs font-bold text-white whitespace-nowrap">{t.title}</span>
+              <span className="text-[16px] font-bold text-white whitespace-nowrap">{t.title}</span>
               {i < trends.length - 1 && <span className="text-white/30 ml-2">·</span>}
             </div>
           ))}
@@ -94,8 +94,8 @@ const TrendsPage = () => {
                   <trend.icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-black text-navy mb-1">{trend.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">{trend.desc}</p>
+                  <h3 className="text-[16px] font-black text-navy mb-1">{trend.title}</h3>
+                  <p className="text-[13px] text-gray-500 leading-relaxed line-clamp-2">{trend.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -108,7 +108,7 @@ const TrendsPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-8">
             <Landmark className="h-6 w-6 text-accent-blue" />
-            <h2 className="text-xl font-black text-navy uppercase tracking-tight">Khảo sát BI tại Ngân hàng Việt Nam</h2>
+            <h2 className="text-2xl font-black text-navy uppercase tracking-tight">Khảo sát BI tại Ngân hàng Việt Nam</h2>
             <div className="flex-1 h-px bg-gray-200 ml-4" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -124,9 +124,9 @@ const TrendsPage = () => {
                 <div className="flex justify-between items-start mb-3">
                   <div>
                     <h3 className="text-lg font-black text-navy">{bank.name}</h3>
-                    <p className="text-[10px] font-bold text-accent-blue tracking-wider uppercase">{bank.tagline}</p>
+                    <p className="text-[13px] font-bold text-accent-blue tracking-wider uppercase">{bank.tagline}</p>
                   </div>
-                  <span className="text-[10px] font-black text-navy bg-navy/5 px-2 py-1 rounded-full border border-navy/10">{bank.focus}</span>
+                  <span className="text-[11px] font-black text-navy bg-navy/5 px-2 py-1 rounded-full border border-navy/10">{bank.focus}</span>
                 </div>
                 <p className="text-xs text-gray-500 leading-relaxed italic">"{bank.usage}"</p>
               </motion.div>
@@ -294,7 +294,7 @@ function BankCaseStudies() {
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent lg:hidden" />
                 {/* Name badge */}
                 <div className="absolute bottom-6 left-6 right-6">
-                  <p className="text-banking-gold text-[10px] font-black uppercase tracking-widest mb-1">{bank.tag}</p>
+                  <p className="text-banking-gold text-[12.5px] font-black uppercase tracking-widest mb-1">{bank.tag}</p>
                   <h3 className="text-white font-black text-2xl leading-tight drop-shadow-lg">{bank.name}</h3>
                   <p className="text-blue-100 text-xs mt-1 font-medium">{bank.fullName}</p>
                 </div>
@@ -306,7 +306,7 @@ function BankCaseStudies() {
                 <div className="mb-8">
                   <div className="flex items-center gap-3 mb-3">
                     <div className="h-6 w-1.5 bg-banking-gold rounded-full" />
-                    <span className="text-banking-gold text-[11px] font-black uppercase tracking-widest">Chiến dịch</span>
+                    <span className="text-banking-gold text-[12.5px] font-black uppercase tracking-widest">Chiến dịch</span>
                   </div>
                   <h4 className="text-white text-2xl lg:text-3xl font-black leading-tight">
                     {bank.campaign}
@@ -323,7 +323,7 @@ function BankCaseStudies() {
                       transition={{ delay: j * 0.1 }}
                       className="p-5 bg-white/8 border border-white/15 rounded-2xl hover:bg-white/12 transition-colors group"
                     >
-                      <p className="text-banking-gold text-[10px] font-black uppercase tracking-widest mb-2">
+                      <p className="text-banking-gold text-[11x] font-black uppercase tracking-widest mb-2">
                         {pt.label}
                       </p>
                       <p
@@ -367,7 +367,7 @@ function BankCaseStudies() {
 
       {/* Bottom note */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 border-t border-white/10">
-        <p className="text-center text-blue-300 text-xs font-medium">
+        <p className="text-center text-blue-300 text-[12px] font-medium">
           Nguồn: Báo cáo thường niên VPBank, Techcombank, TPBank, Vietcombank · VnEconomy · Forbes Việt Nam · VnExpress
         </p>
       </div>

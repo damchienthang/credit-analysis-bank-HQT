@@ -126,7 +126,7 @@ const PlatformPage = () => {
             animate={{ opacity: 1 }}
             className="text-banking-gold font-bold tracking-[0.3em] uppercase text-sm mb-4 block"
           >
-            Lý thuyết & Kiến trúc hệ thống
+            Mô hình hệ thống doanh nghiệp
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -235,7 +235,7 @@ const PlatformPage = () => {
       <section className="py-24 bg-gray-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-24">
-            <h2 className="text-3xl md:text-5xl font-black text-navy uppercase tracking-tighter mb-4 italic">Star Schema Visualization</h2>
+            <h2 className="text-3xl md:text-5xl font-black text-navy uppercase tracking-tighter mb-4 ">Star Schema Visualization</h2>
             <p className="text-gray-500 italic">Mô hình dữ liệu chuẩn hóa cho hệ thống phân tích tín dụng.</p>
           </div>
 
@@ -243,15 +243,15 @@ const PlatformPage = () => {
             {/* Fact Table at Center */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
+              whileInView={{ scale: 0.9, opacity: 1 }}
               className="z-20 w-72 p-8 bg-navy text-white rounded-[2rem] shadow-[0_0_50px_rgba(0,82,165,0.3)] border-4 border-banking-gold text-center"
             >
-              <h3 className="text-2xl font-black mb-4 border-b border-white/20 pb-2 flex items-center justify-center gap-2">
+              <h3 className="text-2xl font-black text-white mb-4 border-b border-white/20 pb-2 flex items-center justify-center gap-2">
                 <Database className="h-6 w-6 text-banking-gold" /> Fact_Loans
               </h3>
               <div className="text-left space-y-1 opacity-90">
                 {['loan_id (PK)', 'cust_id (FK)', 'time_id (FK)', 'geo_id (FK)', 'prod_id (FK)', 'risk_id (FK)', 'loan_amnt', 'int_rate', 'total_pymnt'].map((attr) => (
-                  <div key={attr} className="text-[10px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0">{attr}</div>
+                  <div key={attr} className="text-[12px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0">{attr}</div>
                 ))}
               </div>
             </motion.div>
@@ -271,8 +271,8 @@ const PlatformPage = () => {
                   </h4>
                   <div className="space-y-1 opacity-60">
                     {dim.attrs.map(attr => (
-                      <div key={attr} className="text-[10px] font-mono flex items-center gap-2">
-                        <div className="w-1 h-1 bg-gray-300 rounded-full"></div> {attr}
+                      <div key={attr} className="text-[12px] font-mono text-blue-800 flex items-center gap-2">
+                        <div className="w-1 h-1 bg-gray-500 rounded-full"></div> {attr}
                       </div>
                     ))}
                   </div>
@@ -289,7 +289,7 @@ const PlatformPage = () => {
                   </marker>
                 </defs>
                 {/* 12:00 Line */}
-                <line x1="50%" y1="50%" x2="50%" y2="10%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
+                <line x1="50%" y1="10%" x2="50%" y2="10%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
                 {/* 2:00 Line */}
                 <line x1="50%" y1="50%" x2="88%" y2="35%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
                 {/* 5:00 Line */}
@@ -329,7 +329,7 @@ const PlatformPage = () => {
       {/* Data Flow Section */}
       <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-5xl font-black text-navy uppercase tracking-tighter mb-4 italic">Data Flow Pipeline</h2>
+          <h2 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tighter mb-4">Data Flow Pipeline</h2>
           <p className="text-gray-500">Quy trình xử lý dữ liệu chuẩn từ nguồn thô đến trình diễn báo cáo.</p>
         </div>
 
@@ -367,7 +367,7 @@ const PlatformPage = () => {
       <section className="py-24 bg-navy text-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-4">
-            <h2 className="text-white md:text-5xl font-black uppercase tracking-tighter">Technology Architecture</h2>
+            <h2 className="text-white md:text-4xl font-black uppercase tracking-tighter">Technology Architecture</h2>
             <div className="flex gap-2">
               <div className="w-12 h-1.5 bg-banking-gold rounded-full"></div>
               <div className="w-6 h-1.5 bg-accent-blue rounded-full"></div>
@@ -399,8 +399,8 @@ const PlatformPage = () => {
 
       {/* Footer CTA */}
       <section className="py-20 bg-banking-gold relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 text-navy">
-          <h2 className="text-3xl md:text-4xl font-black mb-8 uppercase tracking-tighter italic">Tìm hiểu sâu hơn về kiến trúc?</h2>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 text-navy">
+          <h2 className="text-xl md:text-3xl font-black mb-8 uppercase tracking-tighter">Tìm hiểu sâu hơn về kiến trúc ?</h2>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/architecture" className="px-10 py-5 bg-navy text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform flex items-center gap-3">
               Chi tiết Kiến trúc Kỹ thuật <ArrowRight className="h-5 w-5" />
