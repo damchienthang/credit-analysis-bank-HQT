@@ -5,21 +5,21 @@ import { Users, Target, Rocket, Calendar, Code, Share2, Mail, Award, CheckCircle
 const AboutPage = () => {
   const team = [
     {
-      name: 'Nguyễn Văn A',
+      name: 'Đặng Chiến Thắng',
       role: 'Team Leader / Data Architect',
-      desc: 'Chịu trách nhiệm thiết kế mô hình Star Schema và quy trình ETL tổng thể.',
+      desc: 'Chịu trách nhiệm thiết kế mô hình Star Schema, quy trình ETL và kiến trúc hệ thống BI tổng thể.',
       skills: ['SQL Server', 'Python', 'BI Strategy']
     },
     {
-      name: 'Trần Thị B',
+      name: 'Thành Viên 2',
       role: 'Frontend Developer / UI Designer',
-      desc: 'Phát triển giao diện React Dashboard và trực quan hóa dữ liệu bằng Recharts.',
+      desc: 'Phát triển giao diện React Dashboard và trực quan hóa dữ liệu tín dụng bằng Recharts.',
       skills: ['React', 'Tailwind', 'Framer Motion']
     },
     {
-      name: 'Lê Văn C',
+      name: 'Thành Viên 3',
       role: 'Data Analyst',
-      desc: 'Thực hiện EDA, xử lý dữ liệu sạch và tính toán các chỉ số KPI rủi ro.',
+      desc: 'Thực hiện EDA, xử lý làm sạch dữ liệu và tính toán các chỉ số KPI rủi ro từ 2.26M bản ghi.',
       skills: ['Pandas', 'Matplotlib', 'Statistics']
     }
   ];
@@ -45,7 +45,7 @@ const AboutPage = () => {
         </motion.div>
         <h1 className="text-4xl md:text-6xl font-black text-navy uppercase tracking-tighter">Sứ mệnh Dự án</h1>
         <p className="text-xl text-gray-500 max-w-3xl mx-auto leading-relaxed">
-          Chúng tôi xây dựng <strong>LendingClub BI Platform</strong> với mục tiêu chuyển đổi dữ liệu thô thành tri thức kinh doanh, 
+          Xây dựng <strong>LendingClub BI Platform</strong> với mục tiêu chuyển đổi dữ liệu thô thành tri thức kinh doanh,
           giúp các tổ chức tài chính kiểm soát rủi ro và tối ưu hóa dòng tiền trong kỷ nguyên số.
         </p>
       </section>
@@ -68,7 +68,7 @@ const AboutPage = () => {
             >
               <div className="h-32 bg-navy relative">
                 <div className="absolute -bottom-10 left-8 h-20 w-20 rounded-2xl bg-gray-200 border-4 border-white overflow-hidden shadow-lg">
-                   <img src={`https://i.pravatar.cc/150?u=${member.name}`} alt={member.name} />
+                  <img src={`https://i.pravatar.cc/150?u=${member.name}`} alt={member.name} />
                 </div>
               </div>
               <div className="pt-14 p-8 space-y-4">
@@ -108,13 +108,13 @@ const AboutPage = () => {
               Dự án được thực hiện trong vòng 9 tuần với sự tập trung cao độ vào tính chính xác của dữ liệu và trải nghiệm người dùng.
             </p>
             <div className="pt-8">
-               <div className="flex items-center gap-4 text-banking-gold font-bold">
-                 <Award className="h-10 w-10" />
-                 <div>
-                   <p className="text-2xl leading-none">95%</p>
-                   <p className="text-xs uppercase tracking-widest text-white/60">Hoàn thành</p>
-                 </div>
-               </div>
+              <div className="flex items-center gap-4 text-banking-gold font-bold">
+                <Award className="h-10 w-10" />
+                <div>
+                  <p className="text-2xl leading-none">95%</p>
+                  <p className="text-xs uppercase tracking-widest text-white/60">Hoàn thành</p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -125,9 +125,8 @@ const AboutPage = () => {
                 initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className={`flex items-center gap-6 p-6 rounded-3xl border ${
-                  item.status === 'done' ? 'bg-white/5 border-white/10 opacity-60' : 'bg-white/10 border-white/20'
-                }`}
+                className={`flex items-center gap-6 p-6 rounded-3xl border ${item.status === 'done' ? 'bg-white/5 border-white/10 opacity-60' : 'bg-white/10 border-white/20'
+                  }`}
               >
                 <div className="text-sm font-black text-banking-gold w-20">{item.date}</div>
                 <div className="flex-grow font-bold text-lg">{item.task}</div>

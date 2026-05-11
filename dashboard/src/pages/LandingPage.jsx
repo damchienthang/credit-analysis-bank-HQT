@@ -55,7 +55,7 @@ const LandingPage = () => {
                 </span>
                 <span className="text-xs font-bold uppercase tracking-widest text-white">LendingClub BI Platform v1.0</span>
               </div>
-              <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight mb-6">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6">
                 Hệ Thống Phân Tích <br />
                 <span className="text-banking-gold">& Quản Trị Tín Dụng</span>
               </h1>
@@ -180,33 +180,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Data Pipeline visualization hint */}
-      <section className="py-24 bg-navy text-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <h2 className="text-3xl font-bold mb-12">Quy trình xử lý dữ liệu chuẩn BI</h2>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8">
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-3">CSV</div>
-              <p className="text-xs uppercase tracking-widest font-bold">Raw Data</p>
-            </div>
-            <ArrowRight className="hidden md:block h-6 w-6 text-banking-gold rotate-90 md:rotate-0" />
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-3">Python</div>
-              <p className="text-xs uppercase tracking-widest font-bold">ETL Process</p>
-            </div>
-            <ArrowRight className="hidden md:block h-6 w-6 text-banking-gold rotate-90 md:rotate-0" />
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-3">SQL</div>
-              <p className="text-xs uppercase tracking-widest font-bold">Warehouse</p>
-            </div>
-            <ArrowRight className="hidden md:block h-6 w-6 text-banking-gold rotate-90 md:rotate-0" />
-            <div className="flex flex-col items-center">
-              <div className="w-16 h-16 rounded-full bg-banking-gold/20 flex items-center justify-center mb-3 text-banking-gold border border-banking-gold/50">React</div>
-              <p className="text-xs uppercase tracking-widest font-bold text-banking-gold">BI Dashboard</p>
-            </div>
-          </div>
-        </div>
-      </section>
+
     </div>
   );
 };

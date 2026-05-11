@@ -7,9 +7,9 @@ const Header = () => {
 
   const navigation = [
     { name: 'Trang chủ', href: '/', icon: Landmark },
-    { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
-    { name: 'Nền tảng BI', href: '/platform', icon: Database },
+    { name: 'Business Intelligence', href: '/platform', icon: Database },
     { name: 'Xu hướng', href: '/trends', icon: TrendingUp },
+    { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
     { name: 'Báo cáo', href: '/reports', icon: PieChart },
     { name: 'Kiến trúc', href: '/architecture', icon: ShieldCheck },
     { name: 'Giới thiệu', href: '/about', icon: Info },
@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-gray-100 enterprise-shadow">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full px-4 sm:px-10 lg:px-12">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
             <NavLink to="/" className="flex items-center gap-2 group">
@@ -38,13 +38,14 @@ const Header = () => {
                 key={item.name}
                 to={item.href}
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 ${
-                    isActive
-                      ? 'bg-navy/5 text-navy border-b-2 border-navy'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-navy'
+                  `px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 ${isActive
+                    ? 'bg-navy/5 text-navy border-b-2 border-navy'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-navy'
                   }`
                 }
               >
+
+
                 <item.icon className="h-4 w-4" />
                 {item.name}
               </NavLink>
@@ -73,10 +74,9 @@ const Header = () => {
                 to={item.href}
                 onClick={() => setIsOpen(false)}
                 className={({ isActive }) =>
-                  `block px-3 py-4 rounded-md text-base font-medium flex items-center gap-3 ${
-                    isActive
-                      ? 'bg-navy text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-navy'
+                  `block px-3 py-4 rounded-md text-base font-medium flex items-center gap-3 ${isActive
+                    ? 'bg-navy text-white'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-navy'
                   }`
                 }
               >

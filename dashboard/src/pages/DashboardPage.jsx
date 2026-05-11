@@ -1,16 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
-  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, Legend
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, Legend, ComposedChart
 } from 'recharts';
 import { 
   Database, ShieldAlert, Banknote, TrendingUp, Search, Filter, 
   Download, ChevronRight, AlertTriangle, CheckCircle2 
 } from 'lucide-react';
-import { 
-  kpiData, loanGradeData, loanTrendData, 
-  loanPurposeData, recoveryData, stateRiskData 
+import {
+  kpiData, loanGradeData, loanTrendData,
+  loanPurposeData, recoveryData, stateRiskData
 } from '../data/mockData';
 
 const DashboardPage = () => {
@@ -136,8 +136,9 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Trend Chart */}
         <div className="lg:col-span-1 bg-white p-8 rounded-3xl border border-gray-100 enterprise-shadow">
-          <h3 className="text-xl font-bold text-navy mb-8">Tăng trưởng giải ngân (Tỷ USD)</h3>
-          <div className="h-[300px]">
+          <h3 className="text-xl font-bold text-navy mb-2">Tăng trưởng giải ngân (Tỷ USD)</h3>
+          <p className="text-xs text-gray-400 mb-6 font-medium uppercase tracking-widest">2007 – 2018</p>
+          <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={loanTrendData}>
                 <defs>
@@ -146,17 +147,47 @@ const DashboardPage = () => {
                     <stop offset="95%" stopColor="#0052A5" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="year" axisLine={false} tickLine={false} />
+                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 11 }} />
                 <YAxis hide />
-                <Tooltip />
-                <Area type="monotone" dataKey="amount" stroke="#0052A5" strokeWidth={4} fillOpacity={1} fill="url(#colorAmt)" />
+                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
+                <Area type="monotone" dataKey="amount" stroke="#0052A5" strokeWidth={3} fillOpacity={1} fill="url(#colorAmt)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* State Analytics Table */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-gray-100 enterprise-shadow overflow-hidden">
+        {/* Recovery vs Charge-Off Chart */}
+        <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 enterprise-shadow">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-xl font-bold text-navy">Thu hồi nợ vs Xóa nợ (Recovery vs Charge-off)</h3>
+          </div>
+          <div className="flex gap-6 mb-6">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-status-good"></div>
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Recovery</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-status-risk"></div>
+              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Charge-off</span>
+            </div>
+          </div>
+          <div className="h-[280px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={recoveryData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 600 }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
+                <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '12px' }} />
+                <Bar dataKey="recovery" name="Thu hồi" fill="#22c55e" radius={[6, 6, 0, 0]} opacity={0.85} />
+                <Line type="monotone" dataKey="chargeOff" name="Xóa nợ" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 5 }} />
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* State Analytics Table — Full Width Row */}
+      <div className="bg-white rounded-3xl border border-gray-100 enterprise-shadow overflow-hidden">
           <div className="p-8 border-b border-gray-50 flex justify-between items-center">
             <h3 className="text-xl font-bold text-navy">Phân tích rủi ro theo Khu vực (Top 5)</h3>
             <button className="text-accent-blue text-sm font-bold flex items-center hover:underline">
@@ -195,7 +226,6 @@ const DashboardPage = () => {
             </table>
           </div>
         </div>
-      </div>
 
       {/* AI Insights Bar */}
       <motion.div 
