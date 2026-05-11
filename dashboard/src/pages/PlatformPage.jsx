@@ -156,7 +156,7 @@ const PlatformPage = () => {
                 whileHover={{ y: -10 }}
                 className="p-8 bg-gray-50 rounded-3xl border border-gray-100 enterprise-shadow relative"
               >
-                <div className="text-4xl font-black text-banking-gold/20 absolute top-4 right-6">{point.year}</div>
+                <div className="text-3xl font-black text-banking-gold/100 absolute top-4 right-6">{point.year}</div>
                 <h3 className="text-xl font-bold text-navy mb-4">{point.title}</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">{point.event}</p>
               </motion.div>
@@ -367,7 +367,7 @@ const PlatformPage = () => {
       <section className="py-24 bg-navy text-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-4">
-            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">Technology Architecture</h2>
+            <h2 className="text-white md:text-5xl font-black uppercase tracking-tighter">Technology Architecture</h2>
             <div className="flex gap-2">
               <div className="w-12 h-1.5 bg-banking-gold rounded-full"></div>
               <div className="w-6 h-1.5 bg-accent-blue rounded-full"></div>
@@ -389,7 +389,7 @@ const PlatformPage = () => {
                 <div className="p-3 bg-white/10 rounded-2xl w-fit mb-6 group-hover:bg-banking-gold group-hover:text-navy transition-all">
                   <tech.icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-lg font-bold mb-2 relative z-10">{tech.title}</h3>
+                <h3 className="text-white font-bold mb-2 relative z-10">{tech.title}</h3>
                 <p className="text-xs text-blue-200 leading-relaxed italic relative z-10">{tech.desc}</p>
               </motion.div>
             ))}

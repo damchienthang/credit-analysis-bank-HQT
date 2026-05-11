@@ -5,7 +5,7 @@ import { Users, Target, Rocket, Calendar, Code, Share2, Mail, Award, CheckCircle
 const AboutPage = () => {
   const team = [
     {
-      name: 'Đặng Chiến Thắng',
+      name: 'Đàm Chiến Thắng',
       role: 'Team Leader / Data Architect',
       desc: 'Chịu trách nhiệm thiết kế mô hình Star Schema, quy trình ETL và kiến trúc hệ thống BI tổng thể.',
       skills: ['SQL Server', 'Python', 'BI Strategy']
