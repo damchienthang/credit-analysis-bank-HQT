@@ -280,6 +280,28 @@ function AboutDataset() {
               <p className="text-[10px] text-gray-400 font-medium text-center">
                 Nguồn: Kaggle · LendingClub Statistics · Cập nhật 2018
               </p>
+
+              {/* Download cleaned CSV */}
+              <a
+                href="https://github.com/damchienthang/credit-analysis-bank-HQT/raw/main/data/data_hqtcsdl.csv"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-4 bg-banking-gold/10 border-2 border-banking-gold/40 rounded-2xl hover:bg-banking-gold/20 hover:border-banking-gold transition-all group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-banking-gold flex items-center justify-center flex-shrink-0">
+                  <svg className="h-5 w-5 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-navy text-[13px] font-black leading-tight">Tải trực tiếp dữ liệu đã được làm sạch</p>
+                  <p className="text-gray-500 text-[11px] truncate">data_hqtcsdl.csv · 33 thuộc tính · 2.26M bản ghi</p>
+                </div>
+                <svg className="h-4 w-4 text-navy/40 group-hover:text-navy transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+
             </div>
           </div>
         </motion.div>
