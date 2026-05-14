@@ -25,8 +25,8 @@ const Header = () => {
                 <Landmark className="h-8 w-8 text-white" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-navy leading-tight tracking-tight uppercase">LendingClub</span>
-                <span className="text-[10px] font-medium text-accent-blue tracking-[0.2em] uppercase">Enterprise BI</span>
+                <span className="text-[26px] font-bold text-navy leading-tight tracking-tight uppercase">LendingClub</span>
+                <span className="text-[14px] font-medium text-accent-blue tracking-[0.2em] uppercase">Enterprise BI</span>
               </div>
             </NavLink>
           </div>
@@ -38,7 +38,7 @@ const Header = () => {
                 key={item.name}
                 to={item.href}
                 className={({ isActive }) =>
-                  `px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2 ${isActive
+                  `px-4 py-2 rounded-lg text-[16px] font-bold transition-all flex items-center gap-2 ${isActive
                     ? 'bg-navy/5 text-navy border-b-2 border-navy'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-navy'
                   }`

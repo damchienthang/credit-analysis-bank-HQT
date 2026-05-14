@@ -73,35 +73,35 @@ const PlatformPage = () => {
       name: 'Dim_Time',
       desc: 'Quản lý thời gian: ngày, tháng, quý, năm.',
       attrs: ['time_id (PK)', 'year', 'month', 'quarter'],
-      pos: 'top-0 left-1/2 -translate-x-1/2'
+      pos: 'top-[-50px] left-1/2 -translate-x-1/2'
     },
     {
       id: 'dim_creditrisk',
       name: 'Dim_CreditRisk',
       desc: 'Xếp hạng rủi ro & điểm tín dụng.',
       attrs: ['risk_id (PK)', 'grade', 'fico_range'],
-      pos: 'top-[20%] right-0'
+      pos: 'top-[10%] right-[-60px]'
     },
     {
       id: 'dim_geography',
       name: 'Dim_Geography',
       desc: 'Vị trí & khu vực địa lý.',
       attrs: ['geo_id (PK)', 'addr_state', 'region'],
-      pos: 'bottom-0 right-[15%]'
+      pos: 'bottom-[5%] right-[-60px]'
     },
     {
       id: 'dim_customers',
       name: 'Dim_Customers',
       desc: 'Thông tin khách hàng & thu nhập.',
       attrs: ['cust_id (PK)', 'annual_inc', 'home_ownership'],
-      pos: 'bottom-0 left-[15%]'
+      pos: 'bottom-[5%] left-[-60px]'
     },
     {
       id: 'dim_loanproduct',
       name: 'Dim_LoanProduct',
       desc: 'Phân loại sản phẩm tín dụng.',
       attrs: ['prod_id (PK)', 'term', 'purpose'],
-      pos: 'top-[20%] left-0'
+      pos: 'top-[10%] left-[-60px]'
     }
   ];
 
@@ -131,11 +131,11 @@ const PlatformPage = () => {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-black text-white mb-8 uppercase tracking-tighter"
+            className="text-5xl md:text-5xl font-black text-white mb-8 uppercase tracking-tighter"
           >
             Business Intelligence <br /> <span className="text-banking-gold">Systems (BI)</span>
           </motion.h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed italic">
+          <p className="text-[16px] text-blue-100 max-w-3xl mx-auto leading-relaxed italic">
             "Quy trình thu thập, lưu trữ và phân tích dữ liệu nhằm hỗ trợ doanh nghiệp ra quyết định chính xác."
           </p>
         </div>
@@ -157,8 +157,8 @@ const PlatformPage = () => {
                 className="p-8 bg-gray-50 rounded-3xl border border-gray-100 enterprise-shadow relative"
               >
                 <div className="text-3xl font-black text-banking-gold/100 absolute top-4 right-6">{point.year}</div>
-                <h3 className="text-xl font-bold text-navy mb-4">{point.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{point.event}</p>
+                <h3 className="text-2xl font-bold text-navy mb-4">{point.title}</h3>
+                <p className="text-gray-600 text-base leading-relaxed">{point.event}</p>
               </motion.div>
             ))}
           </div>
@@ -189,13 +189,13 @@ const PlatformPage = () => {
                 <h4 className="font-bold text-navy mb-2 flex items-center gap-2">
                   <Box className="h-5 w-5 text-accent-blue" /> Fact vs Dimension
                 </h4>
-                <p className="text-sm text-gray-500 italic">Bảng <strong>Fact</strong> chứa các con số định lượng. Bảng <strong>Dimension</strong> chứa các thông tin mô tả chi tiết.</p>
+                <p className="text-base text-gray-500 italic">Bảng <strong>Fact</strong> chứa các con số định lượng. Bảng <strong>Dimension</strong> chứa các thông tin mô tả chi tiết.</p>
               </div>
               <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
                 <h4 className="font-bold text-navy mb-2 flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-banking-gold" /> OLAP Concepts
                 </h4>
-                <p className="text-sm text-gray-500 italic">Cho phép phân tích dữ liệu đa chiều, thực hiện các thao tác Slice, Dice và Drill-down.</p>
+                <p className="text-base text-gray-500 italic">Cho phép phân tích dữ liệu đa chiều, thực hiện các thao tác Slice, Dice và Drill-down.</p>
               </div>
             </div>
           </motion.div>
@@ -220,8 +220,8 @@ const PlatformPage = () => {
                       <stage.icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-white text-sm">{stage.title}</h4>
-                      <p className="text-xs text-blue-200">{stage.desc}</p>
+                      <h4 className="font-bold text-white text-base">{stage.title}</h4>
+                      <p className="text-sm text-blue-200">{stage.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -235,11 +235,11 @@ const PlatformPage = () => {
       <section className="py-24 bg-gray-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-24">
-            <h2 className="text-3xl md:text-5xl font-black text-navy uppercase tracking-tighter mb-4 ">Star Schema Visualization</h2>
-            <p className="text-gray-500 italic">Mô hình dữ liệu chuẩn hóa cho hệ thống phân tích tín dụng.</p>
+            <h2 className="text-3xl md:text-4xl font-black text-navy uppercase tracking-tighter mb-4 ">Star Schema Visualization</h2>
+            <p className="text-gray-500">Mô hình dữ liệu chuẩn hóa cho hệ thống phân tích tín dụng.</p>
           </div>
 
-          <div className="relative h-[700px] flex items-center justify-center">
+          <div className="relative h-[850px] flex items-center justify-center">
             {/* Fact Table at Center */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -251,7 +251,7 @@ const PlatformPage = () => {
               </h3>
               <div className="text-left space-y-1 opacity-90">
                 {['loan_id (PK)', 'cust_id (FK)', 'time_id (FK)', 'geo_id (FK)', 'prod_id (FK)', 'risk_id (FK)', 'loan_amnt', 'int_rate', 'total_pymnt'].map((attr) => (
-                  <div key={attr} className="text-[12px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0">{attr}</div>
+                  <div key={attr} className="text-[14px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0">{attr}</div>
                 ))}
               </div>
             </motion.div>
@@ -265,13 +265,13 @@ const PlatformPage = () => {
                   whileHover={{ scale: 1.05, y: -5 }}
                   className={`cursor-help w-56 p-5 bg-white rounded-2xl border-2 transition-all ${activeDim === dim.id ? 'border-accent-blue enterprise-shadow ring-8 ring-blue-50' : 'border-gray-100 shadow-xl'}`}
                 >
-                  <h4 className="font-bold text-navy mb-3 flex items-center justify-between text-sm">
+                  <h4 className="font-bold text-navy mb-3 flex items-center justify-between text-base">
                     {dim.name}
                     <div className="w-2 h-2 rounded-full bg-accent-blue animate-pulse"></div>
                   </h4>
                   <div className="space-y-1 opacity-60">
                     {dim.attrs.map(attr => (
-                      <div key={attr} className="text-[12px] font-mono text-blue-800 flex items-center gap-2">
+                      <div key={attr} className="text-[14px] font-mono text-blue-800 flex items-center gap-2">
                         <div className="w-1 h-1 bg-gray-500 rounded-full"></div> {attr}
                       </div>
                     ))}
@@ -288,16 +288,16 @@ const PlatformPage = () => {
                     <path d="M 0 0 L 10 5 L 0 10 z" fill="#0052A5" />
                   </marker>
                 </defs>
-                {/* 12:00 Line */}
-                <line x1="50%" y1="10%" x2="50%" y2="10%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
-                {/* 2:00 Line */}
-                <line x1="50%" y1="50%" x2="88%" y2="35%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
-                {/* 5:00 Line */}
-                <line x1="50%" y1="50%" x2="75%" y2="85%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
-                {/* 7:00 Line */}
-                <line x1="50%" y1="50%" x2="25%" y2="85%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
-                {/* 10:00 Line */}
-                <line x1="50%" y1="50%" x2="12%" y2="35%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
+                {/* 12:00 Line (Time) */}
+                <line x1="50%" y1="50%" x2="50%" y2="5%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
+                {/* 2:00 Line (Risk) */}
+                <line x1="50%" y1="50%" x2="90%" y2="20%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
+                {/* 5:00 Line (Geo) */}
+                <line x1="50%" y1="50%" x2="85%" y2="80%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
+                {/* 7:00 Line (Cust) */}
+                <line x1="50%" y1="50%" x2="15%" y2="80%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
+                {/* 10:00 Line (Prod) */}
+                <line x1="50%" y1="50%" x2="10%" y2="20%" stroke="#0052A5" strokeWidth="2.5" strokeDasharray="10 5" markerEnd="url(#arrow)" />
               </svg>
               {/* Decorative Concentric Circles */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] border-[1px] border-accent-blue/10 rounded-full"></div>
@@ -348,7 +348,7 @@ const PlatformPage = () => {
                 <div className={`w-24 h-24 rounded-[2rem] bg-white enterprise-shadow border border-gray-100 flex items-center justify-center mb-4 transition-all group-hover:border-banking-gold group-hover:rotate-6`}>
                   <step.icon className={`h-10 w-10 ${step.color}`} />
                 </div>
-                <span className="font-black text-navy uppercase tracking-tighter text-sm">{step.name}</span>
+                <span className="font-black text-navy uppercase tracking-tighter text-base">{step.name}</span>
               </motion.div>
               {i < arr.length - 1 && (
                 <div className="flex-1 h-1 bg-gradient-to-r from-gray-100 via-banking-gold to-gray-100 hidden md:block relative">
@@ -389,8 +389,8 @@ const PlatformPage = () => {
                 <div className="p-3 bg-white/10 rounded-2xl w-fit mb-6 group-hover:bg-banking-gold group-hover:text-navy transition-all">
                   <tech.icon className="h-6 w-6" />
                 </div>
-                <h3 className="text-white font-bold mb-2 relative z-10">{tech.title}</h3>
-                <p className="text-xs text-blue-200 leading-relaxed italic relative z-10">{tech.desc}</p>
+                <h3 className="text-white font-bold text-lg mb-2 relative z-10">{tech.title}</h3>
+                <p className="text-sm text-blue-200 leading-relaxed italic relative z-10">{tech.desc}</p>
               </motion.div>
             ))}
           </div>

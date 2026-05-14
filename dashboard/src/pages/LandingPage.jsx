@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, BarChart3, ShieldCheck, Zap, Database, Globe, Layers, Table2, TrendingUp, ChevronDown, ChevronUp, Search, Filter } from 'lucide-react';
+import { ArrowRight, BarChart3, ShieldCheck, Zap, Database, Globe, Layers, Table2, TrendingUp, ChevronDown, ChevronUp, Search, Filter, User, Handshake, Landmark } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
@@ -29,131 +29,183 @@ const LandingPage = () => {
       description: 'Xử lý dữ liệu thô phức tạp, loại bỏ nhiễu và chuẩn hóa thông tin với hiệu suất cao.',
       icon: Zap,
       color: 'bg-amber-500'
+    },
+    {
+      title: 'Kiến trúc Star Schema',
+      description: 'Mô hình hóa dữ liệu theo cấu trúc Fact-Dimension, tối ưu hóa 70% tốc độ truy vấn đa chiều.',
+      icon: Layers,
+      color: 'bg-teal-500'
+    },
+    {
+      title: 'AI Insights & Cảnh báo',
+      description: 'Tự động phát hiện các điểm bất thường và rủi ro tập trung trong danh mục tín dụng.',
+      icon: TrendingUp,
+      color: 'bg-rose-500'
+    },
+    {
+      title: 'Khả năng Mở rộng',
+      description: 'Sẵn sàng xử lý các tập dữ liệu lớn hơn nữa với kiến trúc Cloud-ready và SQL Server.',
+      icon: Globe,
+      color: 'bg-navy'
     }
   ];
 
+  const featuresRow = [
+    { label: 'An Toàn', sub: 'Bảo mật đa lớp', icon: ShieldCheck },
+    { label: 'Hiệu Quả', sub: 'Phân tích chuyên sâu', icon: TrendingUp },
+    { label: 'Tận Tâm', sub: 'Đồng hành bền vững', icon: Handshake },
+    { label: 'Thấu Hiểu', sub: 'Hiểu khách hàng hơn', icon: User },
+  ];
+
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden bg-[#050b18]">
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center bg-navy pt-20">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+      <section className="relative min-h-screen flex flex-col justify-center pt-20 overflow-hidden">
+        {/* Background Cityscape/Gradient - Brighter */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#101c44] via-[#0a1128] to-[#050b18] opacity-80"></div>
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(0, 102, 255, 0.15) 0%, transparent 65%)' }}></div>
+          {/* Subtle grid pattern */}
+          <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }}></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-[2200px] mx-auto px-8 lg:px-24 relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center">
+            {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-blue/20 border border-accent-blue/30 text-accent-blue mb-6">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-blue opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent-blue"></span>
-                </span>
-                <span className="text-xs font-bold uppercase tracking-widest text-white">LendingClub BI Platform v1.0</span>
-              </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6">
+              <h1 className="text-6xl md:text-7xl font-bold text-white leading-[1.1] mb-8">
                 Hệ Thống Phân Tích <br />
                 <span className="text-banking-gold">& Quản Trị Tín Dụng</span>
               </h1>
-              <p className="text-xl text-gray-300 mb-10 max-w-lg leading-relaxed">
+              <p className="text-xl text-gray-300 mb-12 max-w-xl leading-relaxed opacity-80">
                 Giải pháp Business Intelligence toàn diện cho dữ liệu tài chính quy mô lớn.
                 Tối ưu hóa chiến lược cho vay và quản trị rủi ro nợ xấu.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to="/dashboard" className="px-8 py-4 bg-accent-blue hover:bg-blue-600 text-white rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-900/20">
-                  Khám phá Dashboard <ArrowRight className="h-5 w-5" />
+              <div className="flex flex-wrap gap-6 mb-24">
+                <Link to="/dashboard" className="px-10 py-5 bg-[#0066ff] hover:bg-blue-600 text-white rounded-xl font-bold text-lg transition-all flex items-center gap-3 shadow-2xl shadow-blue-600/30 group">
+                  <BarChart3 className="h-6 w-6" />
+                  Khám phá Dashboard
+                  <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Link>
-                <Link to="/architecture" className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl font-bold transition-all backdrop-blur-sm">
+                <Link to="/architecture" className="px-10 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/20 rounded-xl font-bold text-lg transition-all backdrop-blur-md flex items-center gap-3">
+                  <Layers className="h-6 w-6 text-banking-gold" />
                   Kiến trúc hệ thống
                 </Link>
               </div>
+
+              {/* Bottom Icon Row */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-white/10 pt-10 opacity-70">
+                {featuresRow.map((f, i) => (
+                  <div key={i} className="flex flex-col gap-2">
+                    <f.icon className="h-8 w-8 text-white mb-2" />
+                    <div>
+                      <p className="text-white font-bold text-[16px]">{f.label}</p>
+                      <p className="text-gray-500 text-[12px]">{f.sub}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </motion.div>
 
+            {/* Right Dashboard Visualization */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
-              className="relative hidden lg:block"
+              className="relative"
             >
-              <div className="glass-card p-8 rounded-3xl relative overflow-hidden">
-                <div className="flex justify-between items-start mb-8">
-                  <div>
-                    <h3 className="text-navy font-bold text-xl">Dòng tiền giải ngân</h3>
-                    <p className="text-xs text-gray-500 underline underline-offset-4 decoration-accent-blue decoration-2">Xu hướng 2007-2018</p>
+              <div className="relative bg-[#0a192f]/80 backdrop-blur-2xl p-10 rounded-[40px] border border-white/10 shadow-[0_40px_100px_-15px_rgba(0,0,0,0.6)] overflow-hidden group">
+                {/* Background glow inside card */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 blur-[100px]"></div>
+
+                <div className="flex justify-between items-center mb-10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-600/20 rounded-lg text-blue-400">
+                      <TrendingUp className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-white font-bold text-xl tracking-wide">Dòng tiền giải ngân</h3>
                   </div>
                 </div>
-                {/* Mock Chart Visualization */}
-                <div className="h-64 flex items-end gap-2 px-4">
-                  {[40, 60, 45, 90, 65, 80, 100, 75, 85, 95].map((h, i) => (
+
+                <p className="text-[13px] text-gray-500 mb-6 font-medium">Từ ngày 01/01/2024 - 31/05/2024</p>
+
+                {/* Styled Bar Chart */}
+                <div className="h-64 flex items-end justify-between gap-1 mb-12 px-2">
+                  {[25, 40, 35, 55, 45, 65, 50, 75, 55, 70, 60, 85, 95].map((h, i) => (
                     <motion.div
                       key={i}
                       initial={{ height: 0 }}
                       animate={{ height: `${h}%` }}
-                      transition={{ delay: 0.5 + (i * 0.1), duration: 1 }}
-                      className="flex-grow bg-navy/10 hover:bg-accent-blue transition-colors rounded-t-lg"
+                      transition={{ delay: 0.3 + (i * 0.05), duration: 0.8 }}
+                      className={`w-full max-w-[12px] rounded-t-sm transition-all duration-300 ${i === 12 ? 'bg-[#0066ff] shadow-[0_0_20px_rgba(0,102,255,0.5)]' : 'bg-blue-600/40 hover:bg-blue-600/80'
+                        }`}
                     />
                   ))}
                 </div>
-                <div className="mt-8 grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <p className="text-[14px] text-gray-400 mb-1">NPL Ratio</p>
-                    <p className="text-[16px] font-bold text-status-risk leading-none">14.2%</p>
+
+                {/* Chart Labels */}
+                <div className="flex justify-between text-[11px] text-gray-500 mb-10 px-1 uppercase tracking-tighter">
+                  {['01/2024', '02/2024', '03/2024', '04/2024', '05/2024', '06/2024', '07/2024', '08/2024', '09/2024', '10/2024', '11/2024', '12/2024'].map((m, i) => (
+                    <span key={i}>{m}</span>
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-2 gap-8 border-t border-white/5 pt-8">
+                  <div>
+                    <p className="text-[14px] text-gray-500 mb-2 uppercase tracking-widest font-bold">NPL Ratio</p>
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-4xl font-bold text-white">14.2%</p>
+                      <span className="text-[14px] text-status-risk flex items-center gap-1 font-bold">
+                        <ChevronDown className="h-3 w-3" /> 2.1% <span className="text-[12px] text-gray-600 font-normal">so với kỳ trước</span>
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <p className="text-[14px] text-gray-400 mb-1">Recovery Rate</p>
-                    <p className="text-[16px] font-bold text-status-good leading-none">58.3%</p>
+                  <div>
+                    <p className="text-[14px] text-gray-500 mb-2 uppercase tracking-widest font-bold">Recovery Rate</p>
+                    <div className="flex items-baseline gap-2">
+                      <p className="text-4xl font-bold text-[#22c55e]">58.3%</p>
+                      <span className="text-[14px] text-[#22c55e] flex items-center gap-1 font-bold">
+                        <ChevronUp className="h-3 w-3" /> 4.7% <span className="text-[12px] text-gray-600 font-normal">so với kỳ trước</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
+
+                {/* Floating "Mức dữ liệu" Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8, x: 20 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  transition={{ delay: 1, duration: 0.5 }}
+                  className="absolute -top-4 -right-4 p-5 bg-banking-gold rounded-2xl shadow-2xl text-navy flex flex-col gap-1 z-20"
+                >
+                  <div className="flex items-center gap-2">
+                    <Database className="h-6 w-6" />
+                    <span className="text-[12px] font-bold uppercase">Mức dữ liệu</span>
+                  </div>
+                  <p className="text-3xl font-black leading-none">2.26M</p>
+                  <p className="text-[10px] font-bold opacity-60">Cập nhật 05/2024</p>
+                </motion.div>
               </div>
-              {/* Floating element */}
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute -top-10 -right-10 p-6 bg-banking-gold rounded-2xl shadow-2xl text-navy"
-              >
-                <Database className="h-8 w-8 mb-2" />
-                <p className="text-xs font-bold uppercase tracking-widest">Big Data</p>
-                <p className="text-2xl font-black leading-none">2.26M</p>
-              </motion.div>
+
+              {/* Decorative Glow */}
+              <div className="absolute -bottom-20 -left-20 w-96 h-96 bg-blue-600/10 blur-[120px] rounded-full"></div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="inline-flex p-3 rounded-2xl bg-navy/5 text-navy mb-4">
-                  <stat.icon className="h-6 w-6" />
-                </div>
-                <p className="text-4xl font-black text-navy mb-1">{stat.value}</p>
-                <p className="text-sm text-gray-500 font-medium uppercase tracking-wider">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Features Detail Section (Existing content follows) */}
 
       {/* Features Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold text-navy mb-4">Đặc điểm Nền tảng</h2>
-            <div className="h-1.5 w-24 bg-banking-gold mx-auto rounded-full"></div>
+          <div className="text-center mb-20">
+            <h2 className="text-2xl md:text-4xl font-black text-navy mb-4 uppercase tracking-tighter">Năng lực Cốt lõi <br /> <span className="text-banking-gold">Hệ thống BI</span></h2>
+            <div className="h-1.5 w-32 bg-banking-gold mx-auto rounded-full mt-6"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -195,116 +247,134 @@ const LandingPage = () => {
 /* ---------- About Dataset ---------- */
 function AboutDataset() {
   return (
-    <section className="py-16 bg-gray-50 border-y border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-3xl border border-gray-100 enterprise-shadow overflow-hidden"
-        >
-          {/* Header bar */}
-          <div className="bg-navy px-8 py-5 flex items-center gap-4">
-            <div className="w-10 h-10 rounded-full bg-banking-gold/20 border-2 border-banking-gold flex items-center justify-center flex-shrink-0">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-banking-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-              </svg>
+    <section className="py-24 bg-[#051a3d] relative overflow-hidden">
+      {/* Subtle background patterns */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 30% 10%, rgba(212, 175, 55, 0.15) 0%, transparent 40%)' }}></div>
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-navy/80 to-transparent"></div>
+
+      <div className="max-w-[1900px] mx-auto px-8 lg:px-24 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-10 gap-16 items-stretch">
+
+          {/* Left Column (7/10): Content Content */}
+          <div className="lg:col-span-7 flex flex-col justify-center space-y-12">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-1.5 h-10 bg-banking-gold rounded-full"></div>
+                <span className="text-banking-gold font-black text-sm uppercase tracking-[0.3em]">Nguồn Dữ Liệu Gốc</span>
+              </div>
+              <h2 className="text-5xl md:text-4xl font-black text-white uppercase tracking-tighter leading-tight">
+                Ứng dụng Big Data <br />
+                vào <span className="text-banking-gold">Quản trị Tín dụng</span>
+              </h2>
+            </motion.div>
+
+            {/* Grid of 4 Cards (2x2 Style) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  title: 'QUY MÔ KHỔNG LỒ',
+                  desc: 'Phân tích hành vi vay vốn của hơn 2.26 triệu khách hàng, cung cấp cái nhìn toàn cảnh về thị trường P2P.',
+                  icon: Database,
+                  color: 'border-blue-500/30 bg-blue-500/5'
+                },
+                {
+                  title: 'DỮ LIỆU CHUẨN HÓA',
+                  desc: 'Từ 151 thuộc tính thô được tinh lọc còn 33 biến quan trọng, loại bỏ hoàn toàn các dữ liệu nhiễu và thiếu.',
+                  icon: Layers,
+                  color: 'border-banking-gold/30 bg-banking-gold/5'
+                },
+                {
+                  title: 'CHU KỲ DÀI HẠN',
+                  desc: 'Dữ liệu trải dài từ 2007-2018, bao quát cả giai đoạn khủng hoảng tài chính và phục hồi kinh tế.',
+                  icon: TrendingUp,
+                  color: 'border-emerald-500/30 bg-emerald-500/5'
+                },
+                {
+                  title: 'HIỆU QUẢ PHÂN TÍCH',
+                  desc: 'Tối ưu hóa mô hình Star Schema giúp rút ngắn thời gian truy vấn báo cáo từ vài phút xuống còn vài giây.',
+                  icon: Zap,
+                  color: 'border-rose-500/30 bg-rose-500/5'
+                }
+              ].map((card, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                  className={`p-8 border rounded-3xl backdrop-blur-sm group hover:scale-[1.02] transition-all duration-300 ${card.color}`}
+                >
+                  <h3 className="text-banking-gold font-black text-lg mb-4 flex items-center gap-3">
+                    <card.icon className="h-5 w-5" />
+                    {card.title}
+                  </h3>
+                  <p className="text-blue-100/70 text-[15px] leading-relaxed group-hover:text-white transition-colors">
+                    {card.desc}
+                  </p>
+                </motion.div>
+              ))}
             </div>
-            <div>
-              <p className="text-banking-gold text-[10px] font-black uppercase tracking-[0.25em]">About Dataset</p>
-              <h2 className="text-white font-black text-xl leading-tight">LendingClub Loan Data (2007–2018)</h2>
+
+            {/* Pagination dots & Footer Note */}
+            <div className="flex items-center justify-between pt-8">
+              <div className="flex gap-2">
+                <div className="w-8 h-2 bg-banking-gold rounded-full"></div>
+                <div className="w-2 h-2 bg-white/20 rounded-full"></div>
+                <div className="w-2 h-2 bg-white/20 rounded-full"></div>
+              </div>
+              <p className="text-white/30 text-[11px] font-bold uppercase tracking-widest">
+                Source: Kaggle · wordsforthewise/lending-club · 2018
+              </p>
             </div>
           </div>
 
-          {/* Content */}
-          <div className="p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Description */}
-            <div className="lg:col-span-2 space-y-4">
-              <p className="text-gray-600 leading-relaxed text-xl">
-                Bộ dữ liệu được cung cấp bởi <strong className="text-navy">LendingClub</strong> — nền tảng cho vay ngang hàng (P2P Lending) lớn nhất Hoa Kỳ. Dữ liệu ghi lại toàn bộ lịch sử khoản vay từ <strong className="text-navy">2007 đến 2018</strong>, bao gồm thông tin về người vay, điều kiện khoản vay, lịch sử tín dụng và kết quả thanh toán.
-              </p>
-              <p className="text-gray-600 leading-relaxed text-xm">
-                Sau quá trình <strong className="text-navy">ETL và làm sạch dữ liệu</strong>, bộ dữ liệu được thu gọn từ 151 cột nguyên bản xuống còn <strong className="text-navy">33 thuộc tính chất lượng cao</strong> với hơn <strong className="text-navy">2.26 triệu bản ghi</strong>, phục vụ phân tích rủi ro tín dụng và xây dựng hệ thống BI.
-              </p>
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                {['P2P Lending', 'Credit Risk', 'Financial Analytics', 'Big Data', 'ETL Pipeline', 'Star Schema'].map(tag => (
-                  <span key={tag} className="text-[12px] font-black px-3 py-1.5 rounded-full bg-navy/5 text-navy border border-navy/10 uppercase tracking-widest">
-                    {tag}
-                  </span>
-                ))}
+          {/* Right Column (3/10): Square Tinted Image */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="lg:col-span-3 relative"
+          >
+            <div className="relative aspect-square w-full overflow-hidden border border-white/5 shadow-2xl">
+              <img 
+                src="/pictures/kaggle.png" 
+                alt="Dataset Architecture" 
+                className="w-full h-full object-cover transition-transform duration-[2000ms]"
+              />
+              {/* Deep Blue Tinted Overlay */}
+              <div className="absolute inset-0 bg-[#051a3d]/60 backdrop-blur-[2px]"></div>
+              
+              {/* Vertical Gradient Fade */}
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#051a3d] to-transparent"></div>
+              
+              {/* Floating ID Tag */}
+              <div className="absolute bottom-10 left-10 z-20 space-y-2">
+                <p className="text-banking-gold text-[12px] font-black uppercase tracking-[0.2em]">
+                  Kaggle Repository / LendingClub Data
+                </p>
+                <h4 className="text-white text-4xl font-black uppercase tracking-tighter">
+                  Kaggle
+                </h4>
+                <p className="text-blue-100/60 text-sm font-medium leading-tight">
+                  Hệ thống dữ liệu cho vay ngang hàng P2P lớn nhất
+                </p>
               </div>
             </div>
-
-            {/* Stats + Link */}
-            <div className="space-y-4">
-              {/* Dataset stats */}
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { val: '2.26M+', label: 'Bản ghi' },
-                  { val: '151', label: 'Thuộc tính' },
-                  { val: '2007–2018', label: 'Thời gian' },
-                  { val: '50+', label: 'Bang (Mỹ)' },
-                ].map((s, i) => (
-                  <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 text-center">
-                    <p className="text-xl font-black text-accent-blue">{s.val}</p>
-                    <p className="text-[12px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Kaggle link */}
-              <a
-                href="https://www.kaggle.com/datasets/wordsforthewise/lending-club"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-4 bg-navy rounded-2xl hover:bg-accent-blue transition-colors group"
-              >
-                <div className="w-9 h-9 rounded-xl bg-banking-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="h-5 w-5 text-navy" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.825 23.859c-.022.092-.117.141-.281.141h-3.139c-.187 0-.351-.082-.492-.248l-5.178-6.589-1.448 1.374v5.111c0 .235-.117.352-.351.352H5.505c-.236 0-.354-.117-.354-.352V.353c0-.233.118-.353.354-.353h2.431c.234 0 .351.12.351.353v14.343l6.203-6.272c.165-.165.33-.246.495-.246h3.239c.144 0 .236.06.285.18.046.149.034.255-.036.315l-6.555 6.344 6.836 8.507c.095.104.117.208.07.336z" />
-                  </svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white text-[16px] font-black leading-tight">Xem trên Kaggle</p>
-                  <p className="text-blue-300 text-[13px] truncate">wordsforthewise/lending-club</p>
-                </div>
-                <svg className="h-4 w-4 text-white/50 group-hover:text-banking-gold transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-
-              {/* Source note */}
-              <p className="text-[10px] text-gray-400 font-medium text-center">
-                Nguồn: Kaggle · LendingClub Statistics · Cập nhật 2018
-              </p>
-
-              {/* Download cleaned CSV */}
-              <a
-                href="https://github.com/damchienthang/credit-analysis-bank-HQT/raw/main/data/data_hqtcsdl.csv"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-4 bg-banking-gold/10 border-2 border-banking-gold/40 rounded-2xl hover:bg-banking-gold/20 hover:border-banking-gold transition-all group"
-              >
-                <div className="w-9 h-9 rounded-xl bg-banking-gold flex items-center justify-center flex-shrink-0">
-                  <svg className="h-5 w-5 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-navy text-[13px] font-black leading-tight">Tải trực tiếp dữ liệu đã được làm sạch</p>
-                  <p className="text-gray-500 text-[11px] truncate">data_hqtcsdl.csv · 33 thuộc tính · 2.26M bản ghi</p>
-                </div>
-                <svg className="h-4 w-4 text-navy/40 group-hover:text-navy transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </a>
-
+            
+            {/* Minimal Navigation dots */}
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+              <div className="w-8 h-1.5 bg-banking-gold rounded-full"></div>
+              <div className="w-2 h-1.5 bg-white/10 rounded-full"></div>
+              <div className="w-2 h-1.5 bg-white/10 rounded-full"></div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+
+        </div>
       </div>
     </section>
   );
@@ -382,7 +452,7 @@ function DatasetSection() {
             <Table2 className="h-4 w-4" />
             <span className="text-xs font-bold uppercase tracking-widest">Data Dictionary</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-navy mb-4 uppercase tracking-tighter">
+          <h2 className="text-3xl md:text-4xl font-black text-navy mb-4 uppercase tracking-tighter">
             Các thuộc tính được lựa chọn
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
@@ -517,7 +587,7 @@ function EDASection() {
             <TrendingUp className="h-4 w-4" />
             <span className="text-xs font-bold uppercase tracking-widest">Exploratory Data Analysis</span>
           </div>
-          <h2 className="text-3xl md:text-5xl font-black text-navy mb-4 uppercase tracking-tighter">
+          <h2 className="text-3xl md:text-4xl font-black text-navy mb-4 uppercase tracking-tighter">
             Phân tích Dữ liệu EDA
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">

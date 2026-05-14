@@ -129,10 +129,10 @@ export default function ArchitecturePage() {
             Sơ đồ tổng quát quy trình
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter">
+            className="text-4xl md:text-5xl font-black text-white mb-6 uppercase tracking-tighter">
             ETL Pipeline &amp; <span className="text-banking-gold">Kiến trúc Hệ thống</span>
           </motion.h1>
-          <p className="text-xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-[18px] text-blue-100 max-w-3xl mx-auto leading-relaxed">
             Hệ thống phân tích dữ liệu hoạt động tín dụng — từ <strong>File CSV thô</strong> đến{' '}
             <strong>Web Dashboard tương tác</strong> qua 6 giai đoạn chuẩn.
           </p>
@@ -152,7 +152,7 @@ export default function ArchitecturePage() {
             const style = stageStyle(i, stages.length);
             return (
               <div key={s.no} className="flex items-center">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[12px] font-black uppercase tracking-widest ${style.hdr}`}>
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-black uppercase tracking-widest ${style.hdr}`}>
                   <span>{s.no}</span>
                   <span className="hidden xl:inline">{s.title}</span>
                 </div>
@@ -181,14 +181,14 @@ export default function ArchitecturePage() {
                     <s.icon className="h-7 w-7 text-white" />
                   </div>
                   <div>
-                    <p className="text-white/70 text-[10px] font-black uppercase tracking-[0.2em]">{s.sub}</p>
-                    <h3 className="text-white font-black text-lg leading-tight">{s.no}. {s.title}</h3>
+                    <p className="text-white/70 text-[13px] font-black uppercase tracking-[0.2em]">{s.sub}</p>
+                    <h3 className="text-white font-black text-xl leading-tight">{s.no}. {s.title}</h3>
                   </div>
                 </div>
 
                 {/* Body */}
                 <div className="p-5">
-                  <span className={`inline-block text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 border ${i === stages.length - 1
+                  <span className={`inline-block text-[13px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 border ${i === stages.length - 1
                     ? 'bg-banking-gold/10 text-navy border-banking-gold/30'
                     : i % 2 === 0
                       ? 'bg-navy/5 text-navy border-navy/15'
@@ -199,7 +199,7 @@ export default function ArchitecturePage() {
 
                   {/* Toggle */}
                   <button onClick={() => setOpen(isOpen ? null : i)}
-                    className="flex items-center gap-2 text-xs font-bold text-accent-blue hover:text-navy transition-colors mb-3">
+                    className="flex items-center gap-2 text-sm font-bold text-accent-blue hover:text-navy transition-colors mb-3">
                     {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     {isOpen ? 'Thu gọn' : 'Xem chi tiết'}
                   </button>
@@ -210,7 +210,7 @@ export default function ArchitecturePage() {
                         exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                         <ul className="space-y-2 mb-4">
                           {s.details.map((d, j) => (
-                            <li key={j} className="flex gap-2 text-[13px] text-gray-600 font-medium">
+                            <li key={j} className="flex gap-2 text-sm text-gray-600 font-medium">
                               <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${style.dot}`} />
                               {d}
                             </li>
@@ -218,14 +218,14 @@ export default function ArchitecturePage() {
                         </ul>
                         <div className="p-3 bg-navy/5 rounded-xl border border-navy/10">
                           <p className="text-[12px] font-black text-gray-400 uppercase tracking-widest mb-1">Output</p>
-                          <p className="text-xs font-bold text-navy">{s.output}</p>
+                          <p className="text-sm font-bold text-navy">{s.output}</p>
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
 
                   {!isOpen && (
-                    <p className="text-[16px] text-gray-400 italic leading-relaxed">{s.details[0]}</p>
+                    <p className="text-[15px] text-gray-500 italic leading-relaxed">{s.details[0]}</p>
                   )}
                 </div>
               </motion.div>
@@ -234,7 +234,7 @@ export default function ArchitecturePage() {
         </div>
 
         {/* Legend */}
-        <div className="mt-10 flex flex-wrap justify-center gap-6 text-xs font-bold text-gray-500">
+        <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm font-bold text-gray-500">
           {[
             { label: 'Extract (ETL)', cls: 'bg-accent-blue' },
             { label: 'Transform', cls: 'bg-navy' },
@@ -271,8 +271,8 @@ export default function ArchitecturePage() {
                 <div className="space-y-1">
                   {factCols.map(col => (
                     <div key={col} className="text-[13px] font-mono text-blue-100 py-1 border-b border-white/5 last:border-0 flex items-center gap-2">
-                      {col.includes('PK') && <span className="text-banking-gold font-black text-[9px] w-4">PK</span>}
-                      {col.includes('FK') && <span className="text-accent-blue font-black text-[9px] w-4">FK</span>}
+                      {col.includes('PK') && <span className="text-banking-gold font-black text-[10px] w-4">PK</span>}
+                      {col.includes('FK') && <span className="text-accent-blue font-black text-[10px] w-4">FK</span>}
                       {!col.includes('PK') && !col.includes('FK') && <span className="w-4" />}
                       {col.replace(' (PK)', '').replace(' (FK)', '')}
                     </div>
@@ -296,7 +296,7 @@ export default function ArchitecturePage() {
                     {dim.cols.map(col => (
                       <div key={col} className="text-[13px] font-mono text-gray-600 flex items-center gap-1.5">
                         {col.includes('PK')
-                          ? <span className="text-banking-gold font-black text-[9px] w-4">PK</span>
+                          ? <span className="text-banking-gold font-black text-[10px] w-4">PK</span>
                           : <span className="w-4" />
                         }
                         {col.replace(' (PK)', '')}
@@ -319,7 +319,7 @@ export default function ArchitecturePage() {
                 <CheckCircle2 className="h-5 w-5 text-accent-blue flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold text-navy text-sm mb-1">{note.title}</p>
-                  <p className="text-xs text-gray-500 leading-relaxed">{note.desc}</p>
+                  <p className="text-sm text-gray-600 leading-relaxed">{note.desc}</p>
                 </div>
               </div>
             ))}

@@ -73,13 +73,13 @@ const AboutPage = () => {
               </div>
               <div className="pt-14 p-8 space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold text-navy">{member.name}</h3>
-                  <p className="text-xs font-bold text-accent-blue uppercase tracking-widest">{member.role}</p>
+                  <h3 className="text-2xl font-bold text-navy">{member.name}</h3>
+                  <p className="text-sm font-bold text-accent-blue uppercase tracking-widest">{member.role}</p>
                 </div>
-                <p className="text-sm text-gray-500 leading-relaxed">{member.desc}</p>
+                <p className="text-base text-gray-500 leading-relaxed">{member.desc}</p>
                 <div className="flex flex-wrap gap-2">
                   {member.skills.map(skill => (
-                    <span key={skill} className="text-[10px] font-bold px-2 py-1 bg-gray-50 text-gray-400 rounded-md uppercase border border-gray-100">
+                    <span key={skill} className="text-[13px] font-bold px-2 py-1 bg-gray-50 text-gray-400 rounded-md uppercase border border-gray-100">
                       {skill}
                     </span>
                   ))}
@@ -111,8 +111,8 @@ const AboutPage = () => {
               <div className="flex items-center gap-4 text-banking-gold font-bold">
                 <Award className="h-10 w-10" />
                 <div>
-                  <p className="text-2xl leading-none">95%</p>
-                  <p className="text-xs uppercase tracking-widest text-white/60">Hoàn thành</p>
+                  <p className="text-3xl leading-none">95%</p>
+                  <p className="text-sm uppercase tracking-widest text-white/60">Hoàn thành</p>
                 </div>
               </div>
             </div>
@@ -128,8 +128,8 @@ const AboutPage = () => {
                 className={`flex items-center gap-6 p-6 rounded-3xl border ${item.status === 'done' ? 'bg-white/5 border-white/10 opacity-60' : 'bg-white/10 border-white/20'
                   }`}
               >
-                <div className="text-sm font-black text-banking-gold w-20">{item.date}</div>
-                <div className="flex-grow font-bold text-lg">{item.task}</div>
+                <div className="text-base font-black text-banking-gold w-20">{item.date}</div>
+                <div className="flex-grow font-bold text-xl">{item.task}</div>
                 {item.status === 'done' ? (
                   <CheckCircle2 className="h-6 w-6 text-status-good" />
                 ) : (

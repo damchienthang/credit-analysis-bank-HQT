@@ -16,7 +16,7 @@ import {
 // ── Connection status badge ────────────────────────────────────────────────────
 function DbStatus({ live }) {
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-widest border ${
       live ? 'bg-green-50 text-green-700 border-green-200' : 'bg-amber-50 text-amber-700 border-amber-200'
     }`}>
       {live ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
@@ -119,15 +119,15 @@ const DashboardPage = () => {
                   {Icon && <Icon className="h-6 w-6" />}
                 </div>
                 {kpi.trend ? (
-                  <span className={`text-xs font-bold px-2 py-1 rounded-lg ${kpi.trend.startsWith('+') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                  <span className={`text-sm font-bold px-2 py-1 rounded-lg ${kpi.trend.startsWith('+') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
                     {kpi.trend}
                   </span>
                 ) : (
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-blue-50 text-blue-500">LIVE</span>
+                  <span className="text-[13px] font-bold px-2 py-1 rounded-lg bg-blue-50 text-blue-500">LIVE</span>
                 )}
               </div>
-              <p className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-              <h3 className="text-3xl font-black text-navy">{kpi.value}</h3>
+              <p className="text-base font-bold text-gray-400 uppercase tracking-widest mb-1">{kpi.label}</p>
+              <h3 className="text-4xl font-black text-navy">{kpi.value}</h3>
             </motion.div>
           );
         })}
@@ -190,7 +190,7 @@ const DashboardPage = () => {
             <div className="p-4 bg-navy/5 rounded-2xl border border-navy/10">
               <div className="flex items-center gap-3">
                 <AlertTriangle className="h-5 w-5 text-accent-blue" />
-                <p className="text-xs font-bold text-navy">Insight: Nợ tiêu dùng chiếm 75% tỷ trọng danh mục.</p>
+                <p className="text-sm font-bold text-navy">Insight: Nợ tiêu dùng chiếm 75% tỷ trọng danh mục.</p>
               </div>
             </div>
           </div>
@@ -275,7 +275,7 @@ const DashboardPage = () => {
                   <td className="px-8 py-5 text-gray-600 font-medium">{Number(item.loans).toLocaleString()}</td>
                   <td className="px-8 py-5 text-status-risk font-bold">{item.npl}</td>
                   <td className="px-8 py-5">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-tighter ${
                       item.risk === 'Low'    ? 'bg-green-100 text-green-700' :
                       item.risk === 'Medium' ? 'bg-amber-100 text-amber-700' :
                                                'bg-red-100 text-red-700'
