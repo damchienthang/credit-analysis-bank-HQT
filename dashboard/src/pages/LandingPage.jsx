@@ -131,7 +131,7 @@ const LandingPage = () => {
                   </div>
                 </div>
 
-                <p className="text-[13px] text-gray-500 mb-6 font-medium">Từ ngày 01/01/2024 - 31/05/2024</p>
+                <p className="text-[15px] text-gray-500 mb-6 font-medium">Từ ngày 01/01/2024 - 31/05/2024</p>
 
                 {/* Styled Bar Chart */}
                 <div className="h-64 flex items-end justify-between gap-1 mb-12 px-2">
@@ -160,7 +160,7 @@ const LandingPage = () => {
                     <div className="flex items-baseline gap-2">
                       <p className="text-4xl font-bold text-white">14.2%</p>
                       <span className="text-[14px] text-status-risk flex items-center gap-1 font-bold">
-                        <ChevronDown className="h-3 w-3" /> 2.1% <span className="text-[12px] text-gray-600 font-normal">so với kỳ trước</span>
+                        <ChevronDown className="h-3 w-3" /> 2.1% <span className="text-[14px] text-gray-600 font-normal">so với kỳ trước</span>
                       </span>
                     </div>
                   </div>
@@ -169,7 +169,7 @@ const LandingPage = () => {
                     <div className="flex items-baseline gap-2">
                       <p className="text-4xl font-bold text-[#22c55e]">58.3%</p>
                       <span className="text-[14px] text-[#22c55e] flex items-center gap-1 font-bold">
-                        <ChevronUp className="h-3 w-3" /> 4.7% <span className="text-[12px] text-gray-600 font-normal">so với kỳ trước</span>
+                        <ChevronUp className="h-3 w-3" /> 4.7% <span className="text-[14px] text-gray-600 font-normal">so với kỳ trước</span>
                       </span>
                     </div>
                   </div>
@@ -320,58 +320,53 @@ function AboutDataset() {
               ))}
             </div>
 
-            {/* Pagination dots & Footer Note */}
-            <div className="flex items-center justify-between pt-8">
-              <div className="flex gap-2">
-                <div className="w-8 h-2 bg-banking-gold rounded-full"></div>
-                <div className="w-2 h-2 bg-white/20 rounded-full"></div>
-                <div className="w-2 h-2 bg-white/20 rounded-full"></div>
-              </div>
-              <p className="text-white/30 text-[11px] font-bold uppercase tracking-widest">
-                Source: Kaggle · wordsforthewise/lending-club · 2018
-              </p>
-            </div>
-          </div>
-
-          {/* Right Column (3/10): Square Tinted Image */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="lg:col-span-3 relative"
-          >
-            <div className="relative aspect-square w-full overflow-hidden border border-white/5 shadow-2xl">
-              <img 
-                src="/pictures/kaggle.png" 
-                alt="Dataset Architecture" 
-                className="w-full h-full object-cover transition-transform duration-[2000ms]"
-              />
-              {/* Deep Blue Tinted Overlay */}
-              <div className="absolute inset-0 bg-[#051a3d]/60 backdrop-blur-[2px]"></div>
-              
-              {/* Vertical Gradient Fade */}
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#051a3d] to-transparent"></div>
-              
-              {/* Floating ID Tag */}
-              <div className="absolute bottom-10 left-10 z-20 space-y-2">
-                <p className="text-banking-gold text-[12px] font-black uppercase tracking-[0.2em]">
-                  Kaggle Repository / LendingClub Data
-                </p>
-                <h4 className="text-white text-4xl font-black uppercase tracking-tighter">
-                  Kaggle
-                </h4>
-                <p className="text-blue-100/60 text-sm font-medium leading-tight">
-                  Hệ thống dữ liệu cho vay ngang hàng P2P lớn nhất
-                </p>
-              </div>
-            </div>
-            
-            {/* Minimal Navigation dots */}
-            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+            {/* Pagination dots */}
+            <div className="flex items-center gap-2 pt-8">
               <div className="w-8 h-1.5 bg-banking-gold rounded-full"></div>
               <div className="w-2 h-1.5 bg-white/10 rounded-full"></div>
               <div className="w-2 h-1.5 bg-white/10 rounded-full"></div>
             </div>
+          </div>
+
+          {/* Right Column (3/10): Square Image + Link Underneath */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="lg:col-span-3 space-y-6"
+          >
+            <a
+              href="https://www.kaggle.com/datasets/wordsforthewise/lending-club"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block relative aspect-square w-full overflow-hidden border border-white/5 shadow-2xl group cursor-pointer"
+            >
+              <img
+                src="/pictures/kaggle.png"
+                alt="Dataset Architecture"
+                className="w-full h-full object-cover transition-transform duration-[2000ms] group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-[#051a3d]/60 backdrop-blur-[2px] group-hover:bg-[#051a3d]/40 transition-all"></div>
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#051a3d] to-transparent"></div>
+
+              <div className="absolute bottom-10 left-10 z-20 space-y-2">
+                <p className="text-banking-gold text-[12px] font-black uppercase tracking-[0.2em]">Kaggle Repository</p>
+                <h4 className="text-white text-4xl font-black uppercase tracking-tighter">Kaggle</h4>
+                <p className="text-blue-100/60 text-sm font-medium">LendingClub Financial Data</p>
+              </div>
+            </a>
+
+            {/* Link Directly Under Image */}
+            <a
+              href="https://www.kaggle.com/datasets/wordsforthewise/lending-club"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full py-5 bg-white/5 border border-white/10 rounded-2xl text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-banking-gold hover:text-navy transition-all group"
+            >
+              <Database className="h-4 w-4 text-banking-gold group-hover:text-navy" />
+              <span>Explore Dataset on Kaggle</span>
+              <ArrowRight className="h-4 w-4" />
+            </a>
           </motion.div>
 
         </div>
