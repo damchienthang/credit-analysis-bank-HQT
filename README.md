@@ -1,60 +1,88 @@
-# Hệ Thống Phân Tích & Quản Trị Dữ Liệu Tín Dụng (BI Model)
+# HỆ THỐNG PHÂN TÍCH VÀ QUẢN TRỊ DỮ LIỆU TÍN DỤNG (BANKING BUSINESS INTELLIGENCE)
 
-## Tổng quan dự án (Executive Summary)
-Dự án tập trung vào việc xây dựng hệ thống **Business Intelligence (BI)** hoàn chỉnh để phân tích hoạt động tín dụng dựa trên bộ dữ liệu **Lending Club** (hơn 2.26 triệu bản ghi). Hệ thống hỗ trợ Ban lãnh đạo ngân hàng theo dõi sức khỏe danh mục cho vay, đánh giá rủi ro nợ xấu và tối ưu hóa lợi nhuận.
+## 1. Tổng quan dự án
+Dự án tập trung xây dựng giải pháp Business Intelligence (BI) toàn diện nhằm phân tích và quản trị rủi ro tín dụng dựa trên bộ dữ liệu lớn từ Lending Club. Hệ thống cho phép chuyển đổi dữ liệu thô phức tạp thành các báo cáo trực quan, hỗ trợ Ban lãnh đạo ngân hàng trong việc theo dõi sức khỏe danh mục cho vay, đánh giá tỷ lệ nợ xấu (NPL) và tối ưu hóa chiến lược thu hồi nợ.
 
-**Vai trò:** Data Analyst / BI Developer (Nhóm trưởng)
-**Mục tiêu:** Chuyển đổi dữ liệu thô phân mảnh thành Dashboard quản trị trực quan.
+## 2. Quy mô và Đặc điểm dữ liệu
+Hệ thống xử lý tập dữ liệu thực tế với khối lượng lớn và độ phức tạp cao:
+- **Tổng số bản ghi:** **2,260,701** giao dịch vay vốn.
+- **Dữ liệu thô ban đầu:** **151** trường thông tin (cột), bao gồm nhiều dữ liệu nhiễu và lỗi định dạng mã hóa.
+- **Dữ liệu sau xử lý:** **33** thuộc tính quan trọng nhất được trích xuất và chuẩn hóa để tối ưu hóa hiệu suất truy vấn.
+- **Thời gian dữ liệu:** Trải dài từ năm **2007** đến năm **2018**.
 
----
+## 3. Các chỉ số hiệu suất chính (KPIs)
+Dựa trên kết quả phân tích hệ thống, các chỉ số quan trọng được tổng hợp như sau:
+- **Tổng dư nợ hệ thống:** **$32.5 tỷ USD**.
+- **Tỷ lệ nợ xấu (NPL):** **14.2%** trên tổng danh mục.
+- **Tỷ lệ thu hồi nợ:** **58.3%** đối với các khoản vay đã tất toán hoặc quá hạn.
+- **Phân bổ hạng tín dụng:** Tập trung chủ yếu ở nhóm Grade B (**663,557** khoản vay) và Grade C (**650,053** khoản vay).
 
-## Kiến trúc hệ thống (System Architecture)
-Quy trình thực hiện tuân thủ mô hình chuẩn của một dự án BI:
-`Raw Data (CSV) ➔ ETL (Python/SQL) ➔ Data Warehouse (SQL Server) ➔ BI Dashboard`
+## 4. Kiến trúc hệ thống
+Hệ thống được thiết kế theo mô hình 4 tầng chuẩn trong kỹ nghệ dữ liệu:
 
----
+- **Tầng dữ liệu thô (Raw Data):** Tệp CSV dung lượng lớn với hơn **2.26 triệu** dòng.
+- **Tầng xử lý (ETL Phase):** 
+    - Sử dụng Python (Pandas, RegEx) để làm sạch, xử lý lỗi Unicode và chuyển đổi định dạng.
+    - Giảm số lượng cột từ **151** xuống **33**, giúp tăng tốc độ truy vấn lên **70%**.
+- **Tầng lưu trữ (Data Warehouse):** 
+    - Thiết kế theo mô hình **Star Schema** trong SQL Server để tối ưu hóa hiệu suất phân tích.
+    - Cấu trúc gồm **1 bảng Fact** trung tâm và **5 bảng Dimension** bao quanh.
+    - Tên Database: **CreditBI_DB**.
 
-## Công nghệ & Kỹ năng (Tech Stack)
-* **Ngôn ngữ:** Python (Pandas, NumPy, RegEx) để xử lý dữ liệu lớn.
-* **Cơ sở dữ liệu:** SQL Server (T-SQL) thiết kế kho dữ liệu.
-* **Mô hình hóa:** Star Schema (1 Fact, 4 Dimensions).
-* **Công cụ:** Git/GitHub (Version Control), Power BI/Excel (Visualization).
+### Mô hình dữ liệu (Star Schema)
+```mermaid
+erDiagram
+    Fact_Loans {
+        bigint loan_id PK
+        int customer_id FK
+        int time_id FK
+        int geo_id FK
+        int product_id FK
+        int risk_id FK
+        float loan_amnt
+        float int_rate
+        int term
+        float dti
+        float out_prncp
+        float total_pymnt
+        float recoveries
+    }
+    Dim_Customers ||--o{ Fact_Loans : "customer_id"
+    Dim_Time ||--o{ Fact_Loans : "time_id"
+    Dim_Geography ||--o{ Fact_Loans : "geo_id"
+    Dim_LoanProduct ||--o{ Fact_Loans : "product_id"
+    Dim_CreditRisk ||--o{ Fact_Loans : "risk_id"
+```
+- **Tầng trình diễn (Presentation Layer):**
+    - Backend: Node.js (Express) kết nối trực tiếp SQL Server qua thư viện mssql.
+    - Frontend: Dashboard hiện đại xây dựng trên React.js, Vite và Tailwind CSS.
 
----
+## 5. Công nghệ sử dụng
+- **Xử lý dữ liệu:** Python (Pandas, NumPy, Matplotlib, Seaborn).
+- **Cơ sở dữ liệu:** SQL Server (T-SQL), thiết kế Store Procedures và tối ưu hóa Index.
+- **Phát triển ứng dụng:** Node.js, Express, React.js, Tailwind CSS, Recharts (vẽ biểu đồ).
+- **Quản lý dự án:** Git, GitHub.
 
-## Quy trình thực hiện chi tiết
+## 6. Cấu trúc thư mục
+- **backend/**: Mã nguồn server Express cung cấp API dữ liệu từ SQL Server.
+- **dashboard/**: Ứng dụng React hiển thị biểu đồ và các chỉ số quản trị.
+- **data/**: Tài liệu hướng dẫn và từ điển dữ liệu.
+- **notebooks/**: Quy trình ETL (Làm sạch dữ liệu) và phân tích khám phá (EDA).
+- **sql_scripts/**: Scripts khởi tạo cấu trúc bảng, nạp dữ liệu và các câu lệnh truy vấn KPI.
+- **outputs/**: Hình ảnh báo cáo và kết quả phân tích tĩnh.
+- **reports/**: Tài liệu đồ án chi tiết và hướng dẫn nghiệp vụ.
 
-### 1. Xử lý dữ liệu thô (ETL Phase - Python): https://www.kaggle.com/datasets/wordsforthewise/lending-club?resource=download
-Do tập dữ liệu gốc cực lớn (151 cột) và gặp lỗi mã hóa Unicode, tôi đã thực hiện quy trình xử lý nghiêm ngặt:
-* **Xử lý lỗi mã hóa (Encoding):** Khắc phục lỗi `UnicodeDecodeError` bằng cách chuyển đổi bảng mã sang `latin1` để xử lý tệp nén trực tiếp bằng Pandas.
-* **Feature Selection:** Loại bỏ 118 cột nhiễu/thiếu dữ liệu, tập trung vào 30 cột nghiệp vụ và 03 chỉ số rủi ro chuyên sâu (**il_util, max_bal_bc, all_util**).
-* **Feature Engineering:** Trích xuất thêm 03 thuộc tính thời gian (**Year, Month, Quarter**) từ cột giải ngân, nâng tổng số lên **33 cột** để tối ưu hóa truy vấn xu hướng.
-* **Data Transformation:** - Sử dụng **RegEx** chuẩn hóa cột `term` và `emp_length` về dạng số nguyên (0-10) để tính toán.
-    - Đồng bộ định dạng ngày tháng về `YYYY-MM-DD` để tương thích hoàn toàn với kiểu dữ liệu DATE trong SQL Server.
-* **Data Imputation:** Xử lý giá trị thiếu bằng phương pháp **Median** cho dữ liệu số và **Logic-based mapping** cho ngày tháng (điền `last_pymnt_d` dựa trên `issue_d`).
-* **Kết quả:** Giảm dung lượng dữ liệu đáng kể, tối ưu hóa bộ nhớ và tăng tốc độ truy vấn hệ thống lên 70%.
-* *Chi tiết tại:* `notebooks/01_data_cleaning.ipynb`
+## 7. Phân tích khám phá dữ liệu (EDA Insights)
+Quá trình phân tích chuyên sâu trên tập dữ liệu **2.26 triệu** bản ghi đã rút ra các đặc điểm quan trọng:
+- **Khoản vay:** Phân bổ chủ yếu trong khoảng từ **$5,000** đến **$25,000**. Các khoản vay có kỳ hạn **36 tháng** chiếm tỷ lệ áp đảo so với **60 tháng**.
+- **Lãi suất:** Trung bình dao động từ **10% - 15%**, tuy nhiên có sự phân hóa mạnh theo Grade. Nhóm Grade A có lãi suất thấp nhất (dưới **8%**), trong khi Grade G có thể lên tới trên **25%**.
+- **Thu nhập khách hàng:** Phần lớn khách hàng có thu nhập năm từ **$45,000** đến **$85,000**. Có mối tương quan nghịch giữa thu nhập và tỷ lệ nợ xấu.
+- **Mục đích vay:** **Debt Consolidation** (Gom nợ) là mục đích phổ biến nhất, chiếm khoảng **50%** tổng số khoản vay.
+- **Rủi ro tài chính:** Chỉ số DTI (Debt-to-Income) trung bình ở mức **18%**. Những khách hàng có DTI trên **30%** có xác suất rơi vào nhóm nợ xấu cao gấp **1.5 lần** bình thường.
 
-### 2. Thiết kế Kho dữ liệu (Data Modeling - SQL)
-Xây dựng mô hình **Star Schema** để tối ưu hóa hiệu suất cho các báo cáo phân tích:
-* **Fact_Loans:** Lưu trữ số tiền vay, lãi suất, kỳ hạn, trạng thái nợ.
-* **Dim_Customers:** Thông tin nghề nghiệp, thu nhập, tình trạng nhà ở.
-* **Dim_Time:** Phân tích xu hướng theo Tháng/Quý/Năm.
-* **Dim_Geography:** Phân tích dư nợ theo khu vực địa lý.
-* *Chi tiết tại:* `sql_scripts/database_schema.sql`
-
-### 3. Phân tích & Trực quan hóa (BI Reporting)
-Hệ thống cung cấp các chỉ số Key Performance Indicators (KPIs) quan trọng:
-* **NPL Ratio (Tỷ lệ nợ xấu):** Theo dõi các khoản vay quá hạn và mất vốn.
-* **Loan Distribution:** Phân bổ dư nợ theo hạng tín dụng (Grade) và mục đích vay.
-* **Recovery Analysis:** Đánh giá hiệu quả thu hồi nợ.
-
----
-
-## Cấu trúc Repository (Project Structure)
-```text
-├── data/               # Từ điển dữ liệu (Data Dictionary)
-├── notebooks/          # Code xử lý ETL & EDA (Python)
-├── sql_scripts/        # Script khởi tạo Database & Quy trình nạp dữ liệu (SQL)
-├── reports/            # Báo cáo đồ án & Hình ảnh Dashboard
-└── README.md           # Hướng dẫn dự án
+## 8. Kết quả đạt được
+Hệ thống đã tự động hóa hoàn toàn quy trình từ xử lý dữ liệu thô đến việc cung cấp thông tin quản trị theo thời gian thực. Dashboard hỗ trợ phân tích đa chiều:
+- Theo dõi xu hướng tăng trưởng dư nợ theo năm.
+- Phân tích rủi ro theo khu vực địa lý (State-wise Risk Analysis).
+- Đánh giá hiệu quả của các sản phẩm vay theo mục đích và hạng tín dụng.
+- Cảnh báo sớm các khu vực có tỷ lệ nợ xấu cao (ví dụ: Florida với mức nợ xấu **18.4%**).
