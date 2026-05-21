@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Users, Target, Rocket, Calendar, Code, Share2, Mail, Award, CheckCircle2 } from 'lucide-react';
 
@@ -67,8 +66,16 @@ const AboutPage = () => {
               className="bg-white rounded-[2.5rem] overflow-hidden enterprise-shadow border border-gray-100 group"
             >
               <div className="h-32 bg-navy relative">
-                <div className="absolute -bottom-10 left-8 h-20 w-20 rounded-2xl bg-gray-200 border-4 border-white overflow-hidden shadow-lg">
-                  <img src={`https://i.pravatar.cc/150?u=${member.name}`} alt={member.name} />
+                <div className="absolute -bottom-10 left-8 h-20 w-20 rounded-2xl border-4 border-white shadow-lg overflow-hidden"
+                  style={{ background: ['#1652f0','#0a1f44','#06b6d4'][i % 3] }}>
+                  <div style={{
+                    width: '100%', height: '100%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 28, fontWeight: 800, color: '#fff',
+                    fontFamily: 'Inter, sans-serif', letterSpacing: '-0.03em'
+                  }}>
+                    {member.name.split(' ').map(w => w[0]).slice(-2).join('')}
+                  </div>
                 </div>
               </div>
               <div className="pt-14 p-8 space-y-4">

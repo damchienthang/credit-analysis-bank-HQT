@@ -1,54 +1,134 @@
-import React, { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  LineChart, Line, PieChart, Pie, Cell, AreaChart, Area, Legend, ComposedChart
+  PieChart, Pie, Cell, AreaChart, Area, ComposedChart, Line, Legend
 } from 'recharts';
-import { 
-  Database, ShieldAlert, Banknote, TrendingUp, Filter, 
-  Download, ChevronRight, AlertTriangle, CheckCircle2, Wifi, WifiOff, RefreshCw
+import {
+  Database, ShieldAlert, Banknote, TrendingUp,
+  Download, RefreshCw, AlertTriangle, CheckCircle2, Info
 } from 'lucide-react';
 import {
   fetchKpi, fetchLoanGrade, fetchLoanTrend,
   fetchLoanPurpose, fetchRecovery, fetchStateRisk,
 } from '../data/api';
 
-// ── Connection status badge ────────────────────────────────────────────────────
-function DbStatus({ live }) {
+const ICON_MAP = { Database, ShieldAlert, Banknote, TrendingUp };
+
+const KPI_CFG = [
+  { color: '#1652f0', target: null,  threshold: null, goodHigh: true  },
+  { color: '#b91c1c', target: 10,    threshold: 15,   goodHigh: false },
+  { color: '#1652f0', target: null,  threshold: null, goodHigh: true  },
+  { color: '#166534', target: 60,    threshold: null, goodHigh: true  },
+];
+
+// ── Tooltip ───────────────────────────────────────────────────────────────────
+const ChartTip = ({ active, payload, label }) => {
+  if (!active || !payload?.length) return null;
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-widest border ${
-      live ? 'bg-green-50 text-green-700 border-green-200' : 'bg-amber-50 text-amber-700 border-amber-200'
-    }`}>
-      {live ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
-      {live ? 'SQL Server Live' : 'Mock Data'}
-    </span>
+    <div style={{
+      background: '#fff', border: '1px solid #dde1e8', borderRadius: 4,
+      padding: '10px 14px', fontSize: 11, boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+    }}>
+      <p style={{ fontWeight: 700, color: '#0a1f44', marginBottom: 6 }}>{label}</p>
+      {payload.map((p, i) => (
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+          <span style={{ width: 8, height: 8, background: p.color, display: 'inline-block', borderRadius: 1 }} />
+          <span style={{ color: '#5e6a7a' }}>{p.name}:</span>
+          <span style={{ fontWeight: 700, color: '#0a1f44', marginLeft: 'auto', paddingLeft: 12 }}>
+            {typeof p.value === 'number' ? p.value.toLocaleString() : p.value}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ── KPI Card ──────────────────────────────────────────────────────────────────
+function KpiCard({ kpi, idx, delay }) {
+  const Icon = ICON_MAP[kpi.icon];
+  const cfg  = KPI_CFG[idx] || { color: '#1652f0' };
+  const numVal = parseFloat(String(kpi.value).replace(/[^0-9.]/g, ''));
+
+  let statusLabel = null;
+  let statusColor = cfg.color;
+
+  if (cfg.threshold && !isNaN(numVal)) {
+    const exceeded = numVal > cfg.threshold;
+    if (!cfg.goodHigh && exceeded) {
+      statusColor  = '#b91c1c';
+      statusLabel  = `⚠ Vượt ${cfg.threshold}%`;
+    } else if (!cfg.goodHigh && !exceeded) {
+      statusColor  = '#166534';
+      statusLabel  = `Trong ngưỡng`;
+    }
+  }
+
+  const progress = cfg.target && !isNaN(numVal)
+    ? Math.min(100, cfg.goodHigh ? (numVal / cfg.target) * 100 : (cfg.target / numVal) * 100)
+    : null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay }}
+      className="kpi-card"
+      style={{ '--kpi-color': statusColor }}
+    >
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+        <div style={{
+          width: 30, height: 30, background: '#f7f8fa', border: '1px solid #dde1e8',
+          borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          {Icon && <Icon style={{ width: 14, height: 14, color: cfg.color }} />}
+        </div>
+        {statusLabel && (
+          <span style={{ fontSize: 10, fontWeight: 700, color: statusColor }}>{statusLabel}</span>
+        )}
+      </div>
+
+      <p className="label" style={{ marginBottom: 4 }}>{kpi.label}</p>
+      <p className="value-lg" style={{ color: statusColor !== cfg.color ? statusColor : '#0a1f44', marginBottom: 10 }}>
+        {kpi.value}
+      </p>
+
+      {progress !== null && (
+        <>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontSize: 10, color: '#8e99a8' }}>vs mục tiêu {cfg.target}{idx === 1 ? '%' : '%'}</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: statusColor }}>{Math.round(progress)}%</span>
+          </div>
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%`, background: statusColor }} />
+          </div>
+        </>
+      )}
+
+      {cfg.threshold && (
+        <p style={{ fontSize: 10, color: '#bcc3ce', marginTop: 6 }}>
+          Ngưỡng: {cfg.threshold}{idx === 1 ? '%' : ''}
+        </p>
+      )}
+    </motion.div>
   );
 }
 
-const ICON_MAP = { Database, ShieldAlert, Banknote, TrendingUp };
-
+// ── Section Header ────────────────────────────────────────────────────────────
+// ── Dashboard ─────────────────────────────────────────────────────────────────
 const DashboardPage = () => {
-  // ── State ──────────────────────────────────────────────────────────────────
-  const [kpiData,        setKpiData]        = useState([]);
-  const [loanGradeData,  setLoanGradeData]  = useState([]);
-  const [loanTrendData,  setLoanTrendData]  = useState([]);
-  const [loanPurposeData,setLoanPurposeData]= useState([]);
-  const [recoveryData,   setRecoveryData]   = useState([]);
-  const [stateRiskData,  setStateRiskData]  = useState([]);
-  const [loading,        setLoading]        = useState(true);
-  const [isLive,         setIsLive]         = useState(false);
-  const [lastUpdated,    setLastUpdated]    = useState('');
+  const [kpiData,         setKpiData]         = useState([]);
+  const [loanGradeData,   setLoanGradeData]   = useState([]);
+  const [loanTrendData,   setLoanTrendData]   = useState([]);
+  const [loanPurposeData, setLoanPurposeData] = useState([]);
+  const [recoveryData,    setRecoveryData]    = useState([]);
+  const [stateRiskData,   setStateRiskData]   = useState([]);
+  const [loading,         setLoading]         = useState(true);
+  const [lastUpdated,     setLastUpdated]     = useState('');
 
-  // ── Fetch all data ─────────────────────────────────────────────────────────
-  const loadAll = async () => {
+  const loadAll = useCallback(async () => {
     setLoading(true);
     try {
-      // Check if backend is alive
-      const health = await fetch('http://localhost:3001/api/health', {
-        signal: AbortSignal.timeout(3000)
-      }).then(r => r.ok).catch(() => false);
-      setIsLive(health);
-
       const [kpi, grade, trend, purpose, recovery, state] = await Promise.all([
         fetchKpi(), fetchLoanGrade(), fetchLoanTrend(),
         fetchLoanPurpose(), fetchRecovery(), fetchStateRisk(),
@@ -59,259 +139,297 @@ const DashboardPage = () => {
       setLoanPurposeData(purpose);
       setRecoveryData(recovery);
       setStateRiskData(state);
-      setLastUpdated(new Date().toLocaleTimeString('vi-VN'));
+      setLastUpdated(new Date().toLocaleString('vi-VN'));
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      loadAll();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [loadAll]);
+
+  const exportReport = () => {
+    const report = {
+      generatedAt: new Date().toISOString(),
+      scope: 'LendingClub Portfolio 2007-2018',
+      kpis: kpiData,
+      loanGrade: loanGradeData,
+      loanTrend: loanTrendData,
+      loanPurpose: loanPurposeData,
+      recovery: recoveryData,
+      stateRisk: stateRiskData,
+    };
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `creditbi-report-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
   };
 
-  useEffect(() => { loadAll(); }, []);
-
-  // ── Loading skeleton ───────────────────────────────────────────────────────
   if (loading) return (
-    <div className="p-8 flex flex-col items-center justify-center min-h-[60vh] gap-4">
-      <div className="w-14 h-14 rounded-2xl bg-navy/5 flex items-center justify-center animate-pulse">
-        <Database className="h-8 w-8 text-navy/30" />
-      </div>
-      <p className="text-gray-400 font-bold text-sm uppercase tracking-widest">Đang tải dữ liệu từ SQL Server...</p>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 8 }}>
+      <Database style={{ width: 24, height: 24, color: '#bcc3ce' }} />
+      <p className="label">Đang tải dữ liệu…</p>
     </div>
   );
 
   return (
-    <div className="p-4 md:p-8 max-w-[1600px] mx-auto space-y-8">
-      {/* Header Actions */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    <div className="page-wrap-wide">
+
+      {/* ── Page header ──────────────────────────────────────────────────── */}
+      <div className="dashboard-header">
         <div>
-          <h1 className="text-3xl font-black text-navy uppercase tracking-tighter">Executive BI Dashboard</h1>
-          <div className="flex items-center gap-3 mt-1">
-            <p className="text-gray-500 font-medium text-sm">LendingClub Portfolio Analysis</p>
-            <DbStatus live={isLive} />
-            {lastUpdated && <span className="text-gray-400 text-xs">• {lastUpdated}</span>}
-          </div>
+          <h1 style={{ fontSize: 18, fontWeight: 800, color: '#0a1f44', letterSpacing: '-0.02em', marginBottom: 3 }}>
+            Executive BI Dashboard
+          </h1>
+          <p style={{ fontSize: 11, color: '#8e99a8', fontWeight: 500 }}>
+            LendingClub Portfolio · 2,260,701 giao dịch · 2007–2018
+            {lastUpdated && <> · Cập nhật <span className="mono">{lastUpdated}</span></>}
+          </p>
         </div>
-        <div className="flex gap-3">
-          <button
-            onClick={loadAll}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl font-bold text-sm text-gray-600 hover:bg-gray-50 transition-all enterprise-shadow"
-          >
-            <RefreshCw className="h-4 w-4" /> Làm mới
+        <div className="dashboard-actions">
+          <button className="btn btn-secondary" onClick={loadAll}>
+            <RefreshCw style={{ width: 12, height: 12 }} /> Làm mới
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-navy text-white rounded-xl font-bold text-sm hover:bg-accent-blue transition-all shadow-lg">
-            <Download className="h-4 w-4" /> Xuất báo cáo
+          <button className="btn btn-primary" onClick={exportReport}>
+            <Download style={{ width: 12, height: 12 }} /> Xuất báo cáo
           </button>
         </div>
       </div>
 
-      {/* KPI Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {kpiData.map((kpi, i) => {
-          const Icon = ICON_MAP[kpi.icon];
-          return (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-white p-6 rounded-3xl border border-gray-100 enterprise-shadow group hover:border-accent-blue/30 transition-all"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div className={`p-3 rounded-2xl ${kpi.risk ? 'bg-red-50 text-status-risk' : 'bg-navy/5 text-navy'} group-hover:scale-110 transition-transform`}>
-                  {Icon && <Icon className="h-6 w-6" />}
-                </div>
-                {kpi.trend ? (
-                  <span className={`text-sm font-bold px-2 py-1 rounded-lg ${kpi.trend.startsWith('+') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
-                    {kpi.trend}
-                  </span>
-                ) : (
-                  <span className="text-[13px] font-bold px-2 py-1 rounded-lg bg-blue-50 text-blue-500">LIVE</span>
-                )}
-              </div>
-              <p className="text-base font-bold text-gray-400 uppercase tracking-widest mb-1">{kpi.label}</p>
-              <h3 className="text-4xl font-black text-navy">{kpi.value}</h3>
-            </motion.div>
-          );
-        })}
+      <div className="dashboard-status-note">
+        Dashboard ưu tiên dữ liệu từ API <span className="mono">localhost:3001</span>; khi backend chưa chạy, hệ thống tự dùng dữ liệu mẫu để phiên demo không bị gián đoạn.
       </div>
 
-      {/* Main Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Loan Grade Distribution */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 enterprise-shadow">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-xl font-bold text-navy">Phân bổ khoản vay theo hạng (Grade)</h3>
-            <div className="flex gap-2">
-              <div className="h-3 w-3 rounded-full bg-status-good"></div>
-              <div className="h-3 w-3 rounded-full bg-status-warning"></div>
-              <div className="h-3 w-3 rounded-full bg-status-risk"></div>
+      {/* ── KPI strip ────────────────────────────────────────────────────── */}
+      <div className="dashboard-kpi-grid">
+        {kpiData.map((kpi, i) => <KpiCard key={i} kpi={kpi} idx={i} delay={i * 0.06} />)}
+      </div>
+
+      {/* ── Charts row 1 ─────────────────────────────────────────────────── */}
+      <div className="dashboard-grid-primary">
+
+        {/* Grade bar chart */}
+        <div className="card">
+          <div className="card-header">
+            <div>
+              <p className="section-title">Phân bổ khoản vay theo Hạng tín dụng</p>
+              <p className="label" style={{ marginTop: 2 }}>Grade A (rủi ro thấp) → Grade G (rủi ro cao)</p>
+            </div>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <span className="badge badge-success">A–C</span>
+              <span className="badge badge-warning">D</span>
+              <span className="badge badge-danger">E–G</span>
             </div>
           </div>
-          <div className="h-[400px]">
+          <div className="card-body" style={{ height: 280 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={loanGradeData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 600 }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-                <Tooltip 
-                  cursor={{ fill: '#f8fafc' }}
-                  contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '12px' }}
-                />
-                <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                  {loanGradeData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+              <BarChart data={loanGradeData} margin={{ top: 4, right: 0, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false}
+                  tick={{ fill: '#8e99a8', fontSize: 11, fontWeight: 600 }} dy={6} />
+                <YAxis axisLine={false} tickLine={false}
+                  tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                  tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} />
+                <Tooltip content={<ChartTip />} />
+                <Bar dataKey="value" name="Số khoản vay" radius={[2, 2, 0, 0]} maxBarSize={44}>
+                  {loanGradeData.map((e, i) => <Cell key={i} fill={e.color} />)}
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Loan Purpose - Donut */}
-        <div className="bg-white p-8 rounded-3xl border border-gray-100 enterprise-shadow">
-          <h3 className="text-xl font-bold text-navy mb-8">Mục đích vay vốn</h3>
-          <div className="h-[300px]">
+        {/* Donut purpose */}
+        <div className="card">
+          <div className="card-header">
+            <p className="section-title">Mục đích vay vốn</p>
+            <span className="label">Top 5</span>
+          </div>
+          <div className="card-body" style={{ height: 220 }}>
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie
-                  data={loanPurposeData}
-                  cx="50%" cy="50%"
-                  innerRadius={60} outerRadius={100}
-                  paddingAngle={5} dataKey="value"
-                >
-                  {loanPurposeData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
+                <Pie data={loanPurposeData} cx="50%" cy="50%"
+                  innerRadius={50} outerRadius={80} paddingAngle={2} dataKey="value" stroke="none">
+                  {loanPurposeData.map((e, i) => <Cell key={i} fill={e.color} />)}
                 </Pie>
-                <Tooltip />
-                <Legend layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ fontSize: '12px', fontWeight: 'bold' }} />
+                <Tooltip formatter={v => [`${v}%`, '']}
+                  contentStyle={{ borderRadius: 3, border: '1px solid #dde1e8', fontSize: 11 }} />
+                <Legend layout="vertical" verticalAlign="middle" align="right"
+                  wrapperStyle={{ fontSize: 11, fontWeight: 600 }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-6 space-y-4">
-            <div className="p-4 bg-navy/5 rounded-2xl border border-navy/10">
-              <div className="flex items-center gap-3">
-                <AlertTriangle className="h-5 w-5 text-accent-blue" />
-                <p className="text-sm font-bold text-navy">Insight: Nợ tiêu dùng chiếm 75% tỷ trọng danh mục.</p>
-              </div>
-            </div>
+          <div style={{ padding: '10px 16px', borderTop: '1px solid #eef0f4', background: '#f7f8fa', display: 'flex', gap: 6, alignItems: 'flex-start' }}>
+            <Info style={{ width: 12, height: 12, color: '#1652f0', flexShrink: 0, marginTop: 1 }} />
+            <p style={{ fontSize: 11, color: '#5e6a7a', fontWeight: 500, lineHeight: 1.4 }}>
+              Debt Consolidation chiếm ~57% — gom nợ là mục đích phổ biến nhất.
+            </p>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Trend Chart */}
-        <div className="lg:col-span-1 bg-white p-8 rounded-3xl border border-gray-100 enterprise-shadow">
-          <h3 className="text-xl font-bold text-navy mb-2">Tăng trưởng giải ngân</h3>
-          <p className="text-xs text-gray-400 mb-6 font-medium uppercase tracking-widest">2007 – 2018</p>
-          <div className="h-[280px]">
+      {/* ── Charts row 2 ─────────────────────────────────────────────────── */}
+      <div className="dashboard-grid-secondary">
+
+        {/* Area trend */}
+        <div className="card">
+          <div className="card-header">
+            <p className="section-title">Tăng trưởng giải ngân</p>
+            <span className="label">2007–2018</span>
+          </div>
+          <div className="card-body" style={{ height: 200 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={loanTrendData}>
+              <AreaChart data={loanTrendData} margin={{ top: 4, right: 0, left: -24, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0052A5" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#0052A5" stopOpacity={0}/>
+                  <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%"  stopColor="#1652f0" stopOpacity={0.12} />
+                    <stop offset="95%" stopColor="#1652f0" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 11 }} />
-                <YAxis hide />
-                <Tooltip contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)' }} />
-                <Area type="monotone" dataKey="amount" stroke="#0052A5" strokeWidth={3} fillOpacity={1} fill="url(#colorAmt)" />
+                <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                <XAxis dataKey="year" axisLine={false} tickLine={false}
+                  tick={{ fill: '#bcc3ce', fontSize: 10 }} />
+                <YAxis axisLine={false} tickLine={false}
+                  tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                  tickFormatter={v => `${(v/1000).toFixed(0)}K`} />
+                <Tooltip content={<ChartTip />} />
+                <Area type="monotone" dataKey="amount" name="Khoản vay"
+                  stroke="#1652f0" strokeWidth={2}
+                  fillOpacity={1} fill="url(#ga)"
+                  dot={{ fill: '#1652f0', r: 2.5, strokeWidth: 0 }}
+                  activeDot={{ r: 4 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Recovery vs Charge-Off */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 enterprise-shadow">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-xl font-bold text-navy">Thu hồi nợ vs Xóa nợ</h3>
-          </div>
-          <div className="flex gap-6 mb-6">
-            <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-status-good"></div>
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Recovery</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-status-risk"></div>
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">Charge-off</span>
+        {/* Recovery vs Charge-off */}
+        <div className="card">
+          <div className="card-header">
+            <p className="section-title">Thu hồi nợ vs Xóa nợ (khoản vay NPL)</p>
+            <div style={{ display: 'flex', gap: 12 }}>
+              {[{ c: '#166534', l: 'Recovery' }, { c: '#b91c1c', l: 'Charge-off' }].map(x => (
+                <div key={x.l} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ width: 10, height: 3, background: x.c, display: 'inline-block', borderRadius: 1 }} />
+                  <span style={{ fontSize: 10, fontWeight: 700, color: '#8e99a8' }}>{x.l}</span>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="h-[280px]">
+          <div className="card-body" style={{ height: 200 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={recoveryData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 600 }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6b7280', fontSize: 12 }} />
-                <Tooltip contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', padding: '12px' }} />
-                <Bar dataKey="recovery" name="Thu hồi" fill="#22c55e" radius={[6, 6, 0, 0]} opacity={0.85} />
-                <Line type="monotone" dataKey="chargeOff" name="Xóa nợ" stroke="#ef4444" strokeWidth={3} dot={{ fill: '#ef4444', r: 5 }} />
+              <ComposedChart data={recoveryData} margin={{ top: 4, right: 0, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                <XAxis dataKey="month" axisLine={false} tickLine={false}
+                  tick={{ fill: '#8e99a8', fontSize: 10, fontWeight: 600 }} />
+                <YAxis axisLine={false} tickLine={false}
+                  tick={{ fill: '#bcc3ce', fontSize: 10 }} />
+                <Tooltip content={<ChartTip />} />
+                <Bar dataKey="recovery" name="Thu hồi ($K)" fill="#166534" radius={[2, 2, 0, 0]} opacity={0.85} />
+                <Line type="monotone" dataKey="chargeOff" name="Xóa nợ ($K)"
+                  stroke="#b91c1c" strokeWidth={2}
+                  dot={{ fill: '#b91c1c', r: 3, strokeWidth: 0 }}
+                  activeDot={{ r: 5 }} />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* State Analytics Table */}
-      <div className="bg-white rounded-3xl border border-gray-100 enterprise-shadow overflow-hidden">
-        <div className="p-8 border-b border-gray-50 flex justify-between items-center">
-          <h3 className="text-xl font-bold text-navy">Phân tích rủi ro theo Khu vực (Top 5)</h3>
-          <button className="text-accent-blue text-sm font-bold flex items-center hover:underline">
-            Xem tất cả <ChevronRight className="h-4 w-4" />
-          </button>
+      {/* ── State risk table ─────────────────────────────────────────────── */}
+      <div className="card" style={{ marginBottom: 12 }}>
+        <div className="card-header">
+          <p className="section-title">Phân tích rủi ro theo Khu vực địa lý — Top 5</p>
+          <span className="label">Xếp theo tổng số khoản vay</span>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-gray-50/50">
-                <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Khu vực (State)</th>
-                <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Số khoản vay</th>
-                <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">NPL Ratio</th>
-                <th className="px-8 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Mức rủi ro</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {stateRiskData.map((item, i) => (
-                <tr key={i} className="hover:bg-gray-50/50 transition-colors">
-                  <td className="px-8 py-5 font-bold text-navy">{item.state}</td>
-                  <td className="px-8 py-5 text-gray-600 font-medium">{Number(item.loans).toLocaleString()}</td>
-                  <td className="px-8 py-5 text-status-risk font-bold">{item.npl}</td>
-                  <td className="px-8 py-5">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-black uppercase tracking-tighter ${
-                      item.risk === 'Low'    ? 'bg-green-100 text-green-700' :
-                      item.risk === 'Medium' ? 'bg-amber-100 text-amber-700' :
-                                               'bg-red-100 text-red-700'
-                    }`}>
-                      {item.risk === 'Low' ? <CheckCircle2 className="h-3 w-3" /> : <AlertTriangle className="h-3 w-3" />}
-                      {item.risk} Risk
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Khu vực</th>
+              <th>Số khoản vay</th>
+              <th>NPL Ratio</th>
+              <th>Tỷ lệ thu hồi</th>
+              <th>Mức rủi ro</th>
+              <th style={{ width: 140 }}>NPL Gauge</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stateRiskData.map((item, i) => {
+              const nplNum  = parseFloat(item.npl);
+              const isHigh  = item.risk === 'High';
+              const isMed   = item.risk === 'Medium';
+              return (
+                <tr key={i} style={{ background: isHigh ? 'rgba(185,28,28,0.02)' : isMed ? 'rgba(146,64,14,0.02)' : undefined }}>
+                  <td><span className="mono" style={{ fontWeight: 700, color: '#0a1f44', fontSize: 13 }}>{item.state}</span></td>
+                  <td><span className="mono">{Number(item.loans).toLocaleString()}</span></td>
+                  <td><span className="mono" style={{ fontWeight: 700, color: isHigh ? '#b91c1c' : isMed ? '#92400e' : '#166534' }}>{item.npl}</span></td>
+                  <td><span className="mono">{item.recovery}</span></td>
+                  <td>
+                    <span className={`badge ${isHigh ? 'badge-danger' : isMed ? 'badge-warning' : 'badge-success'}`}>
+                      {isHigh ? <AlertTriangle style={{ width: 9, height: 9 }} /> : <CheckCircle2 style={{ width: 9, height: 9 }} />}
+                      {item.risk}
                     </span>
                   </td>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div className="progress-bar" style={{ flex: 1 }}>
+                        <div className="progress-fill" style={{
+                          width: `${Math.min(100, (nplNum / 20) * 100)}%`,
+                          background: isHigh ? '#b91c1c' : isMed ? '#92400e' : '#166534'
+                        }} />
+                      </div>
+                      <span className="mono" style={{ fontSize: 10, color: '#8e99a8', width: 30, textAlign: 'right' }}>
+                        {nplNum.toFixed(1)}%
+                      </span>
+                    </div>
+                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      {/* ── Insight row ──────────────────────────────────────────────────── */}
+      <div className="stat-row">
+        <div className="stat-cell" style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <AlertTriangle style={{ width: 14, height: 14, color: '#b91c1c', flexShrink: 0, marginTop: 1 }} />
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#0a1f44', marginBottom: 2 }}>Cảnh báo rủi ro</p>
+            <p style={{ fontSize: 11, color: '#5e6a7a', lineHeight: 1.5 }}>
+              Grade E–G tại Florida: NPL 18.4%, cao hơn trung bình 4.2pp — đề xuất siết điều kiện phê duyệt.
+            </p>
+          </div>
+        </div>
+        <div className="stat-cell" style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <Info style={{ width: 14, height: 14, color: '#1652f0', flexShrink: 0, marginTop: 1 }} />
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#0a1f44', marginBottom: 2 }}>Xu hướng nổi bật</p>
+            <p style={{ fontSize: 11, color: '#5e6a7a', lineHeight: 1.5 }}>
+              Tăng trưởng giải ngân 2012–2015 đạt x4 — giai đoạn bùng nổ P2P lending tại Mỹ.
+            </p>
+          </div>
+        </div>
+        <div className="stat-cell" style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <TrendingUp style={{ width: 14, height: 14, color: '#166534', flexShrink: 0, marginTop: 1 }} />
+          <div>
+            <p style={{ fontSize: 11, fontWeight: 700, color: '#0a1f44', marginBottom: 2 }}>Điểm tích cực</p>
+            <p style={{ fontSize: 11, color: '#5e6a7a', lineHeight: 1.5 }}>
+              Recovery Rate 58.3% — CA/NY có tỷ lệ thu hồi cao nhất (62.1%) nhờ tài sản đảm bảo tốt.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* AI Insights Bar */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-r from-navy to-accent-blue p-1 rounded-3xl shadow-2xl"
-      >
-        <div className="bg-navy/40 backdrop-blur-xl p-6 rounded-[22px] flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-6 text-white">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center animate-pulse">
-              <TrendingUp className="h-8 w-8 text-banking-gold" />
-            </div>
-            <div>
-              <h4 className="text-xl font-bold">Hệ thống AI Insights phát hiện:</h4>
-              <p className="text-gray-300">Rủi ro tập trung cao tại các khoản vay Grade E khu vực Florida. Đề xuất siết chặt phê duyệt.</p>
-            </div>
-          </div>
-          <button className="px-8 py-4 bg-banking-gold text-navy rounded-xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform">
-            Xem chi tiết khuyến nghị
-          </button>
-        </div>
-      </motion.div>
     </div>
   );
 };

@@ -33,7 +33,7 @@ export const loanTrendData = [
 export const loanPurposeData = [
   { name: 'Debt Consolidation', value: 50, color: '#003366' },
   { name: 'Credit Card', value: 25, color: '#0052A5' },
-  { name: 'Home Improvement', value: 10, color: '#D4AF37' },
+  { name: 'Home Improvement', value: 10, color: '#06b6d4' },
   { name: 'Small Business', value: 8, color: '#D1D5DB' },
   { name: 'Other', value: 7, color: '#9CA3AF' },
 ];

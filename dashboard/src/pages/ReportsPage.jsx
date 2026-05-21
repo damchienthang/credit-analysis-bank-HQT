@@ -1,139 +1,189 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FileText, Lightbulb, BarChart, CheckSquare, AlertCircle, TrendingDown, Target, Award } from 'lucide-react';
+import { FileText, Lightbulb, BarChart, CheckSquare, AlertCircle, TrendingDown, Target } from 'lucide-react';
 
-const ReportsPage = () => {
-  const insights = [
-    {
-      title: 'Tập trung Rủi ro cao',
-      desc: 'Các khoản vay thuộc Grade E và F có tỷ lệ nợ xấu (NPL) cao gấp 3 lần mức trung bình, đặc biệt là các mục đích vay "Small Business".',
-      icon: AlertCircle,
-      type: 'risk'
-    },
-    {
-      title: 'Hiệu quả Thu hồi nợ',
-      desc: 'Tỷ lệ thu hồi nợ (Recovery Rate) đạt 58.3% cho các khoản vay có tài sản đảm bảo, cao hơn 15% so với vay tín chấp.',
-      icon: TrendingDown,
-      type: 'good'
-    },
-    {
-      title: 'Xu hướng Địa lý',
-      desc: 'Khu vực California và New York chiếm 35% dư nợ nhưng có tỷ lệ thanh toán đúng hạn ổn định nhất.',
-      icon: Target,
-      type: 'info'
-    }
-  ];
+const insights = [
+  {
+    title: 'Tập trung rủi ro tại Grade E–G',
+    desc: 'Khoản vay Grade E và F có tỷ lệ NPL cao gấp 3 lần mức trung bình toàn danh mục. Đặc biệt mục đích vay "Small Business" chiếm tỷ trọng nợ xấu không cân xứng.',
+    icon: AlertCircle,
+    level: 'High',
+  },
+  {
+    title: 'Hiệu quả thu hồi nợ có tài sản đảm bảo',
+    desc: 'Tỷ lệ thu hồi nợ đạt 58.3% cho khoản vay có tài sản đảm bảo, cao hơn 15 điểm phần trăm so với vay tín chấp thuần túy.',
+    icon: TrendingDown,
+    level: 'Positive',
+  },
+  {
+    title: 'Phân bổ địa lý tập trung',
+    desc: 'California và New York chiếm 35% tổng dư nợ và duy trì tỷ lệ thanh toán đúng hạn ổn định nhất — thị trường lõi có chất lượng tín dụng tốt.',
+    icon: Target,
+    level: 'Info',
+  },
+];
 
-  return (
-    <div className="p-4 md:p-12 max-w-5xl mx-auto space-y-16">
-      {/* Report Header */}
-      <section className="border-b-4 border-navy pb-8">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <h1 className="text-4xl font-black text-navy uppercase">Báo cáo Chiến lược BI</h1>
-            <p className="text-gray-500 font-bold tracking-widest uppercase">Mã báo cáo: LC-2026-05-11</p>
-          </div>
-          <div className="hidden md:block">
-            <Award className="h-16 w-16 text-banking-gold opacity-20" />
-          </div>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-bold text-gray-400">
-          <div>PHÂN PHỐI: <span className="text-navy">Ban quản trị Rủi ro</span></div>
-          <div>NGÀY LẬP: <span className="text-navy">11/05/2026</span></div>
-          <div>PHIÊN BẢN: <span className="text-navy">1.0 Final</span></div>
-          <div>BẢO MẬT: <span className="text-status-risk">Internal Only</span></div>
-        </div>
-      </section>
-
-      {/* Executive Summary */}
-      <section className="bg-white p-10 rounded-3xl enterprise-shadow border border-gray-100">
-        <h2 className="text-2xl font-bold text-navy mb-6 flex items-center gap-3">
-          <FileText className="h-6 w-6 text-accent-blue" /> Tóm tắt điều hành (Executive Summary)
-        </h2>
-        <div className="prose prose-blue max-w-none text-gray-600 leading-relaxed space-y-4 font-medium">
-          <p>
-            Báo cáo này trình bày kết quả phân tích trên bộ dữ liệu <strong>Lending Club (2007-2018)</strong> với quy mô 2.26 triệu khoản vay. 
-            Thông qua hệ thống BI, chúng tôi đã xác định được các chỉ số rủi ro then chốt và hiệu quả vận hành của danh mục tín dụng.
-          </p>
-          <p>
-            Mặc dù quy mô giải ngân tăng trưởng mạnh mẽ đạt mức 10.5 tỷ USD vào năm 2018, tỷ lệ nợ xấu (NPL) vẫn duy trì ở mức <strong>14.2%</strong>. 
-            Hệ thống đã thực hiện tối ưu hóa dữ liệu giúp giảm 70% tài nguyên lưu trữ, cho phép truy vấn báo cáo trong thời gian thực.
-          </p>
-        </div>
-      </section>
-
-      {/* Key Insights Grid */}
-      <section className="space-y-8">
-        <h2 className="text-2xl font-bold text-navy flex items-center gap-3">
-          <Lightbulb className="h-6 w-6 text-banking-gold" /> Phân tích chuyên sâu (Key Insights)
-        </h2>
-        <div className="grid grid-cols-1 gap-6">
-          {insights.map((insight, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="flex gap-6 p-8 bg-gray-50 rounded-3xl border border-gray-100 group hover:bg-white hover:enterprise-shadow transition-all"
-            >
-              <div className={`w-12 h-12 rounded-2xl flex flex-shrink-0 items-center justify-center text-white shadow-lg ${
-                insight.type === 'risk' ? 'bg-status-risk' : insight.type === 'good' ? 'bg-status-good' : 'bg-accent-blue'
-              }`}>
-                <insight.icon className="h-6 w-6" />
-              </div>
-              <div>
-                <h4 className="font-black text-navy text-xl mb-2">{insight.title}</h4>
-                <p className="text-gray-500 font-medium leading-relaxed">{insight.desc}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Performance Results */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-navy p-10 rounded-[2.5rem] text-white space-y-6">
-          <h3 className="text-xl font-bold flex items-center gap-3">
-            <BarChart className="h-6 w-6 text-banking-gold" /> Hiệu suất Hệ thống
-          </h3>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
-              <span className="text-blue-200">Dữ liệu xử lý</span>
-              <span className="font-bold">2,260,701 Dòng</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
-              <span className="text-blue-200">Tối ưu bộ nhớ</span>
-              <span className="font-bold text-status-good">70% Optimization</span>
-            </div>
-            <div className="flex justify-between items-center border-b border-white/10 pb-4">
-              <span className="text-blue-200">Tốc độ truy vấn</span>
-              <span className="font-bold">~0.5s / report</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white p-10 rounded-[2.5rem] enterprise-shadow border border-gray-100 space-y-6">
-          <h3 className="text-xl font-bold text-navy flex items-center gap-3">
-            <CheckSquare className="h-6 w-6 text-status-good" /> Khuyến nghị (Actions)
-          </h3>
-          <ul className="space-y-4 text-sm text-gray-500 font-medium">
-            <li className="flex gap-3">
-              <div className="h-2 w-2 bg-status-risk rounded-full mt-1.5 flex-shrink-0"></div>
-              Siết chặt điều kiện cho vay với các khoản vay Grade E/F.
-            </li>
-            <li className="flex gap-3">
-              <div className="h-2 w-2 bg-status-good rounded-full mt-1.5 flex-shrink-0"></div>
-              Tăng hạn mức cho nhóm khách hàng "Home Ownership" tại CA/NY.
-            </li>
-            <li className="flex gap-3">
-              <div className="h-2 w-2 bg-accent-blue rounded-full mt-1.5 flex-shrink-0"></div>
-              Triển khai mô hình AI dự báo nợ xấu (Early Warning System).
-            </li>
-          </ul>
-        </div>
-      </section>
-    </div>
-  );
+const levelStyle = {
+  High:     { badge: 'badge badge-danger',  label: 'Rủi ro cao'   },
+  Positive: { badge: 'badge badge-success', label: 'Tích cực'     },
+  Info:     { badge: 'badge badge-accent',  label: 'Thông tin'    },
 };
+
+const ReportsPage = () => (
+  <div className="page-wrap">
+
+    {/* ── Report header ──────────────────────────────────────────────── */}
+    <div style={{ borderBottom: '2px solid #0a1f44', paddingBottom: 16, marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <h1 style={{ fontSize: 20, fontWeight: 800, color: '#0a1f44', letterSpacing: '-0.02em', marginBottom: 4 }}>
+            Báo cáo Chiến lược BI
+          </h1>
+          <p className="label" style={{ color: '#8e99a8' }}>Phân tích danh mục tín dụng — LendingClub 2007–2018</p>
+        </div>
+      </div>
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(4,1fr)',
+        gap: 24, marginTop: 16, fontSize: 11
+      }}>
+        {[
+          { k: 'MÃ BÁO CÁO',   v: 'LC-2026-05-11'       },
+          { k: 'NGÀY LẬP',     v: '11/05/2026'           },
+          { k: 'PHÂN PHỐI',    v: 'Ban Quản trị Rủi ro'  },
+          { k: 'BẢO MẬT',      v: 'Internal Only'        },
+        ].map(({ k, v }) => (
+          <div key={k}>
+            <span style={{ color: '#8e99a8', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: 10 }}>
+              {k}
+            </span>
+            <p style={{ color: '#0a1f44', fontWeight: 700, marginTop: 2 }}>{v}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* ── Executive summary ──────────────────────────────────────────── */}
+    <div style={{ marginBottom: 24 }}>
+      <div className="section-head">
+        <FileText style={{ width: 14, height: 14, color: '#1652f0' }} />
+        <span className="section-title">Tóm tắt điều hành (Executive Summary)</span>
+      </div>
+      <div className="card">
+        <div className="card-body">
+          <p style={{ fontSize: 13, color: '#2d3748', lineHeight: 1.7, marginBottom: 12 }}>
+            Báo cáo này trình bày kết quả phân tích trên bộ dữ liệu <strong>Lending Club (2007–2018)</strong> với
+            quy mô <strong>2,260,701</strong> khoản vay. Hệ thống BI đã xác định được các chỉ số rủi ro then chốt
+            và đánh giá hiệu quả vận hành danh mục tín dụng theo 5 chiều phân tích (hạng tín dụng, địa lý,
+            mục đích vay, kỳ hạn, thu nhập khách hàng).
+          </p>
+          <p style={{ fontSize: 13, color: '#2d3748', lineHeight: 1.7 }}>
+            Mặc dù quy mô giải ngân tăng trưởng mạnh đạt mức <strong>10.5 tỷ USD</strong> vào năm 2018,
+            tỷ lệ nợ xấu (NPL) duy trì ở mức <strong>14.2%</strong>. Tối ưu hóa ETL giảm 70% thời gian
+            xử lý, cho phép truy vấn báo cáo trong vòng dưới 1 giây.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {/* ── Key insights ───────────────────────────────────────────────── */}
+    <div style={{ marginBottom: 24 }}>
+      <div className="section-head">
+        <Lightbulb style={{ width: 14, height: 14, color: '#06b6d4' }} />
+        <span className="section-title">Phân tích chuyên sâu (Key Insights)</span>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 1, border: '1px solid #dde1e8', borderRadius: 4, overflow: 'hidden' }}>
+        {insights.map((insight, i) => {
+          const style = levelStyle[insight.level];
+          return (
+            <div key={i} style={{
+              display: 'flex', gap: 16, padding: '16px 20px',
+              borderBottom: i < insights.length - 1 ? '1px solid #eef0f4' : 'none',
+              background: '#fff', alignItems: 'flex-start'
+            }}>
+              <div style={{
+                width: 32, height: 32, flexShrink: 0, borderRadius: 3,
+                background: insight.level === 'High' ? '#fee2e2' : insight.level === 'Positive' ? '#dcfce7' : '#eff6ff',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                <insight.icon style={{
+                  width: 16, height: 16,
+                  color: insight.level === 'High' ? '#b91c1c' : insight.level === 'Positive' ? '#166534' : '#1652f0'
+                }} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0a1f44' }}>{insight.title}</span>
+                  <span className={style.badge}>{style.label}</span>
+                </div>
+                <p style={{ fontSize: 12, color: '#5e6a7a', lineHeight: 1.6 }}>{insight.desc}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    {/* ── Performance + Actions ───────────────────────────────────────── */}
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+
+      {/* Perf stats */}
+      <div className="card">
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <BarChart style={{ width: 14, height: 14, color: '#1652f0' }} />
+            <span className="section-title">Hiệu suất hệ thống</span>
+          </div>
+        </div>
+        <table className="data-table">
+          <tbody>
+            {[
+              { k: 'Dữ liệu xử lý',     v: '2,260,701 dòng',     hi: false },
+              { k: 'Tối ưu bộ nhớ',     v: '70% Optimization',   hi: true  },
+              { k: 'Tốc độ truy vấn',   v: '< 1s / report',      hi: false },
+              { k: 'Cột giữ lại (ETL)', v: '33 / 151 cột gốc',   hi: false },
+              { k: 'Thời gian dữ liệu', v: '2007 – 2018',         hi: false },
+            ].map(({ k, v, hi }) => (
+              <tr key={k}>
+                <td style={{ color: '#8e99a8' }}>{k}</td>
+                <td style={{ textAlign: 'right', fontWeight: 700, color: hi ? '#166534' : '#0a1f44' }}
+                  className="mono">{v}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Actions */}
+      <div className="card">
+        <div className="card-header">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <CheckSquare style={{ width: 14, height: 14, color: '#166534' }} />
+            <span className="section-title">Khuyến nghị (Action Items)</span>
+          </div>
+        </div>
+        <div className="card-body">
+          <ol style={{ paddingLeft: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              { level: 'High',     text: 'Siết chặt điều kiện cho vay với Grade E/F — áp dụng DTI tối đa 25%.' },
+              { level: 'Medium',   text: 'Tăng hạn mức cho nhóm Home Ownership tại CA/NY — tỷ lệ thu hồi tốt.' },
+              { level: 'Low',      text: 'Triển khai mô hình AI Early Warning dự báo NPL theo quý.' },
+            ].map(({ level, text }, i) => {
+              const c = level === 'High' ? '#b91c1c' : level === 'Medium' ? '#92400e' : '#1652f0';
+              const bg = level === 'High' ? '#fee2e2' : level === 'Medium' ? '#fef3c7' : '#eff6ff';
+              return (
+                <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                  <span style={{
+                    fontSize: 9, fontWeight: 800, background: bg, color: c,
+                    padding: '2px 6px', borderRadius: 2, flexShrink: 0, marginTop: 2,
+                    textTransform: 'uppercase', letterSpacing: '0.06em'
+                  }}>{level}</span>
+                  <p style={{ fontSize: 12, color: '#5e6a7a', lineHeight: 1.5, margin: 0 }}>{text}</p>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 export default ReportsPage;

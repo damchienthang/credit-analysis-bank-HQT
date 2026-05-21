@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Globe, FileCode, Server, Settings, Database,
@@ -152,7 +152,7 @@ export default function ArchitecturePage() {
             const style = stageStyle(i, stages.length);
             return (
               <div key={s.no} className="flex items-center">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[14px] font-black uppercase tracking-widest ${style.hdr}`}>
+                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-[12px] font-black uppercase tracking-widest ${style.hdr}`}>
                   <span>{s.no}</span>
                   <span className="hidden xl:inline">{s.title}</span>
                 </div>

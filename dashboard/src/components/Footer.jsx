@@ -1,77 +1,64 @@
-import React from 'react';
-import { Landmark, Mail, Phone, MapPin, Code, Globe } from 'lucide-react';
+import { Code, Database, Mail, MapPin, ShieldCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const Footer = () => {
-  return (
-    <footer className="bg-navy text-white pt-10 pb-6">
-      <div className="w-full px-4 sm:px-10 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-8">
-          {/* Brand */}
-          <div className="col-span-1 md:col-cols-2">
-            <div className="flex items-center gap-2 mb-6">
-              <Landmark className="h-8 w-8 text-banking-gold" />
-              <span className="text-3xl font-bold tracking-tighter uppercase">LendingClub BI</span>
-            </div>
-            <p className="text-gray-300 text-[17px] leading-relaxed mb-4">
-              Hệ thống Business Intelligence tiên tiến hỗ trợ phân tích và quản trị dữ liệu tín dụng.
-              Giải pháp tối ưu hóa lợi nhuận và kiểm soát rủi ro nợ xấu cho doanh nghiệp tài chính.
-            </p>
-            <div className="flex gap-4">
-              <a href="https://github.com/damchienthang/credit-analysis-bank-HQT" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-lg hover:bg-banking-gold transition-colors" title="GitHub Repository">
-                <Globe className="h-5 w-5" />
-              </a>
-              <a href="https://github.com/damchienthang/credit-analysis-bank-HQT" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-lg hover:bg-banking-gold transition-colors" title="Source Code">
-                <Code className="h-5 w-5" />
-              </a>
-            </div>
-          </div>
+const systemLinks = [
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Báo cáo', href: '/reports' },
+  { name: 'Kiến trúc', href: '/architecture' },
+  { name: 'Nền tảng BI', href: '/platform' },
+];
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-[20px] font-bold mb-6 text-banking-gold uppercase tracking-wider">Hệ thống</h4>
-            <ul className="space-y-4 text-base text-gray-300">
-              <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard Phân Tích</a></li>
-              <li><a href="/platform" className="hover:text-white transition-colors">Kiến Trúc Dữ Liệu</a></li>
-              <li><a href="/trends" className="hover:text-white transition-colors">Xu Hướng Ngành</a></li>
-              <li><a href="/reports" className="hover:text-white transition-colors">Báo Cáo Insights</a></li>
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-[20px] font-bold mb-6 text-banking-gold uppercase tracking-wider">Liên hệ</h4>
-            <ul className="space-y-4 text-base text-gray-300">
-              <li className="flex items-center gap-3">
-                <MapPin className="h-4 w-4 text-banking-gold" />
-                <span>Ha Noi, Viet Nam</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-banking-gold" />
-                <span>(+84) 825 - 558 - 468</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-banking-gold" />
-                <span>nhom14hqt_csdl@gmail.com</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Globe className="h-4 w-4 text-banking-gold" />
-                <a href="https://github.com/damchienthang/credit-analysis-bank-HQT" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors break-all">github.com/damchienthang</a>
-              </li>
-            </ul>
-          </div>
+const Footer = () => (
+  <footer className="site-footer rich-footer">
+    <div className="rich-footer-inner">
+      <section className="rich-footer-brand">
+        <div className="rich-footer-logo">
+          <ShieldCheck size={18} />
         </div>
-
-        <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[17px] text-gray-400">
-          <p>© 2026 LendingClub Enterprise BI Platform. All rights reserved.</p>
-          <div className="flex gap-8">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Settings</a>
-          </div>
+        <div>
+          <h2>CreditBI Analytics</h2>
+          <p>
+            Hệ thống Business Intelligence hỗ trợ phân tích danh mục tín dụng,
+            theo dõi rủi ro nợ xấu và trực quan hóa dữ liệu LendingClub.
+          </p>
         </div>
-      </div>
-    </footer>
-  );
-};
+      </section>
+
+      <section>
+        <h3>Hệ thống</h3>
+        <nav className="rich-footer-links" aria-label="Liên kết hệ thống">
+          {systemLinks.map((link) => (
+            <Link key={link.href} to={link.href}>{link.name}</Link>
+          ))}
+        </nav>
+      </section>
+
+      <section>
+        <h3>Thông tin</h3>
+        <div className="rich-footer-info">
+          <span><Database size={14} /> LendingClub 2007-2018</span>
+          <span><MapPin size={14} /> Hà Nội, Việt Nam</span>
+          <a href="mailto:thangd595@gmail.com"><Mail size={14} /> thangd595@gmail.com</a>
+          <a
+            href="https://github.com/damchienthang/BTN-HQT-CSDL-Commercial-bank-credit"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Code size={14} /> Source code
+          </a>
+        </div>
+      </section>
+    </div>
+
+    <div className="rich-footer-bottom">
+      <span>© 2026 CreditBI Analytics · Dự án Hệ Quản Trị Cơ Sở Dữ Liệu · Nhóm 14</span>
+      <span className="rich-footer-policy">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Settings</a>
+      </span>
+    </div>
+  </footer>
+);
 
 export default Footer;

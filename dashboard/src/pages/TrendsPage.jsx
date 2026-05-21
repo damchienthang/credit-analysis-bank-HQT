@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TrendingUp, BrainCircuit, ShieldAlert, Cpu, Globe, ArrowUpRight, Landmark, Zap, ChevronLeft, ChevronRight, Building2 } from 'lucide-react';
+import { TrendingUp, BrainCircuit, ShieldAlert, Globe, Landmark, Zap, ChevronLeft, ChevronRight, Building2 } from 'lucide-react';
 
 const TrendsPage = () => {
   const trends = [
@@ -288,6 +288,7 @@ function BankCaseStudies() {
                   src={bank.img}
                   alt={bank.name}
                   className="absolute inset-0 w-full h-full object-cover"
+                  onError={e => { e.target.style.display = 'none'; }}
                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-navy/80 hidden lg:block" />
