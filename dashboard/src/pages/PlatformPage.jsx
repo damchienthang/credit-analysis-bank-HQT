@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import {
   Database, BarChart3,
   Zap, ArrowRight, Server, Globe,
@@ -156,8 +157,8 @@ const PlatformPage = () => {
                 whileHover={{ y: -10 }}
                 className="p-8 bg-gray-50 rounded-3xl border border-gray-100 enterprise-shadow relative"
               >
-                <div className="text-3xl font-black text-banking-gold/100 absolute top-4 right-6">{point.year}</div>
-                <h3 className="text-2xl font-bold text-navy mb-4">{point.title}</h3>
+                <div className="text-2xl font-black text-banking-gold/100 absolute top-4 right-6">{point.year}</div>
+                <h3 className="text-xl font-bold text-navy mb-4">{point.title}</h3>
                 <p className="text-gray-600 text-base leading-relaxed">{point.event}</p>
               </motion.div>
             ))}
@@ -402,12 +403,12 @@ const PlatformPage = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 text-navy">
           <h2 className="text-xl md:text-3xl font-black mb-8 uppercase tracking-tighter">Tìm hiểu sâu hơn về kiến trúc ?</h2>
           <div className="flex flex-wrap justify-center gap-4">
-            <a href="/architecture" className="px-10 py-5 bg-navy text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform flex items-center gap-3">
+            <Link to="/architecture" className="px-10 py-5 bg-navy text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform flex items-center gap-3">
               Chi tiết Kiến trúc Kỹ thuật <ArrowRight className="h-5 w-5" />
-            </a>
-            <a href="/reports" className="px-10 py-5 bg-white text-navy rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform">
+            </Link>
+            <Link to="/reports" className="px-10 py-5 bg-white text-navy rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform">
               Xem Báo cáo Hệ thống
-            </a>
+            </Link>
           </div>
         </div>
         <div className="absolute top-0 left-0 w-64 h-64 bg-navy/5 rounded-full -ml-32 -mt-32"></div>

@@ -324,7 +324,7 @@ function BankCaseStudies() {
                       transition={{ delay: j * 0.1 }}
                       className="p-5 bg-white/8 border border-white/15 rounded-2xl hover:bg-white/12 transition-colors group"
                     >
-                      <p className="text-banking-gold text-[11x] font-black uppercase tracking-widest mb-2">
+                      <p className="text-banking-gold text-[11px] font-black uppercase tracking-widest mb-2">
                         {pt.label}
                       </p>
                       <p
