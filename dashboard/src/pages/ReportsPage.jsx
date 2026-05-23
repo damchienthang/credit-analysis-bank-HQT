@@ -1,9 +1,13 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   FileText, TrendingUp,
   CheckCircle2, ChevronRight,
   BarChart2, Shield, Target, Layers,
+  Printer,
 } from 'lucide-react';
+
 
 // ── Design tokens (giữ nguyên hệ màu hiện tại) ───────────────────────────────
 const C = {
@@ -230,8 +234,53 @@ const recommendations = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-const ReportsPage = () => (
-  <div className="page-wrap">
+const ReportsPage = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get('print') === 'true') {
+      const timer = setTimeout(() => {
+        window.print();
+      }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [location]);
+
+  return (
+    <div className="page-wrap">
+      {/* Floating print actions for manual printing */}
+      <div 
+        className="no-print" 
+        style={{ 
+          display: 'flex', 
+          justifyContent: 'flex-end', 
+          marginBottom: 16,
+        }}
+      >
+        <button 
+          onClick={() => window.print()}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '8px 14px',
+            fontSize: 11.5,
+            fontWeight: 700,
+            color: C.white,
+            background: C.accent,
+            border: 'none',
+            borderRadius: 3,
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(22, 82, 240, 0.15)',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.background = C.mid}
+          onMouseLeave={(e) => e.currentTarget.style.background = C.accent}
+        >
+          <Printer style={{ width: 12, height: 12 }} /> In báo cáo / Lưu PDF
+        </button>
+      </div>
 
     {/* ── BÌA BÁO CÁO ──────────────────────────────────────────────────────── */}
     <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
@@ -444,6 +493,7 @@ const ReportsPage = () => (
 
     </motion.div>
   </div>
-);
+  );
+};
 
 export default ReportsPage;

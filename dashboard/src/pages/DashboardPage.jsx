@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   AreaChart, Area, BarChart, Bar, LineChart, Line,
@@ -175,7 +176,9 @@ function GaugeChart({ value, max = 100, label, color = C.accent }) {
 // DASHBOARD PAGE
 // ═══════════════════════════════════════════════════════════════════════════════
 const DashboardPage = () => {
+  const navigate = useNavigate();
   const [tab, setTab] = useState(0);           // 0 = Tổng quan, 1 = Phân tích rủi ro
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   const [kpiData,         setKpiData]         = useState([]);
   const [gradeData,       setGradeData]       = useState([]);
@@ -214,8 +217,8 @@ const DashboardPage = () => {
 
   useEffect(() => { loadAll(); }, [loadAll]);
 
-  const exportReport = () => {
-    const blob = new Blob([JSON.stringify({ kpiData, gradeData, trendData }, null, 2)], {
+  const exportAsJSON = () => {
+    const blob = new Blob([JSON.stringify({ kpiData, gradeData, trendData, purposeData, stateData, nplData, gradeRiskData, interestData, recoveryData }, null, 2)], {
       type: 'application/json;charset=utf-8',
     });
     const url  = URL.createObjectURL(blob);
@@ -223,7 +226,80 @@ const DashboardPage = () => {
     link.href = url; link.download = `creditbi-${new Date().toISOString().slice(0,10)}.json`;
     document.body.appendChild(link); link.click(); link.remove();
     URL.revokeObjectURL(url);
+    setShowExportMenu(false);
   };
+
+  const exportAsCSV = () => {
+    let csvContent = "\ufeff"; // BOM for Excel to open UTF-8 correctly
+    
+    // Section 1: KPI Summary
+    csvContent += "BÁO CÁO CÁC CHỈ SỐ KPI CHÍNH (KEY PERFORMANCE INDICATORS)\n";
+    csvContent += "Chỉ số,Giá trị,Mục tiêu / So sánh\n";
+    kpiData.forEach(item => {
+      csvContent += `"${item.label.replace(/"/g, '""')}","${item.value}","${item.sub.replace(/"/g, '""')}"\n`;
+    });
+    csvContent += "\n";
+    
+    // Section 2: Breakdown by Credit Grade
+    csvContent += "PHÂN PHỐI DƯ NỢ VÀ RỦI RO THEO HẠNG TÍN DỤNG (CREDIT GRADES)\n";
+    csvContent += "Hạng,Số khoản vay,Tỷ lệ phân bổ,Tỷ lệ nợ xấu NPL,Lãi suất trung bình,Tỷ lệ thu hồi nợ xấu\n";
+    const total = gradeData.reduce((s, d) => s + d.value, 0);
+    gradeData.forEach(item => {
+      const riskItem = gradeRiskData.find(g => g.grade === item.name) || {};
+      const interestItem = interestData.find(g => g.grade === item.name) || {};
+      const recoveryItem = recoveryData.find(g => g.grade === item.name) || {};
+      
+      const count = item.value || 0;
+      const ratio = total > 0 ? ((count / total) * 100).toFixed(2) + "%" : "0%";
+      const npl = riskItem.npl ? riskItem.npl + "%" : "N/A";
+      const rate = interestItem.rate ? interestItem.rate + "%" : "N/A";
+      const rec = recoveryItem.recovery ? recoveryItem.recovery + "%" : "N/A";
+      
+      csvContent += `"${item.name}",${count},"${ratio}","${npl}","${rate}","${rec}"\n`;
+    });
+    csvContent += "\n";
+    
+    // Section 3: Purpose breakdown
+    csvContent += "PHÂN BỔ DƯ NỢ THEO MỤC ĐÍCH VAY (LOAN PURPOSE)\n";
+    csvContent += "Mục đích,Số khoản vay,Tỷ lệ phân bổ\n";
+    purposeData.forEach(item => {
+      const ratio = total > 0 ? ((item.value / total) * 100).toFixed(2) + "%" : "0%";
+      csvContent += `"${item.name.replace(/"/g, '""')}",${item.value},"${ratio}"\n`;
+    });
+    csvContent += "\n";
+
+    // Section 4: Geographic risk (Top 8 states with highest NPL)
+    csvContent += "DANH SÁCH BANG CÓ RỦI RO NỢ XẤU CAO NHẤT (GEOGRAPHIC RISK)\n";
+    csvContent += "Bang,Tỷ lệ nợ xấu NPL,Số lượng khoản vay\n";
+    stateData.forEach(item => {
+      csvContent += `"${item.state}",${item.npl}%,${item.count}\n`;
+    });
+    csvContent += "\n";
+    
+    // Section 5: NPL Trend over years
+    csvContent += "XU HƯỚNG TỶ LỆ NỢ XẤU THEO NĂM (NPL TREND OVER YEARS)\n";
+    csvContent += "Năm,Tỷ lệ nợ xấu NPL\n";
+    nplData.forEach(item => {
+      csvContent += `"${item.year}",${item.npl}%\n`;
+    });
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `credit_analysis_kpi_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setShowExportMenu(false);
+  };
+
+  const exportAsPDF = () => {
+    setShowExportMenu(false);
+    navigate('/reports?print=true');
+  };
+
 
   if (loading) return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -251,13 +327,140 @@ const DashboardPage = () => {
             {lastUpdated && <> · Cập nhật <span className="mono">{lastUpdated}</span></>}
           </p>
         </div>
-        <div className="dashboard-actions">
+        <div className="dashboard-actions" style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <button className="btn btn-secondary" onClick={loadAll} id="btn-refresh">
             <RefreshCw style={{ width: 11, height: 11 }} /> Làm mới
           </button>
-          <button className="btn btn-primary" onClick={exportReport} id="btn-export">
-            <Download style={{ width: 11, height: 11 }} /> Xuất báo cáo
-          </button>
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => setShowExportMenu(!showExportMenu)} 
+              id="btn-export"
+              style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+            >
+              <Download style={{ width: 11, height: 11 }} /> Xuất báo cáo ▾
+            </button>
+            
+            {showExportMenu && (
+              <>
+                {/* Overlay to close the menu when clicking outside */}
+                <div 
+                  style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    zIndex: 998,
+                    background: 'transparent',
+                  }}
+                  onClick={() => setShowExportMenu(false)}
+                />
+                
+                {/* Dropdown Menu */}
+                <div style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 6px)',
+                  right: 0,
+                  width: 290,
+                  background: C.white,
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 4,
+                  boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
+                  zIndex: 999,
+                  overflow: 'hidden',
+                  padding: '4px 0',
+                }}>
+                  <div style={{ padding: '8px 12px 6px', borderBottom: `1px solid ${C.bg}`, marginBottom: 4 }}>
+                    <p style={{ fontSize: 9.5, fontWeight: 800, color: C.gray, textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
+                      Chọn định dạng xuất
+                    </p>
+                  </div>
+                  
+                  <button 
+                    onClick={exportAsPDF}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = C.bg}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                  >
+                    <span style={{ fontSize: 14, marginRight: 10, marginTop: 1 }}>📄</span>
+                    <div>
+                      <p style={{ fontSize: 11.5, fontWeight: 700, color: C.navy, margin: '0 0 2px' }}>
+                        Báo cáo Executive (PDF / In A4)
+                      </p>
+                      <p style={{ fontSize: 9.5, color: C.gray, margin: 0, lineHeight: 1.3 }}>
+                        Bản in tối ưu hóa và xuất PDF chuẩn trang phân tích ngân hàng.
+                      </p>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={exportAsCSV}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = C.bg}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                  >
+                    <span style={{ fontSize: 14, marginRight: 10, marginTop: 1 }}>📊</span>
+                    <div>
+                      <p style={{ fontSize: 11.5, fontWeight: 700, color: C.navy, margin: '0 0 2px' }}>
+                        Bảng số liệu tài chính (CSV / Excel)
+                      </p>
+                      <p style={{ fontSize: 9.5, color: C.gray, margin: 0, lineHeight: 1.3 }}>
+                        Toàn bộ các chỉ số KPI, rủi ro, phân hạng từ SQL cho Excel.
+                      </p>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={exportAsJSON}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      width: '100%',
+                      padding: '10px 12px',
+                      background: 'none',
+                      border: 'none',
+                      textAlign: 'left',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = C.bg}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                  >
+                    <span style={{ fontSize: 14, marginRight: 10, marginTop: 1 }}>⚙️</span>
+                    <div>
+                      <p style={{ fontSize: 11.5, fontWeight: 700, color: C.navy, margin: '0 0 2px' }}>
+                        Dữ liệu cấu trúc máy (JSON)
+                      </p>
+                      <p style={{ fontSize: 9.5, color: C.gray, margin: 0, lineHeight: 1.3 }}>
+                        File lưu trữ JSON chứa cấu trúc dữ liệu thô phục vụ kỹ thuật.
+                      </p>
+                    </div>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 
