@@ -2,20 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  AreaChart, Area, BarChart, Bar, LineChart, Line,
+  AreaChart, Area, BarChart, Bar, Line,
   ComposedChart, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  ResponsiveContainer, ReferenceLine,
+  ResponsiveContainer, ReferenceLine, ScatterChart, Scatter,
 } from 'recharts';
 import {
-  Database, ShieldAlert, Banknote, TrendingUp, TrendingDown,
+  Database, ShieldAlert, Banknote, TrendingUp,
   Download, RefreshCw, AlertTriangle, Info, ArrowRight,
   ChevronRight, Activity,
 } from 'lucide-react';
 import {
   fetchKpi, fetchLoanGrade, fetchLoanTrend, fetchLoanPurpose,
   fetchStateRisk, fetchNplTrend, fetchGradeRisk,
-  fetchInterestGrade, fetchRecovery,
+  fetchInterestGrade, fetchRecovery, fetchDtiScatter,
 } from '../data/api';
 
 // ── Màu sắc tối giản ─────────────────────────────────────────────────────────
@@ -189,16 +189,17 @@ const DashboardPage = () => {
   const [gradeRiskData,   setGradeRiskData]   = useState([]);
   const [interestData,    setInterestData]    = useState([]);
   const [recoveryData,    setRecoveryData]    = useState([]);
+  const [dtiScatterData,  setDtiScatterData]  = useState([]);
   const [loading,         setLoading]         = useState(true);
   const [lastUpdated,     setLastUpdated]     = useState('');
 
   const loadAll = useCallback(async () => {
-    setLoading(true);
+    setLoading(prev => prev ? prev : true);
     try {
-      const [kpi, grade, trend, purpose, state, npl, grisk, interest, recovery] = await Promise.all([
+      const [kpi, grade, trend, purpose, state, npl, grisk, interest, recovery, dtiScatter] = await Promise.all([
         fetchKpi(), fetchLoanGrade(), fetchLoanTrend(), fetchLoanPurpose(),
         fetchStateRisk(), fetchNplTrend(), fetchGradeRisk(),
-        fetchInterestGrade(), fetchRecovery(),
+        fetchInterestGrade(), fetchRecovery(), fetchDtiScatter(),
       ]);
       setKpiData(kpi);
       setGradeData(grade);
@@ -209,13 +210,43 @@ const DashboardPage = () => {
       setGradeRiskData(grisk);
       setInterestData(interest);
       setRecoveryData(recovery);
+      setDtiScatterData(dtiScatter);
       setLastUpdated(new Date().toLocaleString('vi-VN'));
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => { loadAll(); }, [loadAll]);
+  useEffect(() => {
+    let active = true;
+    const init = async () => {
+      try {
+        const [kpi, grade, trend, purpose, state, npl, grisk, interest, recovery, dtiScatter] = await Promise.all([
+          fetchKpi(), fetchLoanGrade(), fetchLoanTrend(), fetchLoanPurpose(),
+          fetchStateRisk(), fetchNplTrend(), fetchGradeRisk(),
+          fetchInterestGrade(), fetchRecovery(), fetchDtiScatter(),
+        ]);
+        if (!active) return;
+        setKpiData(kpi);
+        setGradeData(grade);
+        setTrendData(trend);
+        setPurposeData(purpose);
+        setStateData(state);
+        setNplData(npl);
+        setGradeRiskData(grisk);
+        setInterestData(interest);
+        setRecoveryData(recovery);
+        setDtiScatterData(dtiScatter);
+        setLastUpdated(new Date().toLocaleString('vi-VN'));
+      } catch (err) {
+        console.error("Lỗi khi tải dữ liệu khởi tạo:", err);
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+    init();
+    return () => { active = false; };
+  }, []);
 
   const exportAsJSON = () => {
     const blob = new Blob([JSON.stringify({ kpiData, gradeData, trendData, purposeData, stateData, nplData, gradeRiskData, interestData, recoveryData }, null, 2)], {
@@ -835,6 +866,49 @@ const DashboardPage = () => {
             </div>
           </div>
 
+          {/* ── Row 3: Scatter chart Phân tích điểm dị biệt (Outliers DTI vs Lãi suất) ── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12, marginBottom: 12 }}>
+            <div className="card">
+              <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <p className="section-title">Phân tích điểm dị biệt (Outliers) — Tỷ lệ Nợ/Thu nhập (DTI) vs Lãi suất cho vay</p>
+                  <p className="label" style={{ marginTop: 2 }}>Tích hợp từ Power BI — Phát hiện lỗ hổng phê duyệt hồ sơ: Khách hàng DTI cực cao (&gt;45%) vẫn hưởng lãi suất thấp (&lt;10%)</p>
+                </div>
+                <span className="badge badge-danger">Lỗ hổng DTI Outliers</span>
+              </div>
+              <div className="card-body" style={{ height: 280 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <ScatterChart margin={{ top: 12, right: 20, left: -20, bottom: 10 }}>
+                    <CartesianGrid strokeDasharray="2 4" stroke="#eef0f4" />
+                    <XAxis type="number" dataKey="dti" name="DTI" unit="%" 
+                      axisLine={false} tickLine={false} tick={{ fill: C.gray, fontSize: 10, fontWeight: 600 }}
+                      label={{ value: 'Tỷ lệ Nợ/Thu nhập (DTI) %', position: 'bottom', offset: -2, fontSize: 9.5, fill: C.gray }}
+                      domain={[0, 55]} />
+                    <YAxis type="number" dataKey="intRate" name="Lãi suất" unit="%" 
+                      axisLine={false} tickLine={false} tick={{ fill: C.gray, fontSize: 10, fontWeight: 600 }}
+                      label={{ value: 'Lãi suất %/năm', angle: -90, position: 'insideLeft', offset: 10, fontSize: 9.5, fill: C.gray }}
+                      domain={[0, 35]} />
+                    <Tooltip cursor={{ strokeDasharray: '3 3' }} 
+                      contentStyle={{ fontSize: 11, borderRadius: 3, border: `1px solid ${C.border}` }}
+                      formatter={(v, name) => [`${v}%`, name === 'dti' ? 'DTI' : 'Lãi suất']} />
+                    <Legend wrapperStyle={{ fontSize: 10.5, fontWeight: 700, paddingTop: 10 }} />
+                    
+                    {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((grade, idx) => (
+                      <Scatter 
+                        key={grade} 
+                        name={`Hạng ${grade}`} 
+                        data={dtiScatterData.filter(d => d.grade === grade)} 
+                        fill={GRADE_COLORS[idx]} 
+                        shape="circle" 
+                        line={false}
+                      />
+                    ))}
+                  </ScatterChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
           {/* ── Insight panels ────────────────────────────────────────────── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 12 }}>
             <InsightBox
@@ -851,9 +925,9 @@ const DashboardPage = () => {
             />
             <InsightBox
               type="info"
-              title="Thu hồi nợ dưới 10% ở mọi hạng"
-              finding="Dù NPL của Grade G là 37,7% — chỉ có 9,71% giá trị nợ xấu được thu hồi. Hệ thống thu hồi nợ hiện tại không tương xứng với quy mô rủi ro."
-              solution="Đầu tư vào quy trình thu hồi sớm (early intervention): liên lạc chủ động sau 30 ngày trễ hạn thay vì chờ đến charge-off."
+              title="Điểm dị biệt (Outliers) thẩm định DTI"
+              finding="Phát hiện nhiều hồ sơ khách hàng có tỷ lệ Nợ/Thu nhập (DTI) cực kỳ cao (&gt;45%) nhưng vẫn được áp mức lãi suất ưu đãi thấp (&lt;10%) như hạng A-B. Đây là lỗ hổng thẩm định lớn."
+              solution="Thiết lập quy tắc Core-system: Tự động từ chối phê duyệt trực tuyến hoặc chuyển lên cấp phê duyệt cao hơn đối với hồ sơ DTI &gt; 45%."
             />
           </div>
 

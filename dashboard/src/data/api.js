@@ -2,7 +2,7 @@
 import {
   kpiData, loanGradeData, loanTrendData, loanPurposeData,
   regionData, stateRiskData, nplTrendData, gradeRiskData,
-  interestByGrade, dtiByRisk, recoveryByGrade,
+  interestByGrade, dtiByRisk, recoveryByGrade, dtiScatterData,
 } from './mockData';
 
 const BASE = 'http://localhost:3001/api';
@@ -28,3 +28,5 @@ export const fetchGradeRisk     = () => safeFetch(`${BASE}/grade-risk`,     grad
 export const fetchInterestGrade = () => safeFetch(`${BASE}/interest-grade`, interestByGrade);
 export const fetchDtiRisk       = () => safeFetch(`${BASE}/dti-risk`,       dtiByRisk);
 export const fetchRecovery      = () => safeFetch(`${BASE}/recovery`,       recoveryByGrade);
+export const fetchDtiScatter    = () => safeFetch(`${BASE}/dti-scatter`,    dtiScatterData);
+

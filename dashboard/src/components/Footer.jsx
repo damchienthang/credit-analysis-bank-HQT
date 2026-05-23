@@ -44,7 +44,7 @@ const Footer = () => (
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Code size={14} /> Source code
+            <Code size={14} /> Github
           </a>
         </div>
       </section>

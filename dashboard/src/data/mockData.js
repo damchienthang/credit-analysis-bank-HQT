@@ -123,3 +123,49 @@ export const recoveryByGrade = [
   { grade: 'F', soNoXau: 14486, tyLeHoiPct: 9.53  },
   { grade: 'G', soNoXau: 4557,  tyLeHoiPct: 9.71  },
 ];
+
+// KPI 9: Chi tiết các điểm dữ liệu DTI vs Lãi suất cho biểu đồ Scatter Chart (Outliers)
+export const dtiScatterData = [
+  // Hạng A
+  { grade: 'A', dti: 12.4, intRate: 5.32 },
+  { grade: 'A', dti: 15.6, intRate: 6.08 },
+  { grade: 'A', dti: 22.1, intRate: 7.24 },
+  { grade: 'A', dti: 28.5, intRate: 8.59 },
+  { grade: 'A', dti: 34.2, intRate: 9.15 },
+  { grade: 'A', dti: 48.2, intRate: 6.50 }, // Outlier!
+  
+  // Hạng B
+  { grade: 'B', dti: 14.2, intRate: 9.99 },
+  { grade: 'B', dti: 18.9, intRate: 10.65 },
+  { grade: 'B', dti: 25.4, intRate: 11.89 },
+  { grade: 'B', dti: 31.8, intRate: 12.99 },
+  { grade: 'B', dti: 36.5, intRate: 13.50 },
+  { grade: 'B', dti: 46.8, intRate: 10.05 }, // Outlier!
+
+  // Hạng C
+  { grade: 'C', dti: 16.5, intRate: 13.99 },
+  { grade: 'C', dti: 21.2, intRate: 14.15 },
+  { grade: 'C', dti: 27.8, intRate: 14.99 },
+  { grade: 'C', dti: 33.4, intRate: 15.65 },
+  { grade: 'C', dti: 39.9, intRate: 16.99 },
+
+  // Hạng D
+  { grade: 'D', dti: 19.5, intRate: 17.99 },
+  { grade: 'D', dti: 24.8, intRate: 18.25 },
+  { grade: 'D', dti: 30.1, intRate: 19.50 },
+  { grade: 'D', dti: 35.6, intRate: 20.89 },
+  { grade: 'D', dti: 41.2, intRate: 21.99 },
+
+  // Hạng E
+  { grade: 'E', dti: 22.4, intRate: 21.99 },
+  { grade: 'E', dti: 28.1, intRate: 22.85 },
+  { grade: 'E', dti: 34.5, intRate: 24.50 },
+  { grade: 'E', dti: 40.8, intRate: 25.99 },
+
+  // Hạng F & G
+  { grade: 'F', dti: 26.5, intRate: 25.50 },
+  { grade: 'F', dti: 38.2, intRate: 28.15 },
+  { grade: 'G', dti: 29.8, intRate: 28.08 },
+  { grade: 'G', dti: 42.5, intRate: 30.99 },
+];
+
