@@ -1,32 +1,30 @@
 // src/data/api.js
-// Fetch từ backend Express → SQL Server thực
-// Fallback về mockData nếu backend không khả dụng
-
 import {
-  kpiData as mockKpi,
-  loanGradeData as mockGrade,
-  loanTrendData as mockTrend,
-  loanPurposeData as mockPurpose,
-  recoveryData as mockRecovery,
-  stateRiskData as mockState,
+  kpiData, loanGradeData, loanTrendData, loanPurposeData,
+  regionData, stateRiskData, nplTrendData, gradeRiskData,
+  interestByGrade, dtiByRisk, recoveryByGrade,
 } from './mockData';
 
 const BASE = 'http://localhost:3001/api';
 
 async function safeFetch(url, fallback) {
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
   } catch {
-    console.warn('[API] Offline – using mock data for:', url);
     return fallback;
   }
 }
 
-export async function fetchKpi()         { const d = await safeFetch(`${BASE}/kpi`, { kpiData: mockKpi }); return d.kpiData; }
-export async function fetchLoanGrade()   { return safeFetch(`${BASE}/loan-grade`,   mockGrade);   }
-export async function fetchLoanTrend()   { return safeFetch(`${BASE}/loan-trend`,   mockTrend);   }
-export async function fetchLoanPurpose() { return safeFetch(`${BASE}/loan-purpose`, mockPurpose); }
-export async function fetchRecovery()    { return safeFetch(`${BASE}/recovery`,      mockRecovery);}
-export async function fetchStateRisk()   { return safeFetch(`${BASE}/state-risk`,    mockState);   }
+export const fetchKpi           = () => safeFetch(`${BASE}/kpi`,            kpiData);
+export const fetchLoanGrade     = () => safeFetch(`${BASE}/loan-grade`,     loanGradeData);
+export const fetchLoanTrend     = () => safeFetch(`${BASE}/loan-trend`,     loanTrendData);
+export const fetchLoanPurpose   = () => safeFetch(`${BASE}/loan-purpose`,   loanPurposeData);
+export const fetchRegion        = () => safeFetch(`${BASE}/region`,         regionData);
+export const fetchStateRisk     = () => safeFetch(`${BASE}/state-risk`,     stateRiskData);
+export const fetchNplTrend      = () => safeFetch(`${BASE}/npl-trend`,      nplTrendData);
+export const fetchGradeRisk     = () => safeFetch(`${BASE}/grade-risk`,     gradeRiskData);
+export const fetchInterestGrade = () => safeFetch(`${BASE}/interest-grade`, interestByGrade);
+export const fetchDtiRisk       = () => safeFetch(`${BASE}/dti-risk`,       dtiByRisk);
+export const fetchRecovery      = () => safeFetch(`${BASE}/recovery`,       recoveryByGrade);

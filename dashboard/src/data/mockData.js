@@ -1,56 +1,125 @@
+// ── Số liệu thực từ SQL Server (đã xác nhận qua /outputs/KPIs) ──────────────
+
+// KPI 1: Tổng dư nợ hiện tại = 948,982,607
+// KPI 2: Tổng giải ngân = 33,949,279,200 | Tỷ lệ hoàn trả = 80.3%
+// KPI 3: Tổng nợ xấu = 4,177,078,700 | NPL = 12.3%
+
 export const kpiData = [
-  { label: 'Tổng khoản vay', value: '2,260,701', trend: '+5.2%', icon: 'Database' },
-  { label: 'Tỷ lệ nợ xấu (NPL)', value: '14.2%', trend: '+0.8%', icon: 'ShieldAlert', risk: true },
-  { label: 'Dư nợ hiện tại', value: '$32.5B', trend: '+12.4%', icon: 'Banknote' },
-  { label: 'Tỷ lệ thu hồi', value: '58.3%', trend: '+2.1%', icon: 'TrendingUp' },
+  { label: 'Tổng khoản vay',       value: '2,257,084',  sub: 'Toàn danh mục 2007–2018', icon: 'Database',    color: '#1652f0' },
+  { label: 'Tỷ lệ nợ xấu (NPL)',   value: '12,3%',      sub: 'Ngưỡng cảnh báo: 15%',    icon: 'ShieldAlert', color: '#b91c1c', risk: true, threshold: 15 },
+  { label: 'Tổng dư nợ hiện tại',  value: '$949M',      sub: 'Dư nợ gốc chưa thu hồi', icon: 'Banknote',    color: '#1652f0' },
+  { label: 'Tỷ lệ hoàn trả',       value: '80,3%',      sub: 'Mục tiêu: ≥ 75%',         icon: 'TrendingUp',  color: '#166534', target: 75 },
 ];
 
+// KPI 4a: Phân bổ theo hạng tín dụng (số khoản vay + tỷ trọng %)
 export const loanGradeData = [
-  { name: 'Grade A', value: 433056, color: '#22c55e' },
-  { name: 'Grade B', value: 663557, color: '#84cc16' },
-  { name: 'Grade C', value: 650053, color: '#eab308' },
-  { name: 'Grade D', value: 324424, color: '#f97316' },
-  { name: 'Grade E', value: 135639, color: '#ef4444' },
-  { name: 'Grade F', value: 41800, color: '#b91c1c' },
-  { name: 'Grade G', value: 12172, color: '#7f1d1d' },
+  { name: 'A', value: 432226,  pct: 19.14, color: '#166534' },
+  { name: 'B', value: 662757,  pct: 29.35, color: '#2d7a3a' },
+  { name: 'C', value: 649478,  pct: 28.76, color: '#5e6a7a' },
+  { name: 'D', value: 324169,  pct: 14.36, color: '#92400e' },
+  { name: 'E', value: 135534,  pct: 6.00,  color: '#b91c1c' },
+  { name: 'F', value: 41767,   pct: 1.85,  color: '#991b1b' },
+  { name: 'G', value: 12153,   pct: 0.54,  color: '#7f1d1d' },
 ];
 
+// KPI 5: Tỷ lệ rủi ro (nợ xấu) theo hạng — dùng cho combo chart
+export const gradeRiskData = [
+  { grade: 'A', soKhoan: 432226,  giaiNgan: 6302,  riskPct: 3.09  },
+  { grade: 'B', soKhoan: 662757,  giaiNgan: 9385,  riskPct: 7.59  },
+  { grade: 'C', soKhoan: 649478,  giaiNgan: 9761,  riskPct: 12.94 },
+  { grade: 'D', soKhoan: 324169,  giaiNgan: 5091,  riskPct: 19.19 },
+  { grade: 'E', soKhoan: 135534,  giaiNgan: 2365,  riskPct: 27.65 },
+  { grade: 'F', soKhoan: 41767,   giaiNgan: 799,   riskPct: 35.52 },
+  { grade: 'G', soKhoan: 12153,   giaiNgan: 248,   riskPct: 37.71 },
+];
+
+// KPI 7: Xu hướng giải ngân theo năm (triệu USD)
 export const loanTrendData = [
-  { year: '2007', amount: 5 },
-  { year: '2008', amount: 20 },
-  { year: '2009', amount: 50 },
-  { year: '2010', amount: 150 },
-  { year: '2011', amount: 350 },
-  { year: '2012', amount: 800 },
-  { year: '2013', amount: 1500 },
-  { year: '2014', amount: 2800 },
-  { year: '2015', amount: 4500 },
-  { year: '2016', amount: 6200 },
-  { year: '2017', amount: 8400 },
-  { year: '2018', amount: 10500 },
+  { year: '2007', amount: 4.8,    soKhoan: 572    },
+  { year: '2008', amount: 21.1,   soKhoan: 2391   },
+  { year: '2009', amount: 51.7,   soKhoan: 5267   },
+  { year: '2010', amount: 131.6,  soKhoan: 12506  },
+  { year: '2011', amount: 261.5,  soKhoan: 21710  },
+  { year: '2012', amount: 717.6,  soKhoan: 53335  },
+  { year: '2013', amount: 1980.6, soKhoan: 134738 },
+  { year: '2014', amount: 3499.4, soKhoan: 235464 },
+  { year: '2015', amount: 6407.1, soKhoan: 420668 },
+  { year: '2016', amount: 6386.9, soKhoan: 433873 },
+  { year: '2017', amount: 6569.3, soKhoan: 443050 },
+  { year: '2018', amount: 7917.4, soKhoan: 494510 },
 ];
 
+// KPI 13: NPL ratio theo năm — dùng cho line chart
+export const nplTrendData = [
+  { year: '2007', nplPct: 9.62,  duNoXau: 0.46   },
+  { year: '2008', nplPct: 12.99, duNoXau: 2.74   },
+  { year: '2009', nplPct: 12.06, duNoXau: 6.24   },
+  { year: '2010', nplPct: 12.12, duNoXau: 15.95  },
+  { year: '2011', nplPct: 16.58, duNoXau: 43.34  },
+  { year: '2012', nplPct: 17.73, duNoXau: 127.24 },
+  { year: '2013', nplPct: 16.64, duNoXau: 329.51 },
+  { year: '2014', nplPct: 18.30, duNoXau: 640.56 },
+  { year: '2015', nplPct: 18.59, duNoXau: 1191.16},
+  { year: '2016', nplPct: 16.44, duNoXau: 1050.24},
+  { year: '2017', nplPct: 9.42,  duNoXau: 618.84 },
+  { year: '2018', nplPct: 1.90,  duNoXau: 150.79 },
+];
+
+// KPI 4b: Mục đích vay — top 5 (tính % từ tổng 2,257,084)
 export const loanPurposeData = [
-  { name: 'Debt Consolidation', value: 50, color: '#003366' },
-  { name: 'Credit Card', value: 25, color: '#0052A5' },
-  { name: 'Home Improvement', value: 10, color: '#06b6d4' },
-  { name: 'Small Business', value: 8, color: '#D1D5DB' },
-  { name: 'Other', value: 7, color: '#9CA3AF' },
+  { name: 'Đảo nợ',          key: 'debt_consolidation', value: 56.6, soKhoan: 1276708, color: '#0a1f44' },
+  { name: 'Thẻ tín dụng',    key: 'credit_card',        value: 22.9, soKhoan: 516469,  color: '#1652f0' },
+  { name: 'Cải tạo nhà',     key: 'home_improvement',   value: 6.6,  soKhoan: 150052,  color: '#5e6a7a' },
+  { name: 'Mua sắm',         key: 'other',              value: 6.2,  soKhoan: 139195,  color: '#8e99a8' },
+  { name: 'Khác',            key: 'others',             value: 7.7,  soKhoan: 174660,  color: '#bcc3ce' },
 ];
 
-export const recoveryData = [
-  { month: 'Jan', recovery: 400, chargeOff: 240 },
-  { month: 'Feb', recovery: 300, chargeOff: 139 },
-  { month: 'Mar', recovery: 200, chargeOff: 980 },
-  { month: 'Apr', recovery: 278, chargeOff: 390 },
-  { month: 'May', recovery: 189, chargeOff: 480 },
-  { month: 'Jun', recovery: 239, chargeOff: 380 },
+// KPI 4c: Theo vùng địa lý
+export const regionData = [
+  { region: 'South',     soKhoan: 810403,  giaiNgan: 12263, laiSuat: 13.17 },
+  { region: 'West',      soKhoan: 580661,  giaiNgan: 8764,  laiSuat: 13.02 },
+  { region: 'Northeast', soKhoan: 464232,  giaiNgan: 7003,  laiSuat: 13.09 },
+  { region: 'Midwest',   soKhoan: 402788,  giaiNgan: 5919,  laiSuat: 13.06 },
 ];
 
+// KPI 11: Top bang NPL cao nhất
 export const stateRiskData = [
-  { state: 'California', loans: 320145, npl: '12.5%', recovery: '62%', risk: 'Low' },
-  { state: 'New York', loans: 215432, npl: '15.2%', recovery: '55%', risk: 'Medium' },
-  { state: 'Texas', loans: 189543, npl: '14.8%', recovery: '58%', risk: 'Medium' },
-  { state: 'Florida', loans: 156432, npl: '18.4%', recovery: '48%', risk: 'High' },
-  { state: 'Illinois', loans: 98543, npl: '13.2%', recovery: '60%', risk: 'Low' },
+  { state: 'LA', name: 'Louisiana',    region: 'South',     loans: 25737,  npl: 14.98, nplRaw: 14.98 },
+  { state: 'AL', name: 'Alabama',      region: 'South',     loans: 27269,  npl: 14.77, nplRaw: 14.77 },
+  { state: 'AR', name: 'Arkansas',     region: 'South',     loans: 17062,  npl: 14.77, nplRaw: 14.77 },
+  { state: 'OK', name: 'Oklahoma',     region: 'South',     loans: 20678,  npl: 14.43, nplRaw: 14.43 },
+  { state: 'MS', name: 'Mississippi',  region: 'South',     loans: 12630,  npl: 14.28, nplRaw: 14.28 },
+  { state: 'NM', name: 'New Mexico',   region: 'West',      loans: 11978,  npl: 13.76, nplRaw: 13.76 },
+  { state: 'NV', name: 'Nevada',       region: 'West',      loans: 32611,  npl: 13.68, nplRaw: 13.68 },
+  { state: 'NY', name: 'New York',     region: 'Northeast', loans: 185996, npl: 13.65, nplRaw: 13.65 },
+];
+
+// KPI 8: Lãi suất theo hạng (dùng cho scatter/bar)
+export const interestByGrade = [
+  { grade: 'A', laiSuatTB: 7.08,  laiMin: 5.31, laiMax: 9.63  },
+  { grade: 'B', laiSuatTB: 10.68, laiMin: 6,    laiMax: 14.09 },
+  { grade: 'C', laiSuatTB: 14.14, laiMin: 6,    laiMax: 17.27 },
+  { grade: 'D', laiSuatTB: 18.14, laiMin: 6,    laiMax: 22.35 },
+  { grade: 'E', laiSuatTB: 21.83, laiMin: 6,    laiMax: 27.27 },
+  { grade: 'F', laiSuatTB: 25.45, laiMin: 6,    laiMax: 30.75 },
+  { grade: 'G', laiSuatTB: 28.08, laiMin: 6,    laiMax: 30.99 },
+];
+
+// KPI 9: DTI theo mức rủi ro (dùng cho scatter insight)
+export const dtiByRisk = [
+  { mucRuiRo: 'Low',     soKhoan: 1955438, dtiTB: 18.63, laiSuatTB: 12.69 },
+  { mucRuiRo: 'Medium',  soKhoan: 8423,    dtiTB: 20.54, laiSuatTB: 15.47 },
+  { mucRuiRo: 'Default', soKhoan: 268441,  dtiTB: 20.18, laiSuatTB: 15.71 },
+  { mucRuiRo: 'High',    soKhoan: 25782,   dtiTB: 20.07, laiSuatTB: 15.60 },
+];
+
+// KPI 12: Thu hồi nợ theo hạng
+export const recoveryByGrade = [
+  { grade: 'A', soNoXau: 14189, tyLeHoiPct: 5.91  },
+  { grade: 'B', soNoXau: 52534, tyLeHoiPct: 6.64  },
+  { grade: 'C', soNoXau: 85619, tyLeHoiPct: 7.45  },
+  { grade: 'D', soNoXau: 61039, tyLeHoiPct: 7.98  },
+  { grade: 'E', soNoXau: 36017, tyLeHoiPct: 8.83  },
+  { grade: 'F', soNoXau: 14486, tyLeHoiPct: 9.53  },
+  { grade: 'G', soNoXau: 4557,  tyLeHoiPct: 9.71  },
 ];

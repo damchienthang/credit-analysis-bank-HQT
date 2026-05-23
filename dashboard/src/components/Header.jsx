@@ -16,12 +16,13 @@ import {
 const primaryNav = [
   { name: 'Trang chủ', href: '/', icon: Home },
   { name: 'Xu hướng', href: '/trends', icon: TrendingUp },
+  { name: 'Nền tảng BI', href: '/platform', icon: Database },
   { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
-  { name: 'Kiến trúc', href: '/architecture', icon: Network },
-];
+  { name: 'Báo cáo', href: '/reports', icon: FileText },
+]
 
 const menuNav = [
-  { name: 'Nền tảng BI', href: '/platform', icon: Database, desc: 'Mô hình BI và data warehouse' },
+  { name: 'Kiến trúc', href: '/architecture', icon: Network, desc: 'Data warehouse' },
   { name: 'Báo cáo', href: '/reports', icon: FileText, desc: 'Insight và khuyến nghị' },
   { name: 'Giới thiệu', href: '/about', icon: Info, desc: 'Thông tin nhóm thực hiện' },
 ];

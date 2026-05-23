@@ -1,42 +1,57 @@
 import { useCallback, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, AreaChart, Area, ComposedChart, Line, Legend
+  AreaChart, Area, BarChart, Bar, LineChart, Line,
+  ComposedChart, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, ReferenceLine,
 } from 'recharts';
 import {
-  Database, ShieldAlert, Banknote, TrendingUp,
-  Download, RefreshCw, AlertTriangle, CheckCircle2, Info
+  Database, ShieldAlert, Banknote, TrendingUp, TrendingDown,
+  Download, RefreshCw, AlertTriangle, Info, ArrowRight,
+  ChevronRight, Activity,
 } from 'lucide-react';
 import {
-  fetchKpi, fetchLoanGrade, fetchLoanTrend,
-  fetchLoanPurpose, fetchRecovery, fetchStateRisk,
+  fetchKpi, fetchLoanGrade, fetchLoanTrend, fetchLoanPurpose,
+  fetchStateRisk, fetchNplTrend, fetchGradeRisk,
+  fetchInterestGrade, fetchRecovery,
 } from '../data/api';
 
-const ICON_MAP = { Database, ShieldAlert, Banknote, TrendingUp };
+// ── Màu sắc tối giản ─────────────────────────────────────────────────────────
+const C = {
+  navy:    '#0a1f44',
+  mid:     '#1a3a6e',
+  accent:  '#1652f0',
+  cyan:    '#06b6d4',
+  danger:  '#b91c1c',
+  warning: '#92400e',
+  success: '#166534',
+  gray:    '#5e6a7a',
+  border:  '#dde1e8',
+  bg:      '#f7f8fa',
+  white:   '#ffffff',
+};
 
-const KPI_CFG = [
-  { color: '#1652f0', target: null,  threshold: null, goodHigh: true  },
-  { color: '#b91c1c', target: 10,    threshold: 15,   goodHigh: false },
-  { color: '#1652f0', target: null,  threshold: null, goodHigh: true  },
-  { color: '#166534', target: 60,    threshold: null, goodHigh: true  },
-];
+// Màu 2 màu đủ dùng cho tất cả chart — không loè loẹt
+const GRADE_COLORS = ['#166534','#2d7a3a','#5e6a7a','#92400e','#b91c1c','#991b1b','#7f1d1d'];
 
-// ── Tooltip ───────────────────────────────────────────────────────────────────
-const ChartTip = ({ active, payload, label }) => {
+// ── Custom Tooltip ─────────────────────────────────────────────────────────────
+const ChartTip = ({ active, payload, label, suffix = '' }) => {
   if (!active || !payload?.length) return null;
   return (
     <div style={{
-      background: '#fff', border: '1px solid #dde1e8', borderRadius: 4,
-      padding: '10px 14px', fontSize: 11, boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+      background: C.white, border: `1px solid ${C.border}`, borderRadius: 3,
+      padding: '10px 14px', fontSize: 11, boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
     }}>
-      <p style={{ fontWeight: 700, color: '#0a1f44', marginBottom: 6 }}>{label}</p>
+      <p style={{ fontWeight: 700, color: C.navy, marginBottom: 6 }}>{label}</p>
       {payload.map((p, i) => (
         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-          <span style={{ width: 8, height: 8, background: p.color, display: 'inline-block', borderRadius: 1 }} />
-          <span style={{ color: '#5e6a7a' }}>{p.name}:</span>
-          <span style={{ fontWeight: 700, color: '#0a1f44', marginLeft: 'auto', paddingLeft: 12 }}>
-            {typeof p.value === 'number' ? p.value.toLocaleString() : p.value}
+          <span style={{ width: 8, height: 3, background: p.color || p.fill, display: 'inline-block' }} />
+          <span style={{ color: C.gray }}>{p.name}:</span>
+          <span style={{ fontWeight: 700, color: C.navy, marginLeft: 'auto', paddingLeft: 12 }}>
+            {typeof p.value === 'number'
+              ? p.value >= 1000 ? p.value.toLocaleString('vi-VN') : p.value.toFixed(2)
+              : p.value}{suffix}
           </span>
         </div>
       ))}
@@ -45,390 +60,603 @@ const ChartTip = ({ active, payload, label }) => {
 };
 
 // ── KPI Card ──────────────────────────────────────────────────────────────────
-function KpiCard({ kpi, idx, delay }) {
-  const Icon = ICON_MAP[kpi.icon];
-  const cfg  = KPI_CFG[idx] || { color: '#1652f0' };
-  const numVal = parseFloat(String(kpi.value).replace(/[^0-9.]/g, ''));
+const ICON_MAP = { Database, ShieldAlert, Banknote, TrendingUp };
 
-  let statusLabel = null;
-  let statusColor = cfg.color;
-
-  if (cfg.threshold && !isNaN(numVal)) {
-    const exceeded = numVal > cfg.threshold;
-    if (!cfg.goodHigh && exceeded) {
-      statusColor  = '#b91c1c';
-      statusLabel  = `⚠ Vượt ${cfg.threshold}%`;
-    } else if (!cfg.goodHigh && !exceeded) {
-      statusColor  = '#166534';
-      statusLabel  = `Trong ngưỡng`;
-    }
-  }
-
-  const progress = cfg.target && !isNaN(numVal)
-    ? Math.min(100, cfg.goodHigh ? (numVal / cfg.target) * 100 : (cfg.target / numVal) * 100)
-    : null;
+function KpiCard({ label, value, sub, icon, color, risk, target, delay = 0 }) {
+  const Icon = ICON_MAP[icon];
+  const numVal = parseFloat(String(value).replace(/[^0-9.,]/g, '').replace(',', '.'));
+  const isAlert = risk && !isNaN(numVal);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay }}
+      transition={{ delay, duration: 0.25 }}
       className="kpi-card"
-      style={{ '--kpi-color': statusColor }}
+      style={{ '--kpi-color': isAlert ? C.danger : color }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
         <div style={{
-          width: 30, height: 30, background: '#f7f8fa', border: '1px solid #dde1e8',
-          borderRadius: 3, display: 'flex', alignItems: 'center', justifyContent: 'center'
+          width: 28, height: 28, border: `1px solid ${C.border}`, borderRadius: 3,
+          background: C.bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          {Icon && <Icon style={{ width: 14, height: 14, color: cfg.color }} />}
+          {Icon && <Icon style={{ width: 13, height: 13, color: isAlert ? C.danger : color }} />}
         </div>
-        {statusLabel && (
-          <span style={{ fontSize: 10, fontWeight: 700, color: statusColor }}>{statusLabel}</span>
+        {isAlert && (
+          <span style={{ fontSize: 10, fontWeight: 700, color: C.danger }}>
+            ▲ Theo dõi
+          </span>
         )}
       </div>
-
-      <p className="label" style={{ marginBottom: 4 }}>{kpi.label}</p>
-      <p className="value-lg" style={{ color: statusColor !== cfg.color ? statusColor : '#0a1f44', marginBottom: 10 }}>
-        {kpi.value}
-      </p>
-
-      {progress !== null && (
-        <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-            <span style={{ fontSize: 10, color: '#8e99a8' }}>vs mục tiêu {cfg.target}{idx === 1 ? '%' : '%'}</span>
-            <span style={{ fontSize: 10, fontWeight: 700, color: statusColor }}>{Math.round(progress)}%</span>
-          </div>
+      <p className="label" style={{ marginBottom: 6 }}>{label}</p>
+      <p className="value-lg" style={{ color: isAlert ? C.danger : C.navy, marginBottom: 6 }}>{value}</p>
+      <p style={{ fontSize: 10, color: C.gray, fontWeight: 500 }}>{sub}</p>
+      {target && (
+        <div style={{ marginTop: 8 }}>
           <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%`, background: statusColor }} />
+            <div className="progress-fill" style={{
+              width: `${Math.min(100, (numVal / target) * 100)}%`,
+              background: color,
+            }} />
           </div>
-        </>
-      )}
-
-      {cfg.threshold && (
-        <p style={{ fontSize: 10, color: '#bcc3ce', marginTop: 6 }}>
-          Ngưỡng: {cfg.threshold}{idx === 1 ? '%' : ''}
-        </p>
+        </div>
       )}
     </motion.div>
   );
 }
 
-// ── Section Header ────────────────────────────────────────────────────────────
-// ── Dashboard ─────────────────────────────────────────────────────────────────
+// ── Insight Box ───────────────────────────────────────────────────────────────
+function InsightBox({ type = 'warning', title, finding, solution }) {
+  const cfg = {
+    warning: { color: C.warning,  icon: AlertTriangle, bg: '#fffbeb' },
+    danger:  { color: C.danger,   icon: AlertTriangle, bg: '#fef2f2' },
+    info:    { color: C.accent,   icon: Info,          bg: '#eff6ff' },
+  }[type];
+  const Icon = cfg.icon;
+  return (
+    <div style={{
+      borderLeft: `3px solid ${cfg.color}`, background: cfg.bg,
+      border: `1px solid ${C.border}`, borderLeftColor: cfg.color,
+      borderRadius: 3, padding: '14px 16px',
+    }}>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 8 }}>
+        <Icon style={{ width: 13, height: 13, color: cfg.color, flexShrink: 0, marginTop: 1 }} />
+        <p style={{ fontSize: 12, fontWeight: 700, color: C.navy, margin: 0 }}>{title}</p>
+      </div>
+      <p style={{ fontSize: 11.5, color: C.gray, lineHeight: 1.55, margin: '0 0 8px' }}>{finding}</p>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+        <ArrowRight style={{ width: 11, height: 11, color: cfg.color, flexShrink: 0, marginTop: 2 }} />
+        <p style={{ fontSize: 11, color: C.navy, fontWeight: 600, lineHeight: 1.45, margin: 0 }}>{solution}</p>
+      </div>
+    </div>
+  );
+}
+
+// ── Section Divider / Narrative bridge ───────────────────────────────────────
+function SectionBridge({ text }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 10,
+      margin: '28px 0 20px', borderBottom: `1px solid ${C.border}`, paddingBottom: 14,
+    }}>
+      <ChevronRight style={{ width: 14, height: 14, color: C.accent, flexShrink: 0 }} />
+      <p style={{ fontSize: 12, color: C.gray, fontWeight: 500, margin: 0, lineHeight: 1.5 }}>{text}</p>
+    </div>
+  );
+}
+
+// ── Gauge SVG đơn giản ───────────────────────────────────────────────────────
+function GaugeChart({ value, max = 100, label, color = C.accent }) {
+  const pct   = Math.min(value / max, 1);
+  const R     = 52, cx = 70, cy = 70;
+  const sweep = Math.PI;                   // 180° arc
+  const start = { x: cx - R, y: cy };
+  const angle = sweep * pct;
+  const end   = { x: cx + R * Math.cos(Math.PI + angle), y: cy + R * Math.sin(Math.PI + angle) };
+  const lg    = angle > Math.PI ? 1 : 0;
+  const track = `M ${start.x} ${cy} A ${R} ${R} 0 1 1 ${cx + R} ${cy}`;
+  const fill  = `M ${start.x} ${cy} A ${R} ${R} 0 ${lg} 1 ${end.x} ${end.y}`;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <svg width={140} height={85} viewBox="0 0 140 90">
+        <path d={track} fill="none" stroke={C.border} strokeWidth={10} strokeLinecap="round" />
+        <path d={fill}  fill="none" stroke={color}    strokeWidth={10} strokeLinecap="round" />
+        <text x={cx} y={cy - 6} textAnchor="middle" fontSize={18} fontWeight={700}
+          fontFamily="JetBrains Mono, monospace" fill={C.navy}>{value}%</text>
+        <text x={cx} y={cy + 10} textAnchor="middle" fontSize={9.5} fontWeight={600}
+          fill={C.gray} letterSpacing={1} textTransform="uppercase">{label}</text>
+      </svg>
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DASHBOARD PAGE
+// ═══════════════════════════════════════════════════════════════════════════════
 const DashboardPage = () => {
+  const [tab, setTab] = useState(0);           // 0 = Tổng quan, 1 = Phân tích rủi ro
+
   const [kpiData,         setKpiData]         = useState([]);
-  const [loanGradeData,   setLoanGradeData]   = useState([]);
-  const [loanTrendData,   setLoanTrendData]   = useState([]);
-  const [loanPurposeData, setLoanPurposeData] = useState([]);
+  const [gradeData,       setGradeData]       = useState([]);
+  const [trendData,       setTrendData]       = useState([]);
+  const [purposeData,     setPurposeData]     = useState([]);
+  const [stateData,       setStateData]       = useState([]);
+  const [nplData,         setNplData]         = useState([]);
+  const [gradeRiskData,   setGradeRiskData]   = useState([]);
+  const [interestData,    setInterestData]    = useState([]);
   const [recoveryData,    setRecoveryData]    = useState([]);
-  const [stateRiskData,   setStateRiskData]   = useState([]);
   const [loading,         setLoading]         = useState(true);
   const [lastUpdated,     setLastUpdated]     = useState('');
 
   const loadAll = useCallback(async () => {
     setLoading(true);
     try {
-      const [kpi, grade, trend, purpose, recovery, state] = await Promise.all([
-        fetchKpi(), fetchLoanGrade(), fetchLoanTrend(),
-        fetchLoanPurpose(), fetchRecovery(), fetchStateRisk(),
+      const [kpi, grade, trend, purpose, state, npl, grisk, interest, recovery] = await Promise.all([
+        fetchKpi(), fetchLoanGrade(), fetchLoanTrend(), fetchLoanPurpose(),
+        fetchStateRisk(), fetchNplTrend(), fetchGradeRisk(),
+        fetchInterestGrade(), fetchRecovery(),
       ]);
       setKpiData(kpi);
-      setLoanGradeData(grade);
-      setLoanTrendData(trend);
-      setLoanPurposeData(purpose);
+      setGradeData(grade);
+      setTrendData(trend);
+      setPurposeData(purpose);
+      setStateData(state);
+      setNplData(npl);
+      setGradeRiskData(grisk);
+      setInterestData(interest);
       setRecoveryData(recovery);
-      setStateRiskData(state);
       setLastUpdated(new Date().toLocaleString('vi-VN'));
     } finally {
       setLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      loadAll();
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, [loadAll]);
+  useEffect(() => { loadAll(); }, [loadAll]);
 
   const exportReport = () => {
-    const report = {
-      generatedAt: new Date().toISOString(),
-      scope: 'LendingClub Portfolio 2007-2018',
-      kpis: kpiData,
-      loanGrade: loanGradeData,
-      loanTrend: loanTrendData,
-      loanPurpose: loanPurposeData,
-      recovery: recoveryData,
-      stateRisk: stateRiskData,
-    };
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+    const blob = new Blob([JSON.stringify({ kpiData, gradeData, trendData }, null, 2)], {
+      type: 'application/json;charset=utf-8',
+    });
+    const url  = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
-    link.download = `creditbi-report-${new Date().toISOString().slice(0, 10)}.json`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    link.href = url; link.download = `creditbi-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(link); link.click(); link.remove();
     URL.revokeObjectURL(url);
   };
 
   if (loading) return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', gap: 8 }}>
-      <Database style={{ width: 24, height: 24, color: '#bcc3ce' }} />
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center', minHeight: '60vh', gap: 10 }}>
+      <Activity style={{ width: 20, height: 20, color: C.gray }} />
       <p className="label">Đang tải dữ liệu…</p>
     </div>
   );
 
+  // Tính tổng khoản vay từ grade data (đúng số liệu SQL)
+  const totalLoans = gradeData.reduce((s, d) => s + d.value, 0);
+
+  // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div className="page-wrap-wide">
 
-      {/* ── Page header ──────────────────────────────────────────────────── */}
+      {/* ── Page header ────────────────────────────────────────────────────── */}
       <div className="dashboard-header">
         <div>
-          <h1 style={{ fontSize: 18, fontWeight: 800, color: '#0a1f44', letterSpacing: '-0.02em', marginBottom: 3 }}>
-            Executive BI Dashboard
+          <h1 style={{ fontSize: 17, fontWeight: 800, color: C.navy, letterSpacing: '-0.02em', marginBottom: 3 }}>
+            Phân tích Danh mục Tín dụng
           </h1>
-          <p style={{ fontSize: 11, color: '#8e99a8', fontWeight: 500 }}>
-            LendingClub Portfolio · 2,260,701 giao dịch · 2007–2018
+          <p style={{ fontSize: 11, color: C.gray, fontWeight: 500 }}>
+            LendingClub · {totalLoans.toLocaleString('vi-VN')} khoản vay · 2007–2018
             {lastUpdated && <> · Cập nhật <span className="mono">{lastUpdated}</span></>}
           </p>
         </div>
         <div className="dashboard-actions">
-          <button className="btn btn-secondary" onClick={loadAll}>
-            <RefreshCw style={{ width: 12, height: 12 }} /> Làm mới
+          <button className="btn btn-secondary" onClick={loadAll} id="btn-refresh">
+            <RefreshCw style={{ width: 11, height: 11 }} /> Làm mới
           </button>
-          <button className="btn btn-primary" onClick={exportReport}>
-            <Download style={{ width: 12, height: 12 }} /> Xuất báo cáo
+          <button className="btn btn-primary" onClick={exportReport} id="btn-export">
+            <Download style={{ width: 11, height: 11 }} /> Xuất báo cáo
           </button>
         </div>
       </div>
 
-      <div className="dashboard-status-note">
-        Dashboard ưu tiên dữ liệu từ API <span className="mono">localhost:3001</span>; khi backend chưa chạy, hệ thống tự dùng dữ liệu mẫu để phiên demo không bị gián đoạn.
+      {/* ── Tab bar ────────────────────────────────────────────────────────── */}
+      <div style={{ display: 'flex', borderBottom: `1px solid ${C.border}`, marginBottom: 24, gap: 0 }}>
+        {['Tổng quan danh mục', 'Phân tích rủi ro'].map((t, i) => (
+          <button
+            key={i}
+            id={`tab-${i}`}
+            onClick={() => setTab(i)}
+            style={{
+              padding: '9px 18px',
+              fontSize: 12, fontWeight: 700,
+              border: 'none', background: 'none', cursor: 'pointer',
+              color: tab === i ? C.navy : C.gray,
+              borderBottom: tab === i ? `2px solid ${C.cyan}` : '2px solid transparent',
+              transition: 'all 0.15s',
+              marginBottom: -1,
+            }}
+          >
+            {t}
+          </button>
+        ))}
       </div>
 
-      {/* ── KPI strip ────────────────────────────────────────────────────── */}
-      <div className="dashboard-kpi-grid">
-        {kpiData.map((kpi, i) => <KpiCard key={i} kpi={kpi} idx={i} delay={i * 0.06} />)}
-      </div>
+      {/* ══════════════════════════════════════════════════════════════════════
+          TAB 0 — TỔNG QUAN DANH MỤC
+      ══════════════════════════════════════════════════════════════════════ */}
+      <AnimatePresence mode="wait">
+      {tab === 0 && (
+        <motion.div key="tab0"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {/* ── KPI Strip ──────────────────────────────────────────────────── */}
+          <div className="dashboard-kpi-grid">
+            {kpiData.map((k, i) => (
+              <KpiCard key={i} {...k} delay={i * 0.05} />
+            ))}
+          </div>
 
-      {/* ── Charts row 1 ─────────────────────────────────────────────────── */}
-      <div className="dashboard-grid-primary">
+          {/* ── Narrative: nhịp cầu vào biểu đồ đầu tiên ─────────────────── */}
+          <SectionBridge text="Từ 2007 đến 2018, danh mục tăng trưởng 1.600 lần về giá trị giải ngân — nhưng tỷ lệ nợ xấu cũng biến động theo chu kỳ kinh tế, đạt đỉnh 18,6% năm 2015 rồi hạ nhiệt về 1,9% cuối 2018 khi chính sách thắt chặt." />
 
-        {/* Grade bar chart */}
-        <div className="card">
-          <div className="card-header">
-            <div>
-              <p className="section-title">Phân bổ khoản vay theo Hạng tín dụng</p>
-              <p className="label" style={{ marginTop: 2 }}>Grade A (rủi ro thấp) → Grade G (rủi ro cao)</p>
-            </div>
-            <div style={{ display: 'flex', gap: 6 }}>
-              <span className="badge badge-success">A–C</span>
-              <span className="badge badge-warning">D</span>
-              <span className="badge badge-danger">E–G</span>
-            </div>
-          </div>
-          <div className="card-body" style={{ height: 280 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={loanGradeData} margin={{ top: 4, right: 0, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false}
-                  tick={{ fill: '#8e99a8', fontSize: 11, fontWeight: 600 }} dy={6} />
-                <YAxis axisLine={false} tickLine={false}
-                  tick={{ fill: '#bcc3ce', fontSize: 10 }}
-                  tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} />
-                <Tooltip content={<ChartTip />} />
-                <Bar dataKey="value" name="Số khoản vay" radius={[2, 2, 0, 0]} maxBarSize={44}>
-                  {loanGradeData.map((e, i) => <Cell key={i} fill={e.color} />)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+          {/* ── Row 1: NPL trend + Gauge ───────────────────────────────────── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 260px', gap: 12, marginBottom: 12 }}>
 
-        {/* Donut purpose */}
-        <div className="card">
-          <div className="card-header">
-            <p className="section-title">Mục đích vay vốn</p>
-            <span className="label">Top 5</span>
-          </div>
-          <div className="card-body" style={{ height: 220 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={loanPurposeData} cx="50%" cy="50%"
-                  innerRadius={50} outerRadius={80} paddingAngle={2} dataKey="value" stroke="none">
-                  {loanPurposeData.map((e, i) => <Cell key={i} fill={e.color} />)}
-                </Pie>
-                <Tooltip formatter={v => [`${v}%`, '']}
-                  contentStyle={{ borderRadius: 3, border: '1px solid #dde1e8', fontSize: 11 }} />
-                <Legend layout="vertical" verticalAlign="middle" align="right"
-                  wrapperStyle={{ fontSize: 11, fontWeight: 600 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div style={{ padding: '10px 16px', borderTop: '1px solid #eef0f4', background: '#f7f8fa', display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-            <Info style={{ width: 12, height: 12, color: '#1652f0', flexShrink: 0, marginTop: 1 }} />
-            <p style={{ fontSize: 11, color: '#5e6a7a', fontWeight: 500, lineHeight: 1.4 }}>
-              Debt Consolidation chiếm ~57% — gom nợ là mục đích phổ biến nhất.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Charts row 2 ─────────────────────────────────────────────────── */}
-      <div className="dashboard-grid-secondary">
-
-        {/* Area trend */}
-        <div className="card">
-          <div className="card-header">
-            <p className="section-title">Tăng trưởng giải ngân</p>
-            <span className="label">2007–2018</span>
-          </div>
-          <div className="card-body" style={{ height: 200 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={loanTrendData} margin={{ top: 4, right: 0, left: -24, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="ga" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%"  stopColor="#1652f0" stopOpacity={0.12} />
-                    <stop offset="95%" stopColor="#1652f0" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
-                <XAxis dataKey="year" axisLine={false} tickLine={false}
-                  tick={{ fill: '#bcc3ce', fontSize: 10 }} />
-                <YAxis axisLine={false} tickLine={false}
-                  tick={{ fill: '#bcc3ce', fontSize: 10 }}
-                  tickFormatter={v => `${(v/1000).toFixed(0)}K`} />
-                <Tooltip content={<ChartTip />} />
-                <Area type="monotone" dataKey="amount" name="Khoản vay"
-                  stroke="#1652f0" strokeWidth={2}
-                  fillOpacity={1} fill="url(#ga)"
-                  dot={{ fill: '#1652f0', r: 2.5, strokeWidth: 0 }}
-                  activeDot={{ r: 4 }} />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Recovery vs Charge-off */}
-        <div className="card">
-          <div className="card-header">
-            <p className="section-title">Thu hồi nợ vs Xóa nợ (khoản vay NPL)</p>
-            <div style={{ display: 'flex', gap: 12 }}>
-              {[{ c: '#166534', l: 'Recovery' }, { c: '#b91c1c', l: 'Charge-off' }].map(x => (
-                <div key={x.l} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ width: 10, height: 3, background: x.c, display: 'inline-block', borderRadius: 1 }} />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: '#8e99a8' }}>{x.l}</span>
+            {/* Line chart: NPL theo năm */}
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <p className="section-title">Tỷ lệ nợ xấu (NPL) theo năm</p>
+                  <p className="label" style={{ marginTop: 2 }}>So sánh với quy mô giải ngân — đỉnh năm 2015</p>
                 </div>
-              ))}
+                <span className="badge badge-danger">NPL Max: 18,6%</span>
+              </div>
+              <div className="card-body" style={{ height: 240 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={nplData} margin={{ top: 4, right: 16, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="gNpl" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%"  stopColor={C.danger} stopOpacity={0.08} />
+                        <stop offset="95%" stopColor={C.danger} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                    <XAxis dataKey="year" axisLine={false} tickLine={false}
+                      tick={{ fill: C.gray, fontSize: 10, fontWeight: 600 }} />
+                    <YAxis yAxisId="left" axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                      tickFormatter={v => `${v}%`} domain={[0, 22]} />
+                    <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                      tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}B` : `${v}M`} />
+                    <Tooltip content={<ChartTip />} />
+                    <Legend wrapperStyle={{ fontSize: 10, fontWeight: 600 }} />
+                    <Bar yAxisId="right" dataKey="duNoXau" name="Dư nợ xấu ($M)"
+                      fill={C.border} radius={[1,1,0,0]} maxBarSize={28} opacity={0.6} />
+                    <Line yAxisId="left" type="monotone" dataKey="nplPct" name="NPL Ratio (%)"
+                      stroke={C.danger} strokeWidth={2}
+                      dot={{ fill: C.danger, r: 2.5, strokeWidth: 0 }}
+                      activeDot={{ r: 4 }} />
+                    <ReferenceLine yAxisId="left" y={15} stroke={C.danger}
+                      strokeDasharray="4 3" strokeWidth={1}
+                      label={{ value: 'Ngưỡng 15%', position: 'right', fontSize: 9, fill: C.danger }} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Gauge + tóm tắt */}
+            <div className="card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+              <p className="label" style={{ marginBottom: 16, textAlign: 'center' }}>Tỷ lệ hoàn trả</p>
+              <GaugeChart value={80.3} max={100} label="of 100%" color={C.success} />
+              <div style={{ marginTop: 12, textAlign: 'center' }}>
+                <p style={{ fontSize: 11, color: C.gray, lineHeight: 1.5 }}>
+                  Trên tổng giải ngân <span className="mono" style={{ fontWeight: 700, color: C.navy }}>$33,9B</span>,<br />
+                  đã thu hồi <span className="mono" style={{ fontWeight: 700, color: C.success }}>$27,3B</span>
+                </p>
+              </div>
             </div>
           </div>
-          <div className="card-body" style={{ height: 200 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={recoveryData} margin={{ top: 4, right: 0, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
-                <XAxis dataKey="month" axisLine={false} tickLine={false}
-                  tick={{ fill: '#8e99a8', fontSize: 10, fontWeight: 600 }} />
-                <YAxis axisLine={false} tickLine={false}
-                  tick={{ fill: '#bcc3ce', fontSize: 10 }} />
-                <Tooltip content={<ChartTip />} />
-                <Bar dataKey="recovery" name="Thu hồi ($K)" fill="#166534" radius={[2, 2, 0, 0]} opacity={0.85} />
-                <Line type="monotone" dataKey="chargeOff" name="Xóa nợ ($K)"
-                  stroke="#b91c1c" strokeWidth={2}
-                  dot={{ fill: '#b91c1c', r: 3, strokeWidth: 0 }}
-                  activeDot={{ r: 5 }} />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
 
-      {/* ── State risk table ─────────────────────────────────────────────── */}
-      <div className="card" style={{ marginBottom: 12 }}>
-        <div className="card-header">
-          <p className="section-title">Phân tích rủi ro theo Khu vực địa lý — Top 5</p>
-          <span className="label">Xếp theo tổng số khoản vay</span>
-        </div>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Khu vực</th>
-              <th>Số khoản vay</th>
-              <th>NPL Ratio</th>
-              <th>Tỷ lệ thu hồi</th>
-              <th>Mức rủi ro</th>
-              <th style={{ width: 140 }}>NPL Gauge</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stateRiskData.map((item, i) => {
-              const nplNum  = parseFloat(item.npl);
-              const isHigh  = item.risk === 'High';
-              const isMed   = item.risk === 'Medium';
-              return (
-                <tr key={i} style={{ background: isHigh ? 'rgba(185,28,28,0.02)' : isMed ? 'rgba(146,64,14,0.02)' : undefined }}>
-                  <td><span className="mono" style={{ fontWeight: 700, color: '#0a1f44', fontSize: 13 }}>{item.state}</span></td>
-                  <td><span className="mono">{Number(item.loans).toLocaleString()}</span></td>
-                  <td><span className="mono" style={{ fontWeight: 700, color: isHigh ? '#b91c1c' : isMed ? '#92400e' : '#166534' }}>{item.npl}</span></td>
-                  <td><span className="mono">{item.recovery}</span></td>
-                  <td>
-                    <span className={`badge ${isHigh ? 'badge-danger' : isMed ? 'badge-warning' : 'badge-success'}`}>
-                      {isHigh ? <AlertTriangle style={{ width: 9, height: 9 }} /> : <CheckCircle2 style={{ width: 9, height: 9 }} />}
-                      {item.risk}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <div className="progress-bar" style={{ flex: 1 }}>
-                        <div className="progress-fill" style={{
-                          width: `${Math.min(100, (nplNum / 20) * 100)}%`,
-                          background: isHigh ? '#b91c1c' : isMed ? '#92400e' : '#166534'
-                        }} />
-                      </div>
-                      <span className="mono" style={{ fontSize: 10, color: '#8e99a8', width: 30, textAlign: 'right' }}>
-                        {nplNum.toFixed(1)}%
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+          {/* ── Narrative 2 ───────────────────────────────────────────────── */}
+          <SectionBridge text="Tăng trưởng bùng nổ 2012–2015 phản ánh làn sóng P2P Lending tại Mỹ — song kéo theo sự tích lũy rủi ro. Từ 2016 danh mục ổn định hơn về quy mô nhưng chất lượng dần được kiểm soát." />
 
-      {/* ── Insight row ──────────────────────────────────────────────────── */}
-      <div className="stat-row">
-        <div className="stat-cell" style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <AlertTriangle style={{ width: 14, height: 14, color: '#b91c1c', flexShrink: 0, marginTop: 1 }} />
-          <div>
-            <p style={{ fontSize: 11, fontWeight: 700, color: '#0a1f44', marginBottom: 2 }}>Cảnh báo rủi ro</p>
-            <p style={{ fontSize: 11, color: '#5e6a7a', lineHeight: 1.5 }}>
-              Grade E–G tại Florida: NPL 18.4%, cao hơn trung bình 4.2pp — đề xuất siết điều kiện phê duyệt.
+          {/* ── Row 2: Area trend + Bảng khu vực ─────────────────────────── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 12, marginBottom: 12 }}>
+
+            {/* Area chart: giải ngân theo năm */}
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <p className="section-title">Tăng trưởng giải ngân (2007–2018)</p>
+                  <p className="label" style={{ marginTop: 2 }}>Đơn vị: Triệu USD</p>
+                </div>
+              </div>
+              <div className="card-body" style={{ height: 220 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={trendData} margin={{ top: 4, right: 0, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="gTrend" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%"  stopColor={C.accent} stopOpacity={0.1} />
+                        <stop offset="95%" stopColor={C.accent} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                    <XAxis dataKey="year" axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }} />
+                    <YAxis axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                      tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}B` : `${v}M`} />
+                    <Tooltip content={<ChartTip suffix=" M" />} />
+                    <Area type="monotone" dataKey="amount" name="Giải ngân ($M)"
+                      stroke={C.accent} strokeWidth={2}
+                      fillOpacity={1} fill="url(#gTrend)"
+                      dot={{ fill: C.accent, r: 2, strokeWidth: 0 }} activeDot={{ r: 4 }} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Bảng top bang NPL */}
+            <div className="card">
+              <div className="card-header">
+                <p className="section-title">Bang có NPL cao nhất</p>
+                <span className="label">Top 8 · Xếp theo NPL%</span>
+              </div>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Bang</th>
+                    <th>Vùng</th>
+                    <th>Số khoản</th>
+                    <th>NPL%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stateData.map((row, i) => (
+                    <tr key={i}>
+                      <td><span className="mono" style={{ fontWeight: 700, color: C.navy }}>{row.state}</span>
+                        <span style={{ color: C.gray, fontSize: 10, marginLeft: 6 }}>{row.name}</span></td>
+                      <td><span style={{ fontSize: 10, color: C.gray }}>{row.region}</span></td>
+                      <td><span className="mono" style={{ fontSize: 11 }}>{row.loans.toLocaleString()}</span></td>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div className="progress-bar" style={{ flex: 1 }}>
+                            <div className="progress-fill" style={{
+                              width: `${(row.nplRaw / 20) * 100}%`,
+                              background: row.nplRaw > 14 ? C.danger : C.warning,
+                            }} />
+                          </div>
+                          <span className="mono" style={{ fontSize: 10, color: row.nplRaw > 14 ? C.danger : C.warning, fontWeight: 700, width: 36 }}>
+                            {row.npl}%
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* ── Insight row (3 ô) ─────────────────────────────────────────── */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 12 }}>
+            <InsightBox
+              type="danger"
+              title="NPL đỉnh 2015 — dấu hiệu bong bóng"
+              finding="Tỷ lệ nợ xấu đạt 18,6% năm 2015 — tương ứng giai đoạn tăng trưởng giải ngân nóng nhất. Đây là tín hiệu cổ điển của việc nới lỏng tiêu chuẩn phê duyệt để chạy theo tăng trưởng."
+              solution="Duy trì tốc độ tăng trưởng giải ngân không vượt quá 40%/năm; ưu tiên chất lượng danh mục hơn quy mô."
+            />
+            <InsightBox
+              type="warning"
+              title="South — vùng rủi ro tập trung"
+              finding="4/8 bang NPL cao nhất thuộc vùng South (LA, AL, AR, OK), với NPL từ 14,3–15%. Cùng lãi suất trung bình 13,17% — cao nhất trong 4 vùng."
+              solution="Áp dụng hệ số rủi ro bổ sung (risk premium) khi phê duyệt khoản vay tại các bang Southern Tier."
+            />
+            <InsightBox
+              type="info"
+              title="Tỷ lệ hoàn trả 80,3% — tín hiệu tích cực"
+              finding="Trên tổng giải ngân $33,9 tỷ, đã thu hồi $27,3 tỷ (80,3%). Dù NPL còn ở mức đáng quan sát (12,3%), dư nợ hiện tại chỉ còn $949M — danh mục đang về cuối vòng đời."
+              solution="Tập trung tối ưu hóa thu hồi nợ xấu ($4,2B) thay vì mở rộng giải ngân mới trong giai đoạn hiện tại."
+            />
+          </div>
+
+        </motion.div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          TAB 1 — PHÂN TÍCH RỦI RO
+      ══════════════════════════════════════════════════════════════════════ */}
+      {tab === 1 && (
+        <motion.div key="tab1"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {/* ── Narrative dẫn vào ─────────────────────────────────────────── */}
+          <div style={{
+            padding: '12px 16px', border: `1px solid ${C.border}`,
+            borderLeft: `3px solid ${C.accent}`, background: C.white,
+            borderRadius: 3, marginBottom: 24,
+          }}>
+            <p style={{ fontSize: 12, color: C.gray, lineHeight: 1.6, margin: 0 }}>
+              Phân tích sâu cho thấy rủi ro danh mục tập trung ở{' '}
+              <strong style={{ color: C.navy }}>hai chiều</strong>: theo{' '}
+              <strong style={{ color: C.navy }}>hạng tín dụng</strong> (Grade E–G có NPL gấp 12× so với Grade A)
+              và theo <strong style={{ color: C.navy }}>mục đích vay</strong> (đảo nợ chiếm 56,6% — nhóm khách hàng áp lực tài chính cao).
             </p>
           </div>
-        </div>
-        <div className="stat-cell" style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <Info style={{ width: 14, height: 14, color: '#1652f0', flexShrink: 0, marginTop: 1 }} />
-          <div>
-            <p style={{ fontSize: 11, fontWeight: 700, color: '#0a1f44', marginBottom: 2 }}>Xu hướng nổi bật</p>
-            <p style={{ fontSize: 11, color: '#5e6a7a', lineHeight: 1.5 }}>
-              Tăng trưởng giải ngân 2012–2015 đạt x4 — giai đoạn bùng nổ P2P lending tại Mỹ.
-            </p>
+
+          {/* ── Row 1: Donut mục đích + Combo grade ───────────────────────── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 12, marginBottom: 12 }}>
+
+            {/* Donut */}
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <p className="section-title">Cơ cấu mục đích vay</p>
+                  <p className="label" style={{ marginTop: 2 }}>Theo số khoản vay</p>
+                </div>
+                <span className="badge badge-warning">Đảo nợ: 56,6%</span>
+              </div>
+              <div className="card-body" style={{ height: 240 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={purposeData} cx="42%" cy="50%"
+                      innerRadius={60} outerRadius={92} paddingAngle={2}
+                      dataKey="value" stroke="none">
+                      {purposeData.map((e, i) => (
+                        <Cell key={i} fill={e.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(v, name) => [`${v}%`, name]}
+                      contentStyle={{ borderRadius: 3, border: `1px solid ${C.border}`, fontSize: 11 }}
+                    />
+                    <Legend layout="vertical" verticalAlign="middle" align="right"
+                      wrapperStyle={{ fontSize: 10.5, fontWeight: 600, color: C.gray }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Combo chart grade */}
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <p className="section-title">Hạng tín dụng — Giải ngân & Tỷ lệ rủi ro</p>
+                  <p className="label" style={{ marginTop: 2 }}>Cột: Tổng giải ngân ($B) · Đường: NPL Risk %</p>
+                </div>
+              </div>
+              <div className="card-body" style={{ height: 240 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={gradeRiskData} margin={{ top: 4, right: 16, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                    <XAxis dataKey="grade" axisLine={false} tickLine={false}
+                      tick={{ fill: C.gray, fontSize: 11, fontWeight: 700 }} />
+                    <YAxis yAxisId="left" axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                      tickFormatter={v => `${v}B`} />
+                    <YAxis yAxisId="right" orientation="right" axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                      tickFormatter={v => `${v}%`} />
+                    <Tooltip content={<ChartTip />} />
+                    <Legend wrapperStyle={{ fontSize: 10, fontWeight: 600 }} />
+                    <Bar yAxisId="left" dataKey="giaiNgan" name="Giải ngân ($B)"
+                      radius={[2,2,0,0]} maxBarSize={40}>
+                      {gradeRiskData.map((_, i) => (
+                        <Cell key={i} fill={GRADE_COLORS[i]} />
+                      ))}
+                    </Bar>
+                    <Line yAxisId="right" type="monotone" dataKey="riskPct" name="Rủi ro (%)"
+                      stroke={C.warning} strokeWidth={2}
+                      dot={{ fill: C.warning, r: 3, strokeWidth: 0 }} activeDot={{ r: 5 }} />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="stat-cell" style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-          <TrendingUp style={{ width: 14, height: 14, color: '#166534', flexShrink: 0, marginTop: 1 }} />
-          <div>
-            <p style={{ fontSize: 11, fontWeight: 700, color: '#0a1f44', marginBottom: 2 }}>Điểm tích cực</p>
-            <p style={{ fontSize: 11, color: '#5e6a7a', lineHeight: 1.5 }}>
-              Recovery Rate 58.3% — CA/NY có tỷ lệ thu hồi cao nhất (62.1%) nhờ tài sản đảm bảo tốt.
-            </p>
+
+          {/* ── Narrative 2 ───────────────────────────────────────────────── */}
+          <SectionBridge text="Dữ liệu lãi suất cho thấy ngân hàng đã định giá rủi ro đúng hướng — Grade G chịu lãi suất trung bình 28% so với 7% của Grade A. Tuy nhiên, tỷ lệ thu hồi nợ xấu vẫn rất thấp ở mọi hạng (< 10%), cho thấy công cụ thu hồi chưa hiệu quả." />
+
+          {/* ── Row 2: Bar lãi suất + Recovery table ──────────────────────── */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 12, marginBottom: 12 }}>
+
+            {/* Bar chart lãi suất theo hạng */}
+            <div className="card">
+              <div className="card-header">
+                <div>
+                  <p className="section-title">Lãi suất trung bình theo hạng tín dụng</p>
+                  <p className="label" style={{ marginTop: 2 }}>Grade A (7,1%) → Grade G (28,1%) — %/năm</p>
+                </div>
+              </div>
+              <div className="card-body" style={{ height: 220 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={interestData} margin={{ top: 4, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#eef0f4" />
+                    <XAxis dataKey="grade" axisLine={false} tickLine={false}
+                      tick={{ fill: C.gray, fontSize: 11, fontWeight: 700 }} />
+                    <YAxis axisLine={false} tickLine={false}
+                      tick={{ fill: '#bcc3ce', fontSize: 10 }}
+                      tickFormatter={v => `${v}%`} />
+                    <Tooltip content={<ChartTip suffix="%" />} />
+                    <Bar dataKey="laiSuatTB" name="Lãi suất TB (%)" radius={[2,2,0,0]} maxBarSize={44}>
+                      {interestData.map((_, i) => (
+                        <Cell key={i} fill={GRADE_COLORS[i]} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Bảng thu hồi nợ xấu */}
+            <div className="card">
+              <div className="card-header">
+                <p className="section-title">Tỷ lệ thu hồi nợ xấu theo hạng</p>
+                <span className="label">Rất thấp — max 9,7%</span>
+              </div>
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Hạng</th>
+                    <th>Số khoản NPL</th>
+                    <th>Thu hồi %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recoveryData.map((row, i) => (
+                    <tr key={i}>
+                      <td><span className="mono" style={{ fontWeight: 700, color: GRADE_COLORS[i] }}>{row.grade}</span></td>
+                      <td><span className="mono" style={{ fontSize: 11 }}>{row.soNoXau.toLocaleString()}</span></td>
+                      <td>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div className="progress-bar" style={{ flex: 1 }}>
+                            <div className="progress-fill" style={{
+                              width: `${(row.tyLeHoiPct / 15) * 100}%`,
+                              background: C.gray,
+                            }} />
+                          </div>
+                          <span className="mono" style={{ fontSize: 10, color: C.gray, fontWeight: 600, width: 36 }}>
+                            {row.tyLeHoiPct}%
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </div>
+
+          {/* ── Insight panels ────────────────────────────────────────────── */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 12 }}>
+            <InsightBox
+              type="warning"
+              title="Đảo nợ chiếm 56,6% — rủi ro dây chuyền"
+              finding="1,276,708 khoản vay (56,6%) dùng để đảo nợ. Đây là nhóm khách hàng đang vay chỗ này trả chỗ kia — khi thu nhập giảm nhẹ, toàn bộ hệ thống nợ sụp đổ."
+              solution="Chủ động giảm tỷ trọng xuống < 40%; chuyển hướng sang vay kinh doanh và mua tài sản — nhóm tạo dòng tiền trực tiếp."
+            />
+            <InsightBox
+              type="danger"
+              title="Grade E–G: NPL tăng theo cấp số nhân"
+              finding="Grade A: NPL 3,1% — Grade G: NPL 37,7%. Dù lãi suất cao (28%), tỷ lệ thu hồi chỉ đạt 9,7% — lợi nhuận thực bị xói mòn hoàn toàn. Tổng dư nợ xấu E–G: $1,03B."
+              solution="Siết tiêu chuẩn phê duyệt Grade E–G; áp trần giải ngân theo hạng; tăng cường công cụ thu hồi nợ (đặc biệt nhóm F–G)."
+            />
+            <InsightBox
+              type="info"
+              title="Thu hồi nợ dưới 10% ở mọi hạng"
+              finding="Dù NPL của Grade G là 37,7% — chỉ có 9,71% giá trị nợ xấu được thu hồi. Hệ thống thu hồi nợ hiện tại không tương xứng với quy mô rủi ro."
+              solution="Đầu tư vào quy trình thu hồi sớm (early intervention): liên lạc chủ động sau 30 ngày trễ hạn thay vì chờ đến charge-off."
+            />
+          </div>
+
+        </motion.div>
+      )}
+      </AnimatePresence>
 
     </div>
   );
