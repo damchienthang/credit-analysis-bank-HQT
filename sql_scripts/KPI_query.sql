@@ -307,7 +307,7 @@ GROUP BY r.risk_tier
 ORDER BY FICO_Trung_Binh DESC;
 
 -- =========================
--- 15. Tổng hợp Dashboard - KPI tổng quan (1 query duy nhất)
+-- 15. Tổng hợp Dashboard - KPI tổng quan
 -- Dùng để hiển thị các card số liệu chính trong Power BI
 -- =========================
 

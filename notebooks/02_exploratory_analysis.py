@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import os
 
 
-CSV_PATH = "C:/Năm 3 kì 2/HQT_CSDL/data_hqtcsdl.csv"
-OUTPUT_DIR = "C:/Năm 3 kì 2/HQT_CSDL/Dataset/outputs/charts"
+CSV_PATH = "C:/Nam 3 ki 2/HQT_CSDL/data_hqtcsdl.csv"
+OUTPUT_DIR = "C:/Nam 3 ki 2/HQT_CSDL/Dataset/outputs/charts"
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
@@ -13,8 +13,6 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 df = pd.read_csv(CSV_PATH, low_memory=False)
 print("Load xong dữ liệu")
-
-# CLEAN DATA
 
 
 # numeric dạng %
