@@ -39,13 +39,13 @@ const Header = () => {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <NavLink to="/" className="brand-mark" aria-label="CreditBI Analytics">
+        <NavLink to="/" className="brand-mark" aria-label="VDCB Analytics">
           <span className="brand-icon">
             <ShieldCheck size={15} />
           </span>
           <span className="brand-copy">
-            <span className="brand-title">CreditBI</span>
-            <span className="brand-subtitle">Risk Intelligence</span>
+            <span className="brand-title">Ngân hàng TMCP Tín dụng Số Việt Nam</span>
+            <span className="brand-subtitle">Digital Credit Bank</span>
           </span>
         </NavLink>
 
@@ -82,7 +82,7 @@ const Header = () => {
           <nav className="app-menu" aria-label="Menu đầy đủ">
             <div className="app-menu-head">
               <span>Menu</span>
-              <strong>CreditBI Analytics</strong>
+              <strong>VDCB Analytics</strong>
             </div>
             <div className="app-menu-grid">
               {menuNav.map((item) => (

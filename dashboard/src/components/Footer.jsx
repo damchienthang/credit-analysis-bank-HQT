@@ -16,7 +16,7 @@ const Footer = () => (
           <ShieldCheck size={18} />
         </div>
         <div>
-          <h2>CreditBI Analytics</h2>
+          <h2>Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB)</h2>
           <p>
             Hệ thống Business Intelligence hỗ trợ phân tích danh mục tín dụng,
             theo dõi rủi ro nợ xấu và trực quan hóa dữ liệu LendingClub.
@@ -51,7 +51,7 @@ const Footer = () => (
     </div>
 
     <div className="rich-footer-bottom">
-      <span>© 2026 CreditBI Analytics · Dự án Hệ Quản Trị Cơ Sở Dữ Liệu · Nhóm 14</span>
+      <span>© 2026 Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB) · Dự án Hệ Quản Trị Cơ Sở Dữ Liệu · Nhóm 14</span>
       <span className="rich-footer-policy">
         <a href="#">Privacy Policy</a>
         <a href="#">Terms of Service</a>

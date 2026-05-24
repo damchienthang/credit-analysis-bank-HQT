@@ -5,7 +5,7 @@ import {
   AreaChart, Area, Bar, Line, ComposedChart, PieChart, Pie, Cell, ScatterChart, Scatter,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import { Printer, HelpCircle, Info, Landmark, ShieldCheck, TrendingUp, PiggyBank, CreditCard, Coins, Briefcase, Award, Activity, Sparkles, Target, Zap } from 'lucide-react';
+import { Landmark, ShieldCheck, TrendingUp, Target, Database, Server, Download } from 'lucide-react';
 import {
   loanTrendData, nplTrendData, loanPurposeData, stateRiskData, dtiScatterData
 } from '../data/mockData';
@@ -34,7 +34,11 @@ const C = {
   vdcbCyan: '#06b6d4',     // Xanh ngọc kỹ thuật số
   vdcbNavy: '#0a1f44',     // Navy đậm định chế
   vdcbLightBlue: '#f0f4fe',// Nền xanh nhạt
-  vdcbTeal: '#0d9488',
+  vdcbTeal: '#041cbaff',
+
+  // Bổ sung để sửa lỗi size/màu (do copy từ code Vietcombank)
+  vcbGreen: '#1652f0',     // Map vcbGreen sang VDCB Blue thương hiệu
+  vcbLeaf: '#06b6d4',      // Map vcbLeaf sang VDCB Cyan kỹ thuật số
 };
 
 // Đổi màu phân hạng rủi ro sang tông Teal-Cyan-Blue làm chủ đạo cho hợp theme
@@ -53,6 +57,13 @@ const SlideDecorations = () => (
 const PrintStyle = () => (
   <style dangerouslySetInnerHTML={{
     __html: `
+    @media screen {
+      /* Ẩn hoàn toàn các slide A4 ngang khi xem trên trình duyệt để giao diện gọn gàng */
+      .report-slides-container {
+        display: none !important;
+      }
+    }
+    
     @media print {
       /* Ẩn các thành phần giao diện web thông thường */
       .no-print,
@@ -392,6 +403,7 @@ const ReportsPage = () => {
   const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
+    document.title = "Hệ thống Business Intelligence & Quản trị Rủi ro Tín dụng - Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB)";
     const params = new URLSearchParams(location.search);
     if (params.get('print') === 'true') {
       const timer = setTimeout(() => {
@@ -402,108 +414,264 @@ const ReportsPage = () => {
   }, [location]);
 
   return (
-    <div className="page-wrap" style={{ maxWidth: 960, margin: '0 auto', padding: '16px 0' }}>
+    <div className="page-wrap" style={{ width: '100%', minHeight: '100vh', background: '#f7f9fc', fontFamily: "'Inter', system-ui, -apple-system, sans-serif" }}>
       <PrintStyle />
 
-      {/* ── NÚT IN & BẢNG HƯỚNG DẪN XUẤT PDF (ẨN KHI IN) ────────────────────────── */}
-      <div
-        className="no-print"
-        style={{
+      {/* ── GIAO DIỆN CỔNG THÔNG TIN QUAN HỆ NHÀ ĐẦU TƯ (VISIBLE ON SCREEN, HIDDEN ON PRINT) ── */}
+      <div className="no-print" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+
+        {/* Vietcombank Green Top Header */}
+        <header style={{
+          background: C.white,
+          borderBottom: `4px solid ${C.vcbGreen}`,
+          padding: '0 40px',
+          height: 75,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          marginBottom: 16,
-          padding: '10px 14px',
-          background: `linear-gradient(135deg, rgba(22, 82, 240, 0.04) 0%, rgba(6, 182, 212, 0.04) 100%)`,
-          border: `1px solid ${C.border}`,
-          borderRadius: 6,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <Info style={{ width: 14, height: 14, color: C.accent }} />
-          <p style={{ fontSize: 11, color: C.navy, fontWeight: 600, margin: 0 }}>
-            Hệ thống Slide được tối ưu hóa in ngang **A4 Landscape tràn màn hình (Fullscreen)**.
-          </p>
-        </div>
-
-        <div style={{ display: 'flex', gap: 8, position: 'relative' }}>
-          <button
-            onClick={() => setShowHelp(!showHelp)}
-            style={{
-              display: 'inline-flex',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              background: `linear-gradient(135deg, ${C.vcbGreen} 0%, ${C.vcbLeaf} 100%)`,
+              width: 44,
+              height: 44,
+              borderRadius: 8,
+              display: 'flex',
               alignItems: 'center',
-              gap: 4,
-              padding: '6px 12px',
-              fontSize: 11,
-              fontWeight: 700,
-              color: C.navy,
-              background: C.white,
-              border: `1px solid ${C.border}`,
-              borderRadius: 3,
-              cursor: 'pointer',
-              transition: 'background 0.15s'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
-            onMouseLeave={(e) => e.currentTarget.style.background = C.white}
-          >
-            Hướng dẫn In Tràn Viền
-          </button>
+              justifyContent: 'center',
+              boxShadow: '0 4px 10px rgba(15, 89, 47, 0.15)'
+            }}>
+              <Landmark size={22} color={C.white} />
+            </div>
+            <div>
+              <span style={{ fontSize: 16, fontWeight: 900, color: C.vcbGreen, letterSpacing: '0.01em', display: 'block' }}>
+                VDCB <span style={{ color: C.navy }}>INVESTOR RELATIONS</span>
+              </span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: C.slateBlue, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Cổng thông tin Quan hệ Nhà đầu tư & Cổ đông
+              </span>
+            </div>
+          </div>
 
-          <button
-            onClick={() => window.print()}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              padding: '6px 14px',
-              fontSize: 11,
-              fontWeight: 700,
-              color: C.white,
-              background: C.accent,
-              border: 'none',
-              borderRadius: 3,
-              cursor: 'pointer',
-              boxShadow: '0 4px 12px rgba(22, 82, 240, 0.15)',
-              transition: 'background 0.2s',
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = C.navy}
-            onMouseLeave={(e) => e.currentTarget.style.background = C.accent}
-          >
-            <Printer style={{ width: 13, height: 13 }} /> In Slide / Xuất PDF (A4 Ngang)
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: C.slateBlue }}>
+              Mã cổ phiếu: <strong style={{ color: C.vcbGreen }}>VDCB</strong>
+            </span>
+          </div>
+        </header>
 
-          {/* Popover Hướng dẫn chi tiết xuất PDF */}
-          {showHelp && (
+        {/* Portal Hero Grid & Content */}
+        <main style={{
+          maxWidth: 1000,
+          width: '100%',
+          margin: '40px auto',
+          padding: '0 20px',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 28
+        }}>
+
+          {/* Big Welcome Card */}
+          <div style={{
+            background: `linear-gradient(135deg, ${C.navy} 0%, #051636 50%, ${C.vcbGreen} 100%)`,
+            borderRadius: 12,
+            padding: '40px 48px',
+            color: C.white,
+            position: 'relative',
+            overflow: 'hidden',
+            boxShadow: '0 10px 30px rgba(10,31,68,0.12)'
+          }}>
             <div style={{
               position: 'absolute',
-              top: '100%',
-              right: 0,
-              marginTop: 8,
-              width: 320,
-              background: C.white,
-              border: `1px solid ${C.border}`,
-              borderRadius: 6,
-              padding: 14,
-              boxShadow: '0 10px 25px rgba(10,31,68,0.15)',
-              zIndex: 100,
-              fontSize: 11,
-              color: C.slateBlue,
-              lineHeight: 1.5,
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: `1px solid ${C.border}`, paddingBottom: 6 }}>
-                <span style={{ fontWeight: 800, color: C.navy, display: 'flex', alignItems: 'center', gap: 4 }}>HƯỚNG DẪN IN TRÀN VIỀN A4</span>
-                <button onClick={() => setShowHelp(false)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12, color: C.gray, fontWeight: 700 }}>✕</button>
-              </div>
-              <ul style={{ paddingLeft: 14, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <li><strong>Thiết bị đầu ra (Destination):</strong> Chọn <em>Lưu dưới dạng PDF</em> (Save as PDF) hoặc <em>Microsoft Print to PDF</em>.</li>
-                <li><strong>Hướng trang (Layout):</strong> Bắt buộc chọn <strong>Nằm ngang (Landscape)</strong>.</li>
-                <li><strong>Lề (Margins):</strong> Chọn <strong>Không có lề (None)</strong> để Slide được tràn toàn màn hình (không bị viền trắng bao quanh).</li>
-                <li><strong>Tỷ lệ (Scale):</strong> Chọn <strong>Vừa với trang (Fit to page)</strong> hoặc chỉnh thủ công <strong>100%</strong>.</li>
-                <li><strong>Đồ họa nền (Background graphics):</strong> **Phải tích chọn** để hiển thị trọn vẹn màu sắc gradient và ảnh nền.</li>
-              </ul>
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundImage: `radial-gradient(circle at 80% 20%, rgba(112, 179, 67, 0.15) 0%, transparent 50%)`,
+              pointerEvents: 'none',
+            }} />
+
+            <div style={{ position: 'relative', zIndex: 2, maxWidth: 750 }}>
+              <span style={{ fontSize: 10.5, fontWeight: 900, color: '#4368eeff', letterSpacing: '0.15em', textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>
+                CÔNG BỐ THÔNG TIN CHÍNH THỨC
+              </span>
+              <h1 style={{ fontSize: 26, fontWeight: 900, letterSpacing: '-0.02em', margin: '0 0 16px 0', lineHeight: 1.3 }}>
+                Báo cáo Chuyên đề & Phân tích Hoạt động Danh mục <br />
+                <span style={{ color: '#4221feff' }}>Hệ thống Business Intelligence & Quản trị Rủi ro Tín dụng (VDCB)</span>
+              </h1>
+              <p style={{ fontSize: 13, color: '#ffffff', margin: 0, lineHeight: 1.6, fontWeight: 500 }}>
+                Chào mừng Quý cổ đông, đối tác và nhà đầu tư đến với Cổng thông tin công bố tài liệu và báo cáo chuyên đề của Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB). Tại đây, chúng tôi trình bày chi tiết kết quả phân tích chất lượng danh mục cho vay bán lẻ, cấu trúc nợ xấu NPL và tối ưu hóa hiệu năng cơ sở dữ liệu trên quy mô lớn 2.26 triệu giao dịch.
+              </p>
             </div>
-          )}
-        </div>
+          </div>
+
+          {/* Features Resource Grid (3 Cards representing Vietcombank IR) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            {[
+              {
+                title: 'Báo cáo Kết quả Kinh doanh',
+                desc: 'Tổng quan tốc độ tăng trưởng giải ngân tín dụng lũy kế đạt $33.95 Tỷ USD qua 12 năm vĩ mô. Phân tích chi tiết quy mô dư nợ sạch 2.25 triệu bản ghi Fact Table.',
+                icon: <TrendingUp size={20} color={C.vcbGreen} />
+              },
+              {
+                title: 'Quản trị Chất lượng Tài sản',
+                desc: 'Cập nhật diễn biến tỷ lệ nợ xấu NPL lao dốc ngoạn mục về mức thấp lịch sử 1.90% vào năm 2018. Định hướng cơ cấu xếp hạng tín nhiệm Grade A-C bền vững.',
+                icon: <ShieldCheck size={20} color={C.vcbLeaf} />
+              },
+              {
+                title: 'Kiến trúc & Tối ưu CSDL',
+                desc: 'Giải pháp kiến trúc Star Schema (1 Fact + 5 Dimensions) cùng chiến lược thiết lập chỉ mục Non-clustered Indexes giúp tăng tốc độ truy vấn báo cáo BI lên tới 70%.',
+                icon: <Server size={20} color={C.accent} />
+              }
+            ].map((item, idx) => (
+              <div key={idx} style={{
+                background: C.white,
+                border: '1px solid #e2e8f0',
+                borderRadius: 10,
+                padding: 20,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 12,
+                boxShadow: '0 4px 15px rgba(0,0,0,0.02)',
+                transition: 'transform 0.2s',
+                boxSizing: 'border-box'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ background: '#f8fafc', padding: 8, borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.icon}
+                  </div>
+                  <h3 style={{ fontSize: 13.5, fontWeight: 800, color: C.navy, margin: 0 }}>{item.title}</h3>
+                </div>
+                <p style={{ fontSize: 11.5, color: C.slateBlue, margin: 0, lineHeight: 1.5, fontWeight: 500 }}>
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Central Download Area */}
+          <div style={{
+            background: C.white,
+            border: '1.5px solid #e2e8f0',
+            borderRadius: 12,
+            padding: 30,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            gap: 20,
+            boxShadow: '0 10px 25px rgba(0,0,0,0.02)',
+            boxSizing: 'border-box'
+          }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 650 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 900, color: C.navy, margin: 0 }}>
+                Tài liệu dành cho Nhà đầu tư & Cổ đông
+              </h2>
+              <p style={{ fontSize: 12.5, color: C.slateBlue, margin: 0, lineHeight: 1.5, fontWeight: 500 }}>
+                Quý nhà đầu tư có thể kết xuất và tải về trọn bộ Slide Báo cáo Chuyên đề.
+              </p>
+            </div>
+
+            {/* EXPORT ACTION BUTTON */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, position: 'relative' }}>
+              <button
+                onClick={() => window.print()}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  padding: '16px 36px',
+                  fontSize: 14,
+                  fontWeight: 900,
+                  color: C.white,
+                  background: `linear-gradient(90deg, ${C.vcbGreen} 0%, ${C.vcbLeaf} 100%)`,
+                  border: 'none',
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 15px rgba(15, 89, 47, 0.25)',
+                  transition: 'all 0.2s',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em'
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(15, 89, 47, 0.35)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(15, 89, 47, 0.25)'; }}
+              >
+                <Download style={{ width: 18, height: 18 }} /> Tải Báo Cáo Slide PDF
+              </button>
+
+              <button
+                onClick={() => setShowHelp(!showHelp)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: C.vcbGreen,
+                  fontSize: 11.5,
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  padding: '4px 8px'
+                }}
+              >
+                Xem hướng dẫn in tràn viền A4 không viền trắng
+              </button>
+
+              {/* Popover Hướng dẫn in ngang */}
+              {showHelp && (
+                <div style={{
+                  position: 'absolute',
+                  top: '100%',
+                  marginTop: 10,
+                  width: 330,
+                  background: C.white,
+                  border: `1.2px solid ${C.border}`,
+                  borderRadius: 8,
+                  padding: 16,
+                  boxShadow: '0 10px 25px rgba(10,31,68,0.15)',
+                  zIndex: 100,
+                  fontSize: 11.5,
+                  color: C.slateBlue,
+                  textAlign: 'left',
+                  lineHeight: 1.5,
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, borderBottom: `1.2px solid ${C.border}`, paddingBottom: 6 }}>
+                    <span style={{ fontWeight: 800, color: C.vcbGreen, display: 'flex', alignItems: 'center', gap: 4 }}>HƯỚNG DẪN IN TRÀN VIỀN A4</span>
+                    <button onClick={() => setShowHelp(false)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', fontSize: 12, color: C.gray, fontWeight: 700 }}>✕</button>
+                  </div>
+                  <ul style={{ paddingLeft: 14, margin: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <li><strong>Thiết bị đầu ra:</strong> Chọn <em>Lưu dưới dạng PDF</em> (Save as PDF) để xuất tệp tin trực tiếp.</li>
+                    <li><strong>Hướng trang:</strong> Bắt buộc chọn <strong>Nằm ngang (Landscape)</strong>.</li>
+                    <li><strong>Lề (Margins):</strong> Chọn <strong>Không có lề (None)</strong> để Slide được tràn 100% trang in (không bị viền trắng).</li>
+                    <li><strong>Đồ họa nền (Background graphics):</strong> **Bắt buộc tích chọn** để giữ nguyên màu nền gradient và các hình khối đồ họa của Slide.</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </main>
+
+        {/* Compact Footer */}
+        <footer style={{
+          background: C.navy,
+          color: '#c3d1e6',
+          padding: '24px 40px',
+          textAlign: 'center',
+          fontSize: 11,
+          borderTop: `4px solid ${C.vcbGreen}`,
+          marginTop: 'auto'
+        }}>
+          <p style={{ margin: '0 0 4px 0', fontWeight: 600 }}>
+            Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB) | Ban dự án Quản trị Rủi ro & BI Analytics (Credit BI)
+          </p>
+          <p style={{ margin: 0, fontSize: 10, color: '#8c9fb8' }}>
+            Vietnam Digital Credit Bank (VDCB) © 2026. Công bố tài liệu dành cho Đại hội cổ đông và Nhà đầu tư vĩ mô.
+          </p>
+        </footer>
       </div>
 
       <div className="report-slides-container" style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
@@ -591,11 +759,11 @@ const ReportsPage = () => {
               overflow: 'hidden'
             }}>
               <motion.div
-                animate={{ 
+                animate={{
                   scale: [1, 1.05, 1],
                   rotate: [0, 1, -1, 0]
                 }}
-                transition={{ 
+                transition={{
                   duration: 8,
                   repeat: Infinity,
                   ease: "easeInOut"
@@ -608,15 +776,16 @@ const ReportsPage = () => {
                   filter: 'drop-shadow(0 0 35px rgba(0, 229, 255, 0.7))' // Tăng viền sáng màu xanh dương rực rỡ
                 }}
               >
-                {/* Render the gradient <defs> directly inside the lucide icon, pass via color prop */}
-                <Landmark size={170} strokeWidth={1.2} color="url(#bankIconGrad)">
+                {/* Define the gradient in a separate tiny svg so it can be referenced safely without violating Lucide prop types */}
+                <svg width="0" height="0" style={{ position: 'absolute' }}>
                   <defs>
                     <linearGradient id="bankIconGrad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stopColor="#00FFFF" /> {/* Sáng màu xanh dương rực (Cyan) */}
                       <stop offset="100%" stopColor="#0055FF" /> {/* Xanh dương đậm ở đáy */}
                     </linearGradient>
                   </defs>
-                </Landmark>
+                </svg>
+                <Landmark size={170} strokeWidth={1.2} color="url(#bankIconGrad)" />
               </motion.div>
             </div>
           </div>
