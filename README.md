@@ -4,6 +4,16 @@
 
 Dự án xây dựng giải pháp **Business Intelligence (BI)** toàn diện nhằm phân tích và quản trị rủi ro tín dụng dựa trên bộ dữ liệu lớn từ **Lending Club (Kaggle)**. Hệ thống chuyển đổi dữ liệu thô phức tạp thành các báo cáo trực quan, hỗ trợ Ban lãnh đạo theo dõi sức khỏe danh mục cho vay, đánh giá tỷ lệ nợ xấu (NPL) và tối ưu hóa chiến lược thu hồi nợ.
 
+### 1.1 Đội ngũ phát triển (Nhóm 14)
+
+| Họ và tên | Vai trò | Phân công công việc |
+|---|---|---|
+| **Đàm Chiến Thắng (NT)** | Team Leader / Data Architect | - Tổng hợp báo cáo và phân công công việc.<br>- Khảo sát nghiệp vụ, phân tích yêu cầu và thiết kế kiến trúc hệ thống.<br>- Đề xuất mô hình Star Schema, thiết lập môi trường SQL Server.<br>- Phát triển ứng dụng Web Dashboard phân tích tín dụng (VDCB). |
+| **Lã Quang Hợp** | Data Miner / BI Developer | - Khảo sát nguồn dữ liệu, thu thập và quản lý tài nguyên dữ liệu.<br>- Phân tích khám phá (EDA) và tiền xử lý khai phá dữ liệu.<br>- Xây dựng các trang báo cáo phân tích rủi ro trong Power BI.<br>- Mô tả nghiệp vụ các chỉ số KPIs cần phân tích và câu lệnh truy vấn. |
+| **Phạm Ngọc Hoàng** | Database Designer / ETL Writer | - Thực hiện chuẩn hóa dữ liệu 3NF, thiết kế sơ đồ hệ thống tín dụng khái quát.<br>- Mô tả chi tiết quy trình ETL và vẽ sơ đồ luồng dữ liệu ETL tổng thể. |
+| **Vũ Văn Học** | ETL Developer / BI Developer | - Thực hiện làm sạch dữ liệu thô, lọc nhiễu và xử lý giá trị thiếu.<br>- Viết script nạp dữ liệu vào các bảng Dim và Fact (etl_process.sql), chuẩn hóa kiểu dữ liệu.<br>- Xây dựng các trang báo cáo phân tích rủi ro trong Power BI. |
+| **Nguyễn Minh Huyền** | Data Analyst / SQL Developer | - Thiết kế lược đồ quan hệ ERD cho toàn bộ hệ thống cơ sở dữ liệu.<br>- Mô tả nghiệp vụ các KPIs phân tích rủi ro tín dụng và nợ xấu.<br>- Lập trình các câu truy vấn SQL tính toán chỉ số KPIs (KPI_query.sql). |
+
 ---
 
 ## 2. Quy mô và Đặc điểm dữ liệu
@@ -23,9 +33,9 @@ Dự án xây dựng giải pháp **Business Intelligence (BI)** toàn diện nh
 
 | KPI | Giá trị | Mô tả |
 |---|---|---|
-| Tổng dư nợ hệ thống | **$32.5 tỷ USD** | Tổng `out_prncp` toàn danh mục |
-| Tỷ lệ nợ xấu (NPL) | **14.2%** | Tỷ lệ `loan_amnt` có `npl_flag = 1` |
-| Tỷ lệ thu hồi nợ | **58.3%** | `SUM(recoveries) / SUM(loan_amnt)` × 100 |
+| Tổng dư nợ hệ thống | **$31.3 tỷ USD** | Tổng `loan_amnt` giải ngân toàn hệ thống |
+| Tỷ lệ nợ xấu (NPL) | **14.2%** | Tỷ lệ khoản vay có `npl_flag = 1` |
+| Tỷ lệ thu hồi nợ | **4.8%** | `SUM(recoveries) / SUM(loan_amnt)` × 100 |
 | Phân bổ hạng tín dụng | Grade B: **663,557** · Grade C: **650,053** | Tập trung nhóm B và C |
 
 ---
@@ -156,14 +166,28 @@ Dataset/
 ├── dashboard/                  # Ứng dụng React (Vite + Tailwind + Recharts)
 │   └── src/
 │       ├── pages/
-│       │   ├── LandingPage.jsx     # Trang giới thiệu hệ thống
-│       │   ├── DashboardPage.jsx   # KPI, biểu đồ Grade/Trend/Purpose/Recovery
-│       │   ├── PlatformPage.jsx    # Phân tích chuyên sâu theo từng chiều
-│       │   ├── TrendsPage.jsx      # Xu hướng theo tháng/quý/năm
-│       │   ├── ReportsPage.jsx     # Báo cáo tổng hợp
-│       │   ├── ArchitecturePage.jsx# Sơ đồ kiến trúc 6 tầng
-│       │   └── AboutPage.jsx       # Thông tin nhóm
-│       └── data/api.js             # Hàm gọi các endpoint backend
+│       │   ├── Landing/        # Trang chủ giới thiệu hệ thống
+│       │   │   ├── index.jsx
+│       │   │   └── style.css
+│       │   ├── Dashboard/      # KPI, biểu đồ Grade/Trend/Purpose/Recovery
+│       │   │   ├── index.jsx
+│       │   │   └── style.css
+│       │   ├── Platform/       # Kể chuyện dòng chảy dữ liệu 5 Acts
+│       │   │   ├── index.jsx
+│       │   │   └── style.css
+│       │   ├── Trends/         # Phân tích xu hướng tín dụng theo thời gian
+│       │   │   ├── index.jsx
+│       │   │   └── style.css
+│       │   ├── Reports/        # Báo cáo tổng hợp xuất bản chuyên đề
+│       │   │   ├── index.jsx
+│       │   │   └── style.css
+│       │   ├── Architecture/   # Trực quan lược đồ Star Schema và kiến trúc
+│       │   │   ├── index.jsx
+│       │   │   └── style.css
+│       │   └── About/          # Thành viên đội ngũ và lộ trình 9 tuần
+│       │       ├── index.jsx
+│       │       └── style.css
+│       └── data/api.js         # Hàm gọi các endpoint backend
 ├── notebooks/
 │   ├── 01_data_cleaning.ipynb  # ETL Python: làm sạch 151→33 cột
 │   └── 02_exploratory_analysis.py # EDA: phân phối, tương quan, vẽ biểu đồ
