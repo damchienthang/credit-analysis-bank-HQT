@@ -232,20 +232,6 @@ export default function ArchitecturePage() {
           })}
         </div>
 
-        {/* Legend */}
-        <div className="mt-10 flex flex-wrap justify-center gap-6 text-sm font-bold text-gray-500">
-          {[
-            { label: 'Extract (ETL)', cls: 'bg-accent-blue' },
-            { label: 'Transform', cls: 'bg-navy' },
-            { label: 'Load (DW)', cls: 'bg-navy' },
-            { label: 'Phân tích & Trực quan', cls: 'bg-banking-gold' },
-          ].map((l, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${l.cls}`} />
-              {l.label}
-            </div>
-          ))}
-        </div>
       </section>
 
       {/* ── STAR SCHEMA ── */}
