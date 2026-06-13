@@ -15,7 +15,9 @@ import {
   Search,
   ShieldCheck,
   Table2,
+  Target,
   TrendingUp,
+  Users,
   Workflow,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -458,8 +460,56 @@ const LandingPage = () => (
 
     <DatasetSection />
     <EDASection />
+    <ClosingSection />
   </div>
 );
+
+function ClosingSection() {
+  return (
+    <section className="landing-section landing-closing">
+      <div className="page-wrap">
+        <div className="landing-closing-card">
+          <div className="landing-closing-glow" />
+          <div className="landing-closing-grid">
+            <div className="closing-block">
+              <div className="closing-icon-box">
+                <Target className="h-5 w-5" />
+              </div>
+              <h3>Tầm Nhìn Chiến Lược</h3>
+              <p>
+                Định vị VDCB là ngân hàng số đi đầu trong ứng dụng phân tích định lượng quản trị rủi ro tín dụng. Bằng cách khai phá kho dữ liệu lớn, chúng tôi tối ưu chất lượng tài sản nợ, giảm thiểu tỷ lệ nợ xấu NPL và đảm bảo tốc độ tăng trưởng quy mô tín dụng an toàn, bền vững.
+              </p>
+            </div>
+
+            <div className="closing-divider" />
+
+            <div className="closing-block">
+              <div className="closing-icon-box">
+                <Users className="h-5 w-5" />
+              </div>
+              <h3>Cam Kết Khách Hàng</h3>
+              <p>
+                Đặt an toàn tài chính và quyền lợi khách hàng làm trọng tâm. Hệ thống tự động phân tích hành vi giúp cung cấp các hạn mức và lãi suất vay tối ưu, cá nhân hóa theo điểm FICO của từng khách hàng, đồng thời cam kết bảo mật tuyệt đối thông tin giao dịch và dữ liệu cá nhân.
+              </p>
+            </div>
+
+            <div className="closing-divider" />
+
+            <div className="closing-block">
+              <div className="closing-icon-box">
+                <TrendingUp className="h-5 w-5" />
+              </div>
+              <h3>Định Hướng Công Nghệ</h3>
+              <p>
+                Không ngừng nâng cấp hạ tầng lên kiến trúc xử lý dữ liệu dòng thời gian thực <strong>Real-time Data Streaming</strong> và tích hợp thuật toán máy học <strong>Machine Learning (Credit Scoring AI)</strong> giúp tự động hóa 100% quy trình duyệt vay trực tuyến an toàn.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default LandingPage;
 

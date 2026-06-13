@@ -453,7 +453,7 @@ const ReportsPage = () => {
                 VDCB <span style={{ color: C.navy }}>INVESTOR RELATIONS</span>
               </span>
               <span style={{ fontSize: 10, fontWeight: 700, color: C.slateBlue, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                Cổng thông tin Quan hệ Nhà đầu tư & Cổ đông
+                Cổng thông tin Phân tích tín dụng & Rủi ro
               </span>
             </div>
           </div>
@@ -603,9 +603,8 @@ const ReportsPage = () => {
                 onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(15, 89, 47, 0.35)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(15, 89, 47, 0.25)'; }}
               >
-                <Download style={{ width: 18, height: 18 }} /> Tải Báo Cáo Slide PDF
+                <Download style={{ width: 18, height: 18 }} /> Báo cáo chuyên đề
               </button>
-
               <button
                 onClick={() => setShowHelp(!showHelp)}
                 style={{

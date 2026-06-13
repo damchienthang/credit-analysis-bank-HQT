@@ -669,3 +669,101 @@
   line-height: 1.55;
   overflow: hidden;
 }
+
+/* Closing Card at the bottom of Landing Page */
+.landing-closing {
+  padding-bottom: 80px;
+  background: transparent;
+  border-top: 0;
+}
+
+.landing-closing::before {
+  display: none; /* Hide the vertical gradient indicator on this final section */
+}
+
+.landing-closing-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #05122b 0%, #0d2954 100%);
+  border: 1px solid rgba(6, 182, 212, 0.25);
+  border-radius: 6px;
+  padding: 48px;
+  box-shadow: 
+    0 20px 50px rgba(3, 12, 30, 0.25),
+    0 0 30px rgba(6, 182, 212, 0.05);
+}
+
+.landing-closing-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.landing-closing-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+@media (max-width: 960px) {
+  .landing-closing-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .landing-closing-card .closing-divider {
+    display: none;
+  }
+}
+
+.landing-closing-card .closing-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.landing-closing-card .closing-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #06b6d4;
+}
+
+.landing-closing-card .closing-block h3 {
+  font-size: 13px;
+  font-weight: 850;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.landing-closing-card .closing-block p {
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: #b8c9dd;
+  margin: 0;
+  text-align: justify;
+}
+
+.landing-closing-card .closing-block p strong {
+  color: #ffffff;
+}
+
+.landing-closing-card .closing-divider {
+  width: 1px;
+  align-self: stretch;
+  background: rgba(255, 255, 255, 0.08);
+}
