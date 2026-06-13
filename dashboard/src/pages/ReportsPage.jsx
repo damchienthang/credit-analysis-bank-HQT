@@ -5,7 +5,7 @@ import {
   AreaChart, Area, Bar, Line, ComposedChart, PieChart, Pie, Cell, ScatterChart, Scatter,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import { Landmark, ShieldCheck, TrendingUp, Target, Database, Server, Download } from 'lucide-react';
+import { Landmark, ShieldCheck, TrendingUp, Target, Server, Download } from 'lucide-react';
 import {
   loanTrendData, nplTrendData, loanPurposeData, stateRiskData, dtiScatterData
 } from '../data/mockData';

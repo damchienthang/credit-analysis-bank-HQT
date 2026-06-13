@@ -1,11 +1,10 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   Database, BarChart3,
   Zap, ArrowRight, Server, Globe,
   Cpu, LayoutDashboard, Target, TrendingUp,
-  Layers, FileJson, Workflow, Box, Info,
+  Layers, Box,
   History, BookOpen
 } from 'lucide-react';
 
@@ -179,7 +178,7 @@ const PlatformPage = () => {
   ];
 
   return (
-    <div className="bg-bg-light min-h-screen text-slate-800 font-sans">
+    <div className="platform-page bg-bg-light min-h-screen text-slate-800 font-sans">
       {/* ── PART 1: ORIGINAL CODE (Hero + History + Overview) ── */}
 
       {/* Hero Section */}
@@ -187,22 +186,23 @@ const PlatformPage = () => {
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col items-center text-center">
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-banking-gold font-bold tracking-[0.3em] uppercase text-sm mb-4 block"
+            className="text-banking-gold font-bold uppercase text-sm mb-4 block tracking-widest"
           >
             Mô hình hệ thống doanh nghiệp
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-5xl font-black text-white mb-8 uppercase tracking-tighter"
+            className="text-5xl md:text-6xl font-black text-white mb-8 uppercase leading-tight"
           >
-            Business Intelligence <br /> <span className="text-banking-gold">Systems (BI)</span>
+            Business Intelligence <br />
+            <span className="text-banking-gold">Systems (BI)</span>
           </motion.h1>
-          <p className="text-[17px] text-blue-100 max-w-3xl mx-auto leading-relaxed italic">
+          <p className="text-[16px] text-blue-100 max-w-2xl leading-relaxed italic">
             "Quy trình thu thập, lưu trữ và phân tích dữ liệu nhằm hỗ trợ doanh nghiệp ra quyết định chính xác."
           </p>
         </div>
@@ -210,10 +210,10 @@ const PlatformPage = () => {
 
       {/* History & Formation Section */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-navy uppercase tracking-tight flex items-center justify-center gap-3">
-              <History className="text-banking-gold" /> Lịch sử & Sự hình thành
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-navy uppercase tracking-tight inline-flex items-center justify-center gap-3">
+              <History className="text-banking-gold" /> Lịch sử &amp; Sự hình thành
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -233,68 +233,70 @@ const PlatformPage = () => {
       </section>
 
       {/* BI Overview Section */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <h2 className="text-3xl font-bold text-navy border-l-4 border-banking-gold pl-6 uppercase tracking-tight">BI là gì?</h2>
-            <div className="space-y-4 text-gray-600 leading-relaxed text-[16px] text-justify">
-              <p>
-                <strong>Business Intelligence (BI)</strong> không chỉ là một công cụ đơn lẻ, mà là một quy trình tích hợp các phương pháp, kiến trúc và công nghệ. BI giúp doanh nghiệp trả lời các câu hỏi về quá khứ, hiện tại và dự báo tương lai.
-              </p>
-              <p>
-                <strong>Data Warehouse (DW)</strong> đóng vai trò là "trái tim" của hệ thống BI. Dữ liệu từ các nguồn khác nhau được tập hợp về đây, qua quá trình <strong>ETL</strong> để đảm bảo tính nhất quán và chất lượng thông tin.
-              </p>
-            </div>
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h2 className="text-3xl font-bold text-navy border-l-4 border-banking-gold pl-6 uppercase tracking-tight">BI là gì?</h2>
+              <div className="space-y-4 text-gray-600 leading-relaxed text-[16px] text-justify">
+                <p>
+                  <strong>Business Intelligence (BI)</strong> không chỉ là một công cụ đơn lẻ, mà là một quy trình tích hợp các phương pháp, kiến trúc và công nghệ. BI giúp doanh nghiệp trả lời các câu hỏi về quá khứ, hiện tại và dự báo tương lai.
+                </p>
+                <p>
+                  <strong>Data Warehouse (DW)</strong> đóng vai trò là "trái tim" của hệ thống BI. Dữ liệu từ các nguồn khác nhau được tập hợp về đây, qua quá trình <strong>ETL</strong> để đảm bảo tính nhất quán và chất lượng thông tin.
+                </p>
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-              <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
-                <h4 className="font-bold text-navy mb-2 flex items-center gap-2 text-[15px]">
-                  <Box className="h-5 w-5 text-accent-blue" /> Fact vs Dimension
-                </h4>
-                <p className="text-[14px] text-gray-500 italic">Bảng <strong>Fact</strong> chứa các con số định lượng. Bảng <strong>Dimension</strong> chứa các thông tin mô tả chi tiết.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
+                  <h4 className="font-bold text-navy mb-2 flex items-center gap-2 text-[15px]">
+                    <Box className="h-5 w-5 text-accent-blue" /> Fact vs Dimension
+                  </h4>
+                  <p className="text-[14px] text-gray-500 italic">Bảng <strong>Fact</strong> chứa các con số định lượng. Bảng <strong>Dimension</strong> chứa các thông tin mô tả chi tiết.</p>
+                </div>
+                <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
+                  <h4 className="font-bold text-navy mb-2 flex items-center gap-2 text-[15px]">
+                    <TrendingUp className="h-5 w-5 text-banking-gold" /> OLAP Concepts
+                  </h4>
+                  <p className="text-[14px] text-gray-500 italic">Cho phép phân tích dữ liệu đa chiều, thực hiện các thao tác Slice, Dice và Drill-down.</p>
+                </div>
               </div>
-              <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
-                <h4 className="font-bold text-navy mb-2 flex items-center gap-2 text-[15px]">
-                  <TrendingUp className="h-5 w-5 text-banking-gold" /> OLAP Concepts
-                </h4>
-                <p className="text-[14px] text-gray-500 italic">Cho phép phân tích dữ liệu đa chiều, thực hiện các thao tác Slice, Dice và Drill-down.</p>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <div className="p-10 bg-navy rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 opacity-5">
-                <Layers className="h-64 w-64 -mr-16 -mt-16" />
-              </div>
-              <h3 className="text-2xl font-black mb-6 uppercase flex items-center gap-3">
-                <BookOpen className="text-banking-gold" /> Các thành phần chính
-              </h3>
-              <div className="grid grid-cols-1 gap-6">
-                {biStages.map((stage) => (
-                  <div key={stage.id} className="flex gap-4">
-                    <div className={`p-2 rounded-xl ${stage.color} text-white h-fit`}>
-                      <stage.icon className="h-5 w-5" />
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="p-10 bg-navy rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 opacity-5">
+                  <Layers className="h-64 w-64 -mr-16 -mt-16" />
+                </div>
+                <h3 className="text-2xl font-black mb-6 uppercase flex items-center gap-3">
+                  <BookOpen className="text-banking-gold" /> Các thành phần chính
+                </h3>
+                <div className="grid grid-cols-1 gap-6">
+                  {biStages.map((stage) => (
+                    <div key={stage.id} className="flex gap-4">
+                      <div className={`p-2 rounded-xl ${stage.color} text-white h-fit`}>
+                        <stage.icon className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-white text-[16px]">{stage.title}</h4>
+                        <p className="text-[14px] text-blue-200">{stage.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-white text-[16px]">{stage.title}</h4>
-                      <p className="text-[14px] text-blue-200">{stage.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -302,7 +304,7 @@ const PlatformPage = () => {
 
       {/* Narrative Intro & Storytelling Stream - Wider Margins container with clear vertical separation */}
       <section className="py-20 bg-white">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 space-y-32">
+        <div className="platform-narrative max-w-[1600px] mx-auto px-4 md:px-8 space-y-32">
 
           {/* Section: Narrative Dẫn nhập - Centered Open Layout with Medium Image Below */}
           <div className="space-y-6">
@@ -323,21 +325,13 @@ const PlatformPage = () => {
               </div>
             </div>
 
-            {/* Integrated Image 1: bi_colleagues.png - Compact centered */}
-            <div className="w-full pt-2 flex justify-center">
-              <img
-                src="/pictures/bi_colleagues.png"
-                alt="Ban phân tích VDCB thảo luận báo cáo"
-                className="w-full max-h-[400px] object-cover max-w-4xl mx-auto rounded-lg"
-              />
-            </div>
           </div>
 
           {/* Section 1: 7 Steps of Data Flow (Open, featuring the compact flow diagram) */}
           <div className="space-y-6">
             <div className="space-y-2">
               <h3 className="text-2xl font-black text-navy uppercase tracking-tighter">
-                Hành Trình 7 Bước Của Dữ Liệu
+                Quy trình dữ liệu BI
               </h3>
               <p className="text-[14px] text-gray-500 italic">Sơ đồ hóa quy trình xử lý dữ liệu thô tuần tự qua các tầng nghiệp vụ hệ thống BI.</p>
             </div>
@@ -352,7 +346,7 @@ const PlatformPage = () => {
             </div>
 
             <div className="space-y-4">
-              {biStepsNew.map((step, idx) => (
+              {biStepsNew.slice(0, 5).map((step, idx) => (
                 <div key={idx} className="flex flex-col md:flex-row md:items-start gap-4 md:gap-8 py-5 border-b border-gray-100 last:border-b-0">
                   <div className="flex items-center gap-3 md:w-56 shrink-0">
                     <span className="font-mono text-2xl font-black text-accent-blue">{step.no}</span>
@@ -373,7 +367,7 @@ const PlatformPage = () => {
           <div className="space-y-6">
             <div className="space-y-2">
               <h3 className="text-2xl font-black text-navy uppercase tracking-tighter">
-                6 Hoạt Động Nghiệp Vụ Cốt Lõi
+                Hoạt động nghiệp vụ cốt lõi
               </h3>
               <p className="text-[14px] text-gray-500 italic">Các phân mảng hành động kỹ thuật thực thi của hệ thống Business Intelligence.</p>
             </div>
@@ -381,7 +375,7 @@ const PlatformPage = () => {
             <div className="space-y-8">
               {/* 6 Activities Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                {biActivities.map((act, idx) => (
+                {biActivities.slice(0, 4).map((act, idx) => (
                   <div key={idx} className="space-y-2 py-3 border-b border-gray-100 last:border-b-0 md:border-b-0">
                     <div className="flex items-center gap-2 border-b border-gray-100 pb-1.5">
                       <span className="text-[11px] font-mono font-bold text-accent-blue bg-blue-50 px-1.5 py-0.5 rounded">ACT-0{idx + 1}</span>
@@ -394,14 +388,6 @@ const PlatformPage = () => {
                 ))}
               </div>
 
-              {/* Integrated Image 4: bi_finance_desk.png - Compact centered, no frame */}
-              <div className="w-full pt-4 flex justify-center">
-                <img
-                  src="/pictures/bi_finance_desk.png"
-                  alt="Không gian phân tích dữ liệu nghiệp vụ"
-                  className="w-full max-h-[400px] object-cover max-w-4xl mx-auto rounded-lg"
-                />
-              </div>
             </div>
           </div>
 
@@ -417,7 +403,7 @@ const PlatformPage = () => {
             <div className="space-y-8">
               {/* 7 Roles List */}
               <div className="space-y-2">
-                {biRoles.map((role, idx) => (
+                {biRoles.slice(0, 4).map((role, idx) => (
                   <div key={idx} className="flex flex-col md:flex-row md:items-start gap-2 md:gap-8 py-5 border-b border-gray-100 last:border-b-0">
                     <div className="md:w-60 shrink-0">
                       <span className="text-[11px] font-mono font-bold text-accent-blue block mb-1">VAI TRÒ THỰC TIỄN 0{idx + 1}</span>
@@ -446,15 +432,15 @@ const PlatformPage = () => {
 
       {/* Technology Architecture Section */}
       <section className="py-24 bg-navy text-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-4">
-            <h2 className="text-white md:text-4xl font-black uppercase tracking-tighter">Technology Architecture</h2>
-            <div className="flex gap-2">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-14 gap-4">
+            <h2 className="text-white text-3xl md:text-4xl font-black uppercase">Technology Architecture</h2>
+            <div className="flex gap-2 shrink-0">
               <div className="w-12 h-1.5 bg-banking-gold rounded-full"></div>
               <div className="w-6 h-1.5 bg-accent-blue rounded-full"></div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {techCards.map((tech, i) => (
               <div
                 key={i}
@@ -476,13 +462,19 @@ const PlatformPage = () => {
 
       {/* Footer CTA */}
       <section className="py-20 bg-banking-gold relative overflow-hidden">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 text-navy">
-          <h2 className="text-xl md:text-3xl font-black mb-8 uppercase tracking-tighter">Tìm hiểu sâu hơn về kiến trúc ?</h2>
+        <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center relative z-10 text-navy">
+          <h2 className="text-2xl md:text-3xl font-black mb-10 uppercase">Tìm hiểu sâu hơn về kiến trúc ?</h2>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link to="/architecture" className="px-10 py-5 bg-navy text-white rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform flex items-center gap-3">
+            <Link
+              to="/architecture"
+              className="inline-flex items-center gap-3 px-10 py-4 bg-navy text-white rounded-2xl font-black uppercase text-sm hover:scale-105 transition-transform"
+            >
               Chi tiết Kiến trúc Kỹ thuật <ArrowRight className="h-5 w-5" />
             </Link>
-            <Link to="/reports" className="px-10 py-5 bg-white text-navy rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform">
+            <Link
+              to="/reports"
+              className="inline-flex items-center px-10 py-4 bg-white text-navy rounded-2xl font-black uppercase text-sm hover:scale-105 transition-transform"
+            >
               Xem Báo cáo Hệ thống
             </Link>
           </div>
