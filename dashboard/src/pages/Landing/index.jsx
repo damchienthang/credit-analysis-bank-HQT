@@ -1,4 +1,4 @@
-﻿import './style.css';
+import './style.css';
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -10,6 +10,7 @@ import {
   Database,
   Filter,
   Layers,
+  Landmark,
   LineChart,
   Search,
   ShieldCheck,
@@ -125,11 +126,17 @@ function HeroPreview() {
         <div className="hero-kpi-row">
           <div>
             <p className="label">Total Loans</p>
-            <p className="value-lg">2.26M</p>
+            <div className="hero-kpi-val-row">
+              <span className="value-lg">2.26M</span>
+              <span className="trend-badge trend-badge-up">▲ 4.8%</span>
+            </div>
           </div>
           <div>
             <p className="label">NPL Ratio</p>
-            <p className="value-lg text-status-risk">14.2%</p>
+            <div className="hero-kpi-val-row">
+              <span className="value-lg text-status-risk">14.2%</span>
+              <span className="trend-badge trend-badge-down">▼ 1.2%</span>
+            </div>
           </div>
         </div>
 
@@ -147,14 +154,19 @@ function HeroPreview() {
 
         <div className="hero-risk-table">
           {[
-            ['Grade A-C', 'Low', '9.8%', 'badge-success'],
-            ['Grade D', 'Medium', '13.6%', 'badge-warning'],
-            ['Grade E-G', 'High', '18.4%', 'badge-danger'],
-          ].map(([grade, risk, npl, badge]) => (
+            ['Grade A-C', 'Low', '9.8%', 'badge-success', 'down', '-0.4%'],
+            ['Grade D', 'Medium', '13.6%', 'badge-warning', 'up', '+0.8%'],
+            ['Grade E-G', 'High', '18.4%', 'badge-danger', 'up', '+2.3%'],
+          ].map(([grade, risk, npl, badge, trend, change]) => (
             <div key={grade} className="hero-risk-row">
               <span className="mono">{grade}</span>
               <span className={`badge ${badge}`}>{risk}</span>
-              <strong>{npl}</strong>
+              <div className="hero-risk-trend">
+                <strong>{npl}</strong>
+                <span className={`trend-tag ${trend === 'up' ? 'trend-up' : 'trend-down'}`}>
+                  {trend === 'up' ? '▲' : '▼'} {change}
+                </span>
+              </div>
             </div>
           ))}
         </div>
@@ -329,6 +341,9 @@ function EDASection() {
 const LandingPage = () => (
   <div className="landing-page">
     <section className="landing-hero">
+      <div className="hero-bg-icon-wrapper">
+        <Landmark className="hero-bg-bank-icon" />
+      </div>
       <div className="page-wrap-wide landing-hero-grid">
         <motion.div
           initial={{ opacity: 0, y: 18 }}

@@ -1,4 +1,4 @@
-﻿import './style.css';
+import './style.css';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -114,369 +114,368 @@ const biStepsNew = [
 ];
 
 const PlatformPage = () => {
-  const biStages = [
-    {
-      id: '01',
-      title: 'Nguồn dữ liệu (Data Sources)',
-      desc: 'Nơi chứa dữ liệu thô từ nhiều nguồn khác nhau như hệ thống vận hành (ERP, CRM) hoặc các tệp phẳng.',
-      icon: Globe,
-      color: 'bg-blue-500'
-    },
-    {
-      id: '02',
-      title: 'Trích lọc & Biến đổi (ETL)',
-      desc: 'Quá trình Extract, Transform, Load giúp làm sạch, chuẩn hóa dữ liệu trước khi đưa vào kho dữ liệu.',
-      icon: Cpu,
-      color: 'bg-indigo-500'
-    },
-    {
-      id: '03',
-      title: 'Kho dữ liệu (Data Warehouse)',
-      desc: 'Cơ sở dữ liệu tập trung lưu trữ thông tin đã qua xử lý, tổ chức theo các chủ đề để tối ưu hóa việc truy vấn.',
-      icon: Server,
-      color: 'bg-navy'
-    },
-    {
-      id: '04',
-      title: 'Phân tích & Khai phá (Data Mining)',
-      desc: 'Sử dụng các công cụ OLAP và thuật toán để tìm ra các quy luật, xu hướng và tri thức từ dữ liệu.',
-      icon: BarChart3,
-      color: 'bg-accent-blue'
-    },
-    {
-      id: '05',
-      title: 'Trực quan hóa (Visualization)',
-      desc: 'Trình bày dữ liệu dưới dạng Dashboard và báo cáo trực quan, giúp người dùng nắm bắt thông tin nhanh chóng.',
-      icon: Target,
-      color: 'bg-banking-gold'
-    }
-  ];
-
   const historyPoints = [
     {
       year: '1865',
-      title: 'Khởi nguồn',
-      event: 'Richard Millar Devens lần đầu sử dụng thuật ngữ "Business Intelligence" để mô tả cách thu thập thông tin để đạt lợi thế cạnh tranh.'
+      title: 'Khởi nguồn Thuật ngữ',
+      event: 'Richard Millar Devens lần đầu sử dụng cụm từ "Business Intelligence" trong cuốn sách lịch sử thương mại để mô tả cách một chủ ngân hàng thu thập thông tin thị trường trước đối thủ để giành lợi thế cạnh tranh.'
     },
     {
       year: '1958',
-      title: 'Nền móng công nghệ',
-      event: 'Hans Peter Luhn (IBM) công bố bài báo về "A Business Intelligence System", đặt nền móng cho việc dùng máy tính xử lý thông tin.'
+      title: 'Kỷ nguyên Máy tính hóa',
+      event: 'Hans Peter Luhn (nhà khoa học máy tính tại IBM) công bố bài báo khoa học mang tính bước ngoặt "A Business Intelligence System", đặt nền móng cho việc sử dụng máy tính điện tử để tự động trích xuất và xử lý thông tin.'
     },
     {
       year: '1989',
-      title: 'Phổ biến hiện đại',
-      event: 'Howard Dresner (Gartner) phổ biến BI như một thuật ngữ chung cho các mô hình hỗ trợ ra quyết định bằng dữ liệu.'
+      title: 'Định nghĩa Hiện đại',
+      event: 'Howard Dresner (sau này là nhà phân tích tại Gartner) phổ biến BI như một khái niệm chung bao gồm các mô hình dữ liệu và công cụ hỗ trợ ra quyết định dựa trên thực tế dữ liệu lịch sử.'
     }
   ];
 
   const techCards = [
-    { title: 'Python ETL', desc: 'Xử lý và chuyển đổi dữ liệu thô chuyên sâu.', icon: Cpu },
-    { title: 'SQL Server', desc: 'Hệ quản trị CSDL lưu trữ kho dữ liệu DW.', icon: Database },
-    { title: 'Indexing', desc: 'Tối ưu hóa truy vấn trên các bảng Fact/Dimension.', icon: Zap },
-    { title: 'Star Schema', desc: 'Mô hình dữ liệu chuẩn trong kiến trúc BI.', icon: Layers },
-    { title: 'React Dashboard', desc: 'Giao diện trực quan hóa dữ liệu hiện đại.', icon: LayoutDashboard }
+    { title: 'Python ETL', desc: 'Trích xuất và chuẩn hóa dữ liệu thô tự động.', icon: Cpu },
+    { title: 'SQL Server', desc: 'Hệ quản trị CSDL lưu trữ kho dữ liệu DW chính.', icon: Database },
+    { title: 'Indexing', desc: 'Tối ưu hóa tốc độ truy vấn trên Fact/Dimension.', icon: Zap },
+    { title: 'Star Schema', desc: 'Thiết kế Star Schema phân tích đa chiều tối ưu.', icon: Layers },
+    { title: 'React Dashboard', desc: 'Trực quan hóa thời gian thực các chỉ số rủi ro.', icon: LayoutDashboard }
   ];
 
   return (
-    <div className="platform-page bg-bg-light min-h-screen text-slate-800 font-sans">
-      {/* ── PART 1: ORIGINAL CODE (Hero + History + Overview) ── */}
+    <div className="platform-page bg-[#f8fafc] min-h-screen text-slate-800 font-sans antialiased">
 
-      {/* Hero Section */}
-      <section className="relative bg-navy py-24 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col items-center text-center">
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-banking-gold font-bold uppercase text-sm mb-4 block tracking-widest"
-          >
-            Mô hình hệ thống doanh nghiệp
-          </motion.span>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-6xl font-black text-white mb-8 uppercase leading-tight"
-          >
-            Business Intelligence <br />
-            <span className="text-banking-gold">Systems (BI)</span>
-          </motion.h1>
-          <p className="text-[16px] text-blue-100 max-w-2xl leading-relaxed italic">
-            "Quy trình thu thập, lưu trữ và phân tích dữ liệu nhằm hỗ trợ doanh nghiệp ra quyết định chính xác."
-          </p>
+      {/* ── HERO HEADER (The Spark) ── */}
+      <section className="relative bg-[#07142c] py-28 md:py-36 overflow-hidden border-b border-navy/20">
+
+        {/* Modern Tech Background Grid & Glows */}
+        <div className="absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+        <div className="absolute top-1/2 left-1/3 -translate-y-1/2 w-[500px] h-[500px] bg-accent-blue/20 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-cyan/25 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+            {/* Left Column: Rich Text & Metadata */}
+            <div className="lg:col-span-7 space-y-6 text-left animate-fade-in">
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-banking-gold font-bold uppercase text-[11px] block tracking-[0.3em]"
+              >
+                Hành trình chuyển đổi số dữ liệu
+              </motion.span>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight uppercase"
+              >
+                Business Intelligence <br />
+                <span className="text-banking-gold font-black">Systems (BI)</span>
+              </motion.h1>
+              <p className="text-[14.5px] md:text-[15.5px] text-blue-100/85 max-w-2xl leading-relaxed font-medium">
+                Khám phá cách chúng tôi chuẩn hóa dữ liệu tín dụng thô từ các giao dịch thực tế của <strong>VDCB Bank</strong> thành kho tri thức phân tích trực quan hỗ trợ ban điều hành ra quyết định kịp thời.
+              </p>
+
+              {/* Data metrics summary bar */}
+              <div className="flex flex-wrap gap-x-8 gap-y-4 pt-4 border-t border-white/10 mt-8">
+                <div>
+                  <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">Quy mô mẫu thô</p>
+                  <p className="text-xl font-black text-white mt-1">2.26M+ <span className="text-xs font-normal text-blue-200">dòng</span></p>
+                </div>
+                <div className="border-l border-white/10 pl-6">
+                  <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">Thuộc tính gốc</p>
+                  <p className="text-xl font-black text-white mt-1">151 <span className="text-xs font-normal text-blue-200">cột</span></p>
+                </div>
+                <div className="border-l border-white/10 pl-6">
+                  <p className="text-[10px] font-bold text-blue-300 uppercase tracking-widest">Định dạng nạp</p>
+                  <p className="text-xl font-black text-white mt-1">CSV / T-SQL</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Floating Large Blended Dashboard Mockup */}
+            <div className="lg:col-span-5 relative hidden lg:block h-[350px]">
+              {/* Decorative Glow Ring */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-cyan/40 to-accent-blue/30 rounded-full blur-[80px] scale-95 opacity-60 pointer-events-none" />
+
+              {/* Large flat image blending into background */}
+              <div className="absolute right-[-140px] top-1/2 -translate-y-1/2 w-[720px] h-[460px] pointer-events-none">
+                <img
+                  src="/pictures/bi_hero_dashboard.png"
+                  alt="VDCB BI Dashboard Mockup"
+                  className="w-full h-full object-cover hero-image-mask opacity-[0.85]"
+                />
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
-      {/* History & Formation Section */}
-      <section className="py-20 bg-white">
+      {/* ── NARRATIVE INTRODUCTION (Ngữ cảnh thực tế) ── */}
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="text-3xl font-bold text-navy uppercase tracking-tight inline-flex items-center justify-center gap-3">
-              <History className="text-banking-gold" /> Lịch sử &amp; Sự hình thành
-            </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+            {/* Left Column: Heading & Highlight */}
+            <div className="lg:col-span-5 space-y-4">
+              <h2 className="text-3xl lg:text-4xl font-black text-navy uppercase tracking-tighter leading-tight">
+                Dòng chảy thông tin từ Giao dịch đến Quyết định quản trị
+              </h2>
+              <div className="h-1.5 w-16 bg-banking-gold rounded-full" />
+              <div className="p-5 bg-[#f8fafc] rounded-2xl border border-gray-200/50 mt-6 hidden lg:block">
+                <p className="text-xs font-semibold text-navy uppercase tracking-wider mb-2">Mục tiêu tối thượng</p>
+                <p className="text-[13px] text-gray-500 italic leading-relaxed">
+                  Chuyển hóa tài nguyên dữ liệu thô phân tán tại VDCB thành động lực tăng trưởng tài chính và giảm thiểu rủi ro nợ xấu.
+                </p>
+              </div>
+            </div>
+
+            {/* Right Column: Detailed narrative text */}
+            <div className="lg:col-span-7 text-gray-600 text-[14.5px] leading-relaxed space-y-6 text-justify lg:pt-2">
+              <p>
+                Tại <strong>Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB)</strong>, hàng triệu bản ghi giao dịch, hồ sơ đăng ký vay và lịch sử thanh toán nợ được khởi tạo mỗi ngày. Dữ liệu ban đầu chỉ là các mảnh vụn phân tán, thô ráp và nằm rải rác trên các máy chủ CRM, Core Banking và tệp số liệu độc lập. Nếu không được khai phá, khối dữ liệu khổng lồ này chỉ là chi phí lưu trữ thay vì tài sản sinh lời.
+              </p>
+              <p>
+                Mô hình <strong>Business Intelligence (BI)</strong> được thiết lập đóng vai trò là xương sống thông tin tổng thể. Nó không chỉ là công cụ vẽ biểu đồ, mà là một chuỗi hành trình có cấu trúc chặt chẽ giúp <strong>Trích xuất (ETL)</strong>, <strong>Hợp nhất (Data Warehouse)</strong>, <strong>Phân tích chuyên sâu (Analysis &amp; Data Mining)</strong> và cuối cùng là <strong>Trực quan hóa (Presentation)</strong>.
+              </p>
+              <p>
+                Nhờ đó, ban điều hành VDCB có thể đưa ra quyết định dựa trên chứng cứ thực nghiệm, chủ động kiểm soát tỷ lệ nợ xấu, thấu hiểu hành vi khách hàng vay và tối ưu chi phí điều hành toàn hệ thống.
+              </p>
+            </div>
+
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        </div>
+      </section>
+
+      {/* ── ACT I: HISTORY TIMELINE (Chặng đường lịch sử) ── */}
+      <section className="py-24 bg-[#f8fafc] border-t border-gray-100">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl md:text-3xl font-black text-navy uppercase tracking-tighter mt-4 mb-2">
+              Khởi nguồn của Quyết định số
+            </h2>
+            <p className="text-gray-500 text-sm">Chặng đường phát triển hơn 150 năm của Business Intelligence</p>
+          </div>
+
+          <div className="relative border-l-2 border-gray-200 ml-4 md:ml-32 pl-8 space-y-12">
             {historyPoints.map((point, index) => (
               <motion.div
                 key={index}
-                whileHover={{ y: -10 }}
-                className="p-8 bg-gray-50 rounded-3xl border border-gray-100 enterprise-shadow relative"
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="relative group"
               >
-                <div className="text-2xl font-black text-banking-gold/100 absolute top-4 right-6">{point.year}</div>
-                <h3 className="text-xl font-bold text-navy mb-4">{point.title}</h3>
-                <p className="text-gray-600 text-[16px] leading-relaxed">{point.event}</p>
+                {/* Timeline Dot */}
+                <div className="absolute -left-[41px] top-1 bg-white border-2 border-accent-blue w-4 h-4 rounded-full group-hover:bg-accent-blue transition-colors z-10" />
+
+                {/* Year Label */}
+                <div className="absolute -left-[140px] top-0 hidden md:block w-24 text-right">
+                  <span className="font-mono text-2xl font-black text-navy/40 group-hover:text-accent-blue transition-colors">
+                    {point.year}
+                  </span>
+                </div>
+
+                {/* Content Card */}
+                <div className="p-6 bg-white rounded-2xl border border-gray-200/60 shadow-sm hover:shadow-md transition-shadow">
+                  <div className="md:hidden font-mono text-xl font-black text-accent-blue mb-1">
+                    {point.year}
+                  </div>
+                  <h3 className="text-[16px] font-black text-navy mb-2">{point.title}</h3>
+                  <p className="text-gray-600 text-[13.5px] leading-relaxed text-justify">{point.event}</p>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* BI Overview Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              <h2 className="text-3xl font-bold text-navy border-l-4 border-banking-gold pl-6 uppercase tracking-tight">BI là gì?</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-[16px] text-justify">
-                <p>
-                  <strong>Business Intelligence (BI)</strong> không chỉ là một công cụ đơn lẻ, mà là một quy trình tích hợp các phương pháp, kiến trúc và công nghệ. BI giúp doanh nghiệp trả lời các câu hỏi về quá khứ, hiện tại và dự báo tương lai.
-                </p>
-                <p>
-                  <strong>Data Warehouse (DW)</strong> đóng vai trò là "trái tim" của hệ thống BI. Dữ liệu từ các nguồn khác nhau được tập hợp về đây, qua quá trình <strong>ETL</strong> để đảm bảo tính nhất quán và chất lượng thông tin.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
-                  <h4 className="font-bold text-navy mb-2 flex items-center gap-2 text-[15px]">
-                    <Box className="h-5 w-5 text-accent-blue" /> Fact vs Dimension
-                  </h4>
-                  <p className="text-[14px] text-gray-500 italic">Bảng <strong>Fact</strong> chứa các con số định lượng. Bảng <strong>Dimension</strong> chứa các thông tin mô tả chi tiết.</p>
-                </div>
-                <div className="p-4 bg-white rounded-2xl border border-blue-50 enterprise-shadow">
-                  <h4 className="font-bold text-navy mb-2 flex items-center gap-2 text-[15px]">
-                    <TrendingUp className="h-5 w-5 text-banking-gold" /> OLAP Concepts
-                  </h4>
-                  <p className="text-[14px] text-gray-500 italic">Cho phép phân tích dữ liệu đa chiều, thực hiện các thao tác Slice, Dice và Drill-down.</p>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="relative"
-            >
-              <div className="p-10 bg-navy rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 opacity-5">
-                  <Layers className="h-64 w-64 -mr-16 -mt-16" />
-                </div>
-                <h3 className="text-2xl font-black mb-6 uppercase flex items-center gap-3">
-                  <BookOpen className="text-banking-gold" /> Các thành phần chính
-                </h3>
-                <div className="grid grid-cols-1 gap-6">
-                  {biStages.map((stage) => (
-                    <div key={stage.id} className="flex gap-4">
-                      <div className={`p-2 rounded-xl ${stage.color} text-white h-fit`}>
-                        <stage.icon className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-white text-[16px]">{stage.title}</h4>
-                        <p className="text-[14px] text-blue-200">{stage.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PART 2: NARRATIVE STORYTELLING WITH INTEGRATED IMAGES (Full Screen & Margins) ── */}
-
-      {/* Narrative Intro & Storytelling Stream - Wider Margins container with clear vertical separation */}
-      <section className="py-20 bg-white">
-        <div className="platform-narrative max-w-[1600px] mx-auto px-4 md:px-8 space-y-32">
-
-          {/* Section: Narrative Dẫn nhập - Centered Open Layout with Medium Image Below */}
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <span className="text-[12px] font-mono font-bold tracking-widest text-[#1652f0] uppercase">
-                Báo cáo Dẫn nhập / Narrative Analysis
-              </span>
-              <h2 className="text-3xl font-black text-navy uppercase tracking-tighter">
-                Dòng chảy thông tin từ Giao dịch đến Quyết định quản trị
-              </h2>
-              <div className="text-gray-600 text-[14px] md:text-[14px] leading-relaxed space-y-5 text-justify">
-                <p>
-                  Tại <strong>Ngân hàng TMCP Tín dụng Số Việt Nam (VDCB)</strong>, hàng triệu bản ghi giao dịch, hồ sơ đăng ký vay và lịch sử thanh toán nợ được khởi tạo mỗi ngày. Dữ liệu ban đầu là các mảnh vụn phân tán, không đồng nhất, thô ráp và nằm rải rác trên các máy chủ CRM, Core Banking và file số liệu độc lập. Nếu không được khai phá, khối dữ liệu khổng lồ này chỉ là chi phí lưu trữ thay vì tài sản sinh lời.
-                </p>
-                <p>
-                  Mô hình <strong>Business Intelligence (BI)</strong> được thiết lập đóng vai trò là xương sống thông tin tổng thể. Nó không chỉ là công cụ vẽ biểu đồ, mà là một chuỗi hành trình có cấu trúc chặt chẽ giúp <strong>Trích xuất (ETL)</strong>, <strong>Hợp nhất (Data Warehouse)</strong>, <strong>Phân tích chuyên sâu (Analysis & Data Mining)</strong> và cuối cùng là <strong>Trực quan hóa (Presentation)</strong>. Nhờ đó, ban điều hành VDCB có thể đưa ra quyết định dựa trên chứng cứ thực nghiệm, chủ động kiểm soát nợ xấu và tối ưu chi phí điều hành toàn hệ thống.
-                </p>
-              </div>
-            </div>
-
+      {/* ── ACT II: DATA PIPELINE (Xương sống xử lý dữ liệu) ── */}
+      <section className="py-24 bg-white border-t border-gray-100">
+        <div className="max-w-[1400px] mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl md:text-3xl font-black text-navy uppercase tracking-tighter mt-4 mb-2">
+              Kiến trúc Xử lý &amp; Xương sống ETL
+            </h2>
+            <p className="text-gray-500 text-sm">Hành trình trích xuất, chuẩn hóa và tích lũy dữ liệu lịch sử</p>
           </div>
 
-          {/* Section 1: 7 Steps of Data Flow (Open, featuring the compact flow diagram) */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-black text-navy uppercase tracking-tighter">
-                Quy trình dữ liệu BI
-              </h3>
-              <p className="text-[14px] text-gray-500 italic">Sơ đồ hóa quy trình xử lý dữ liệu thô tuần tự qua các tầng nghiệp vụ hệ thống BI.</p>
-            </div>
-
-            {/* Integrated Image 2: bi_pipeline.png - Compact centered, no frame */}
-            <div className="w-full my-6 flex justify-center">
-              <img
-                src="/pictures/bi_pipeline.png"
-                alt="Sơ đồ 7 bước Business Intelligence"
-                className="w-full max-h-[320px] object-contain max-w-3xl mx-auto"
-              />
-            </div>
-
-            <div className="space-y-4">
-              {biStepsNew.slice(0, 5).map((step, idx) => (
-                <div key={idx} className="flex flex-col md:flex-row md:items-start gap-4 md:gap-8 py-5 border-b border-gray-100 last:border-b-0">
-                  <div className="flex items-center gap-3 md:w-56 shrink-0">
-                    <span className="font-mono text-2xl font-black text-accent-blue">{step.no}</span>
-                    <div>
-                      <span className="text-[11px] font-mono font-bold tracking-wider text-gray-400 block uppercase">{step.title}</span>
-                      <strong className="text-[14px] text-navy uppercase">{step.subtitle}</strong>
-                    </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Left: Interactive/Visual flow steps */}
+            <div className="lg:col-span-5 space-y-6">
+              {biStepsNew.map((step, idx) => (
+                <div key={idx} className="flex gap-4 p-5 bg-[#f8fafc] rounded-2xl border border-gray-200/50 hover:border-accent-blue/30 transition-all">
+                  <div className="font-mono text-xl font-black text-accent-blue w-8 shrink-0">
+                    {step.no}
                   </div>
-                  <div className="text-gray-600 text-[14px] leading-relaxed text-justify md:flex-1">
-                    {step.desc}
+                  <div>
+                    <span className="text-[10px] font-mono font-bold tracking-wider text-gray-400 block uppercase">
+                      {step.title}
+                    </span>
+                    <strong className="text-[14px] text-navy uppercase block mb-1">
+                      {step.subtitle}
+                    </strong>
+                    <p className="text-gray-600 text-[13px] leading-relaxed text-justify">
+                      {step.desc}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
 
-          {/* Section 2: 6 Core Activities (Open with Compact Image 4: bi_finance_desk.png underneath) */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-black text-navy uppercase tracking-tighter">
-                Hoạt động nghiệp vụ cốt lõi
-              </h3>
-              <p className="text-[14px] text-gray-500 italic">Các phân mảng hành động kỹ thuật thực thi của hệ thống Business Intelligence.</p>
-            </div>
-
-            <div className="space-y-8">
-              {/* 6 Activities Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                {biActivities.slice(0, 4).map((act, idx) => (
-                  <div key={idx} className="space-y-2 py-3 border-b border-gray-100 last:border-b-0 md:border-b-0">
-                    <div className="flex items-center gap-2 border-b border-gray-100 pb-1.5">
-                      <span className="text-[11px] font-mono font-bold text-accent-blue bg-blue-50 px-1.5 py-0.5 rounded">ACT-0{idx + 1}</span>
-                      <h4 className="font-bold text-[16px] text-navy">{act.title}</h4>
-                    </div>
-                    <p className="text-gray-600 text-[14px] leading-relaxed text-justify">
-                      {act.desc}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          </div>
-
-          {/* Section 3: 7 Roles/Importance (Open with Compact Image 3: bi_glowing_dashboard.png underneath) */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h3 className="text-2xl font-black text-navy uppercase tracking-tighter">
-                Tầm Quan Trọng Thực Tế & Hiệu Quả Quản Trị
-              </h3>
-              <p className="text-[14px] text-gray-500 italic">Giá trị thực tiễn và ảnh hưởng của hệ thống BI đối với công tác điều hành tại VDCB.</p>
-            </div>
-
-            <div className="space-y-8">
-              {/* 7 Roles List */}
-              <div className="space-y-2">
-                {biRoles.slice(0, 4).map((role, idx) => (
-                  <div key={idx} className="flex flex-col md:flex-row md:items-start gap-2 md:gap-8 py-5 border-b border-gray-100 last:border-b-0">
-                    <div className="md:w-60 shrink-0">
-                      <span className="text-[11px] font-mono font-bold text-accent-blue block mb-1">VAI TRÒ THỰC TIỄN 0{idx + 1}</span>
-                      <h4 className="font-bold text-[15px] text-navy uppercase">{role.title}</h4>
-                    </div>
-                    <div className="text-gray-600 text-[14px] leading-relaxed text-justify md:flex-1">
-                      {role.desc}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Integrated Image 3: bi_glowing_dashboard.png - Compact centered, no frame */}
-              <div className="w-full pt-4 flex justify-center">
+            {/* Right: Diagram display with sticky container */}
+            <div className="lg:col-span-7 lg:sticky lg:top-8">
+              <div className="bg-[#f8fafc] p-6 rounded-3xl border border-gray-200/80 shadow-sm">
                 <img
-                  src="/pictures/bi_glowing_dashboard.png"
-                  alt="Giao diện trực quan hóa thông tin thông minh"
-                  className="w-full max-h-[350px] object-cover max-w-4xl mx-auto rounded-lg"
+                  src="/pictures/bi_pipeline.png"
+                  alt="Sơ đồ 7 bước Business Intelligence"
+                  className="w-full max-h-[460px] object-contain mx-auto rounded-2xl border border-gray-200 bg-white p-2 shadow-sm"
                 />
+                <div className="mt-4 text-center">
+                  <p className="text-xs font-semibold text-navy uppercase tracking-wider">
+                    Sơ đồ tổng quan quy trình dữ liệu BI của VDCB
+                  </p>
+                  <p className="text-[11.5px] text-gray-500 mt-1">
+                    Dữ liệu di chuyển tuần tự qua 3 phân tầng chính: Khai thác (ETL) &rarr; Lưu trữ (Warehouse) &rarr; Phân tích &amp; Trình diễn (Dashboard).
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* Technology Architecture Section */}
-      <section className="py-24 bg-navy text-white relative">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-14 gap-4">
-            <h2 className="text-white text-3xl md:text-4xl font-black uppercase">Technology Architecture</h2>
-            <div className="flex gap-2 shrink-0">
-              <div className="w-12 h-1.5 bg-banking-gold rounded-full"></div>
-              <div className="w-6 h-1.5 bg-accent-blue rounded-full"></div>
-            </div>
+      {/* ── ACT III: CORE ANALYTICAL ACTIVITIES (Bộ máy phân tích nghiệp vụ) ── */}
+      <section className="py-24 bg-[#f8fafc] border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl md:text-3xl font-black text-navy uppercase tracking-tighter mt-4 mb-2">
+              Bộ máy phân tích dữ liệu chuyên sâu
+            </h2>
+            <p className="text-gray-500 text-sm">Các cơ chế xử lý và phân tách dữ liệu phục vụ nghiên cứu và ra quyết định</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {techCards.map((tech, i) => (
-              <div
-                key={i}
-                className="p-8 bg-white/5 border border-white/10 rounded-3xl hover:bg-white/10 transition-all group relative overflow-hidden"
-              >
-                <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                  <tech.icon className="h-24 w-24" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {biActivities.map((act, idx) => (
+              <div key={idx} className="p-6 bg-white rounded-2xl border border-gray-200/60 shadow-sm hover:-translate-y-1 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-3 mb-4">
+                    <span className="text-[11px] font-mono font-black text-accent-blue bg-blue-50 px-2 py-0.5 rounded uppercase">
+                      {idx + 1}
+                    </span>
+                    <h4 className="font-bold text-[14.5px] text-navy uppercase tracking-tight">{act.title.split(' (')[0]}</h4>
+                  </div>
+                  <p className="text-gray-600 text-[13px] leading-relaxed text-justify">
+                    {act.desc}
+                  </p>
                 </div>
-                <div className="p-3 bg-white/10 rounded-2xl w-fit mb-6 group-hover:bg-banking-gold group-hover:text-navy transition-all">
-                  <tech.icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-white font-bold text-lg mb-2 relative z-10">{tech.title}</h3>
-                <p className="text-sm text-blue-200 leading-relaxed italic relative z-10">{tech.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer CTA */}
+      {/* ── ACT IV: MANAGEMENT VALUE & DASHBOARD (Giá trị thực tế & Quả ngọt) ── */}
+      <section className="py-24 bg-white border-t border-gray-100">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-2xl md:text-3xl font-black text-navy uppercase tracking-tighter mt-4 mb-2">
+              Quả ngọt quản trị &amp; Khai phá nợ xấu
+            </h2>
+            <p className="text-gray-500 text-sm">Hiệu quả thực tế của hệ thống BI trong việc giám sát rủi ro tín dụng tại VDCB</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left: The 7 values list */}
+            <div className="lg:col-span-5 space-y-5">
+              {biRoles.slice(0, 5).map((role, idx) => (
+                <div key={idx} className="flex gap-4 p-5 bg-[#f8fafc] rounded-xl border border-gray-200/50">
+                  <div className="w-8 h-8 rounded-lg bg-navy/5 text-navy flex items-center justify-center font-bold text-[13px] shrink-0">
+                    0{idx + 1}
+                  </div>
+                  <div>
+                    <h4 className="font-black text-[13.5px] text-navy uppercase mb-1">
+                      {role.title}
+                    </h4>
+                    <p className="text-gray-600 text-[13px] leading-relaxed text-justify">
+                      {role.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Right: The big Glowing Dashboard mockup */}
+            <div className="lg:col-span-7">
+              <div className="bg-[#f8fafc] p-6 rounded-3xl border border-gray-200/80 shadow-md">
+                <img
+                  src="/pictures/bi_glowing_dashboard.png"
+                  alt="Giao diện trực quan hóa thông tin thông minh"
+                  className="w-full max-h-[460px] object-cover mx-auto rounded-2xl border border-gray-200 bg-white shadow-sm"
+                />
+                <div className="mt-4 text-center">
+                  <p className="text-xs font-semibold text-navy uppercase tracking-wider">
+                    Giao diện VDCB BI Dashboard thời gian thực
+                  </p>
+                  <p className="text-[11.5px] text-gray-500 mt-1">
+                    Cung cấp các biểu đồ tổng quan, tỷ lệ nợ xấu tự động cập nhật, giúp các cấp quản lý nắm bắt tình hình tài chính tức thì.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── ACT V: TECHNICAL ARCHITECTURE (Kiến trúc công nghệ) ── */}
+      <section className="py-16 bg-[#07142c] text-white relative border-t border-navy/25">
+        <div className="max-w-[1400px] mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-white text-[15px] font-black uppercase tracking-widest">Technology Stack</h2>
+            </div>
+            <div className="flex gap-1.5 shrink-0">
+              <div className="w-6 h-0.5 bg-banking-gold rounded-full"></div>
+              <div className="w-3 h-0.5 bg-accent-blue rounded-full"></div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {techCards.map((tech, i) => (
+              <div
+                key={i}
+                className="p-4 bg-white/5 border border-white/5 rounded-lg hover:bg-white/10 transition-all group flex items-start gap-4"
+              >
+                <div className="p-2 bg-white/10 rounded-md text-banking-gold shrink-0 mt-0.5 group-hover:bg-banking-gold group-hover:text-navy transition-all">
+                  <tech.icon className="h-4 w-4" />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-white font-bold text-[12.5px] leading-tight group-hover:text-banking-gold transition-colors">{tech.title}</h3>
+                  <p className="text-[10px] text-blue-200/70 leading-relaxed mt-0.5 truncate lg:whitespace-normal">{tech.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER CTA (Kêu gọi hành động) ── */}
       <section className="py-20 bg-banking-gold relative overflow-hidden">
         <div className="max-w-6xl mx-auto px-6 lg:px-8 text-center relative z-10 text-navy">
-          <h2 className="text-2xl md:text-3xl font-black mb-10 uppercase">Tìm hiểu sâu hơn về kiến trúc ?</h2>
+          <h2 className="text-2xl md:text-3xl font-black mb-10 uppercase tracking-tight">Tìm hiểu sâu hơn về kiến trúc kỹ thuật?</h2>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               to="/architecture"
-              className="inline-flex items-center gap-3 px-10 py-4 bg-navy text-white rounded-2xl font-black uppercase text-sm hover:scale-105 transition-transform"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-navy text-white rounded-xl font-black uppercase text-xs hover:scale-[1.03] transition-transform shadow-md"
             >
-              Chi tiết Kiến trúc Kỹ thuật <ArrowRight className="h-5 w-5" />
+              Chi tiết Kiến trúc Kỹ thuật <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              to="/reports"
-              className="inline-flex items-center px-10 py-4 bg-white text-navy rounded-2xl font-black uppercase text-sm hover:scale-105 transition-transform"
+              to="/dashboard"
+              className="inline-flex items-center px-8 py-4 bg-white text-navy rounded-xl font-black uppercase text-xs hover:scale-[1.03] transition-transform shadow-md border border-navy/10"
             >
-              Xem Báo cáo Hệ thống
+              Vào Dashboard Trực Quan
             </Link>
           </div>
         </div>
@@ -487,4 +486,5 @@ const PlatformPage = () => {
 };
 
 export default PlatformPage;
+
 

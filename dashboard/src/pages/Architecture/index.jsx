@@ -1,4 +1,4 @@
-﻿import './style.css';
+import './style.css';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -80,13 +80,11 @@ const stages = [
   },
 ];
 
-// 3-color palette: navy / accent-blue / banking-gold
-// Odd stages → navy bg, Even stages → accent-blue bg, Last → banking-gold bg
-const stageStyle = (i, total) => {
-  if (i === total - 1) return { hdr: 'bg-banking-gold text-navy', badge: 'bg-navy/20 text-navy', dot: 'bg-navy' };
-  if (i % 2 === 0) return { hdr: 'bg-navy text-white', badge: 'bg-white/15 text-white', dot: 'bg-banking-gold' };
-  return { hdr: 'bg-accent-blue text-white', badge: 'bg-white/15 text-white', dot: 'bg-banking-gold' };
+// Unified pipeline style: deep navy header, white text, cyan accent dots
+const stageStyle = () => {
+  return { hdr: 'bg-navy text-white', badge: 'bg-white/15 text-white', dot: 'bg-banking-gold' };
 };
+
 
 const factCols = [
   'loan_key (PK)', 'customer_key (FK)', 'time_key (FK)',

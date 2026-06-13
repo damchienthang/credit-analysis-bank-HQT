@@ -1,4 +1,4 @@
-﻿/* Platform Page styles */
+/* Platform Page styles */
 /* Imported by src/pages/Platform/index.jsx */
 
 /* Platform page: corporate banking-style alignment */
@@ -102,42 +102,58 @@
   gap: 10px;
 }
 
-/* Narrative section container */
-.platform-narrative {
-  max-width: 1180px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 32px !important;
-  padding-right: 32px !important;
-  display: grid;
-  gap: 52px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+/* Narrative timeline indicator dot */
+.platform-page .timeline-item {
+  position: relative;
 }
 
-.platform-narrative>div {
-  padding: 0 0 42px;
-  border-bottom: 1px solid #dde1e8;
+/* Enhancements for diagram images */
+.platform-page img {
+  border: 1px solid rgba(221, 225, 232, 0.8) !important;
+  background: #ffffff;
+  border-radius: 16px !important;
+  box-shadow: 0 10px 30px rgba(10, 31, 68, 0.05) !important;
+  transition: all 0.3s ease;
 }
 
-.platform-narrative>div:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
+.platform-page img:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(10, 31, 68, 0.08) !important;
 }
 
-.platform-narrative img {
-  width: 100%;
-  max-width: 860px !important;
-  display: block;
-  margin: 0 auto;
-  border-radius: 6px !important;
-  box-shadow: 0 12px 34px rgba(15, 25, 35, 0.08);
+/* Custom masking for Hero image to fade and blend with the dark background */
+.platform-page .hero-image-mask {
+  border: none !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle at 65% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0) 80%);
+  mask-image: radial-gradient(circle at 65% 50%, rgba(0,0,0,1) 15%, rgba(0,0,0,0) 80%);
+  transition: none !important;
 }
 
-/* Footer CTA section — keep centered */
+.platform-page .hero-image-mask:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+
+/* Technology Cards Hover effect */
+.platform-page .group:hover {
+  border-color: rgba(6, 182, 212, 0.4) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Custom spacing adjustments for Acts */
+.platform-page section {
+  position: relative;
+}
+
+/* Footer CTA centered alignment */
 .platform-page section:last-of-type {
-  padding-top: 52px !important;
-  padding-bottom: 52px !important;
+  padding-top: 64px !important;
+  padding-bottom: 64px !important;
 }
 
 .platform-page section:last-of-type .text-center {
@@ -149,6 +165,3 @@
   margin-right: auto !important;
 }
 
-.platform-page section:last-of-type .flex-wrap {
-  justify-content: center !important;
-}
