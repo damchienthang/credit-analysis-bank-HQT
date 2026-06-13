@@ -1,3 +1,4 @@
+﻿import './style.css';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, BrainCircuit, ShieldAlert, Globe, Landmark, Zap, ChevronLeft, ChevronRight, Building2 } from 'lucide-react';
@@ -377,4 +378,5 @@ function BankCaseStudies() {
 }
 
 export default TrendsPage;
+
 

@@ -1,3 +1,4 @@
+﻿import './style.css';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -8,7 +9,7 @@ import {
 import { Landmark, ShieldCheck, TrendingUp, Target, Server, Download } from 'lucide-react';
 import {
   loanTrendData, nplTrendData, loanPurposeData, stateRiskData, dtiScatterData
-} from '../data/mockData';
+} from '../../data/mockData';
 
 
 // ── Thiết kế hệ màu xanh dương & xanh ngọc kỹ thuật số VDCB thuần khiết ───────────────────────────
@@ -1912,3 +1913,5 @@ const ReportsPage = () => {
 };
 
 export default ReportsPage;
+
+

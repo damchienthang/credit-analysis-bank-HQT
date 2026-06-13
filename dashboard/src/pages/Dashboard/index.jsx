@@ -1,3 +1,4 @@
+﻿import './style.css';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,7 +17,7 @@ import {
   fetchKpi, fetchLoanGrade, fetchLoanTrend, fetchLoanPurpose,
   fetchStateRisk, fetchNplTrend, fetchGradeRisk,
   fetchInterestGrade, fetchRecovery, fetchDtiScatter,
-} from '../data/api';
+} from '../../data/api';
 
 // ── Màu sắc tối giản ─────────────────────────────────────────────────────────
 const C = {
@@ -940,3 +941,5 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+
+

@@ -1,3 +1,4 @@
+﻿import './style.css';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -369,3 +370,4 @@ export default function ArchitecturePage() {
     </div>
   );
 }
+

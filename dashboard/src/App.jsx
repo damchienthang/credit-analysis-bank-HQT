@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
-import LandingPage from './pages/LandingPage';
-import DashboardPage from './pages/DashboardPage';
-import PlatformPage from './pages/PlatformPage';
-import TrendsPage from './pages/TrendsPage';
-import ReportsPage from './pages/ReportsPage';
-import ArchitecturePage from './pages/ArchitecturePage';
-import AboutPage from './pages/AboutPage';
+import LandingPage from './pages/Landing';
+import DashboardPage from './pages/Dashboard';
+import PlatformPage from './pages/Platform';
+import TrendsPage from './pages/Trends';
+import ReportsPage from './pages/Reports';
+import ArchitecturePage from './pages/Architecture';
+import AboutPage from './pages/About';
+
 
 function App() {
   return (

@@ -1,0 +1,154 @@
+﻿/* Platform Page styles */
+/* Imported by src/pages/Platform/index.jsx */
+
+/* Platform page: corporate banking-style alignment */
+.platform-page {
+  background: #f7f8fa;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #2d3748;
+}
+
+.platform-page section {
+  border-top: 1px solid rgba(221, 225, 232, 0.7);
+}
+
+.platform-page section:first-of-type {
+  border-top: 0;
+  padding-top: 72px !important;
+  padding-bottom: 72px !important;
+}
+
+/* Constrain wide containers on platform page */
+.platform-page .max-w-7xl,
+.platform-page .max-w-6xl {
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.platform-page section>.max-w-7xl,
+.platform-page section>.max-w-6xl {
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+}
+
+/* Hero: keep text centered as designed in JSX */
+.platform-page section:first-of-type .text-center {
+  text-align: center !important;
+}
+
+.platform-page section:first-of-type h1 {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.platform-page section:first-of-type p {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Typography */
+.platform-page h1,
+.platform-page h2,
+.platform-page h3 {
+  letter-spacing: -0.01em !important;
+  font-weight: 800 !important;
+}
+
+.platform-page h1 {
+  font-size: clamp(32px, 5vw, 52px) !important;
+  line-height: 1.08 !important;
+}
+
+.platform-page h2 {
+  font-size: clamp(22px, 3vw, 32px) !important;
+  line-height: 1.18 !important;
+}
+
+.platform-page h3 {
+  font-size: clamp(18px, 2.2vw, 24px) !important;
+  line-height: 1.22 !important;
+}
+
+.platform-page h4 {
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}
+
+.platform-page p {
+  font-size: 14px !important;
+  line-height: 1.72 !important;
+  font-style: normal !important;
+}
+
+.platform-page img {
+  border: 1px solid #dde1e8;
+  background: #ffffff;
+}
+
+/* History section — centered headings */
+.platform-page section:nth-of-type(2) .text-center {
+  text-align: center !important;
+}
+
+.platform-page section:nth-of-type(2) h2 {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Narrative section container */
+.platform-narrative {
+  max-width: 1180px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  display: grid;
+  gap: 52px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.platform-narrative>div {
+  padding: 0 0 42px;
+  border-bottom: 1px solid #dde1e8;
+}
+
+.platform-narrative>div:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.platform-narrative img {
+  width: 100%;
+  max-width: 860px !important;
+  display: block;
+  margin: 0 auto;
+  border-radius: 6px !important;
+  box-shadow: 0 12px 34px rgba(15, 25, 35, 0.08);
+}
+
+/* Footer CTA section — keep centered */
+.platform-page section:last-of-type {
+  padding-top: 52px !important;
+  padding-bottom: 52px !important;
+}
+
+.platform-page section:last-of-type .text-center {
+  text-align: center !important;
+}
+
+.platform-page section:last-of-type h2 {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.platform-page section:last-of-type .flex-wrap {
+  justify-content: center !important;
+}

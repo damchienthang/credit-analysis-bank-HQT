@@ -1,3 +1,4 @@
+﻿import './style.css';
 import { motion } from 'framer-motion';
 import { Users, Target, Rocket, Calendar, Code, Share2, Mail, Award, CheckCircle2 } from 'lucide-react';
 
@@ -152,3 +153,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+

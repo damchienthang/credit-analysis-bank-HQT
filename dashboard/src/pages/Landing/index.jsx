@@ -1,3 +1,4 @@
+﻿import './style.css';
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -446,3 +447,4 @@ const LandingPage = () => (
 );
 
 export default LandingPage;
+
