@@ -8,11 +8,28 @@
 .pbit2_extracted/
 HQTCSDL(2).pbit/
 
+# Node.js dependencies (do NOT commit - run npm install to restore)
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+**/dist/
+build/
+
 # Temporary and backup files
 ~$*
 *.tmp
+*.log
 
 # IDEs and OS
 .vscode/
 .idea/
 .DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
